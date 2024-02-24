@@ -2,6 +2,7 @@
 using Api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace api.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20240224062623_UpdateCropWithType")]
+    partial class UpdateCropWithType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +27,6 @@ namespace api.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Type")
@@ -56,45 +57,6 @@ namespace api.Migrations
                             CropId = 4,
                             Name = "Blackberry"
                         });
-                });
-
-            modelBuilder.Entity("Api.Models.Varietal", b =>
-                {
-                    b.Property<int>("VarietalId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("CropId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("VarietalId");
-
-                    b.HasIndex("CropId");
-
-                    b.ToTable("Varietals");
-                });
-
-            modelBuilder.Entity("Api.Models.Varietal", b =>
-                {
-                    b.HasOne("Api.Models.Crop", "Crop")
-                        .WithMany("Varietals")
-                        .HasForeignKey("CropId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Crop");
-                });
-
-            modelBuilder.Entity("Api.Models.Crop", b =>
-                {
-                    b.Navigation("Varietals");
                 });
 #pragma warning restore 612, 618
         }

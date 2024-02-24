@@ -6,6 +6,7 @@ namespace Api.Models
   public class ApiContext : DbContext
   {
     public DbSet<Crop> Crops { get; set; }
+    public DbSet<Varietal> Varietals { get; set; }
 
     public ApiContext(DbContextOptions<ApiContext> options) : base(options)
     {
