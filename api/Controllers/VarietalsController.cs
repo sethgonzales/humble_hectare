@@ -44,16 +44,9 @@ namespace Api.Controllers
       return varietal;
     }
 
-    //POST: api/varietals //! Create an item
-    // [HttpPost]
-    // public async Task<ActionResult<Varietal>> Post(Varietal varietal)
-    // {
-    //   _db.Varietals.Add(varietal);
-    //   await _db.SaveChangesAsync();
-    //   return CreatedAtAction(nameof(GetVarietal), new { id = varietal.VarietalId }, varietal);
-    // }
 
-    // POST: api/crops/{cropId}/varietals
+    // ! ###### For POST and PUT make sure that post payload does not contain the crop object #######
+    // POST: api/crops/{cropId}/varietals //! Create an item 
     [HttpPost("~/api/crops/{cropId}/varietals")]
     public async Task<ActionResult<Varietal>> PostVarietalForCrop(int cropId, Varietal varietal)
     {
@@ -71,36 +64,8 @@ namespace Api.Controllers
       return CreatedAtAction(nameof(GetVarietal), new { id = varietal.VarietalId }, varietal);
     }
 
-    //PUT: api/varietal/{id} //! Update an entire item
-    // [HttpPut("{id}")]
-    // public async Task<IActionResult> Put(int id, Varietal varietal)
-    // {
-    //   if (id != varietal.VarietalId)
-    //   {
-    //     return BadRequest();
-    //   }
-
-    //   _db.Varietals.Update(varietal);
-
-    //   try
-    //   {
-    //     await _db.SaveChangesAsync();
-    //   }
-    //   catch (DbUpdateConcurrencyException)
-    //   {
-    //     if (!VarietalExists(id))
-    //     {
-    //       return NotFound();
-    //     }
-    //     else
-    //     {
-    //       throw;
-    //     }
-    //   }
-
-    //   return NoContent();
-    // }
-    // PUT: api/crops/{cropId}/varietals/{varietalId}
+    // ! ###### For POST and PUT make sure that post payload does not contain the crop object #######
+    // PUT: api/crops/{cropId}/varietals/{varietalId} //! Update an entire item
     [HttpPut("~/api/crops/{cropId}/varietals/{varietalId}")]
     public async Task<IActionResult> PutVarietalForCrop(int cropId, int varietalId, Varietal varietal)
     {
