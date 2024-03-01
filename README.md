@@ -2,7 +2,7 @@
 
 #### By _Seth Gonzales_
 
-#### _Full stack application with a C# / ASP.NET Core MVC backend using Entity Framework Core and MySQL, and React frontend._
+#### _Full stack application. C# / ASP.NET Core MVC backend using Entity Framework Core and MySQL. React with JavaScript frontend._
 
 ## Description
 
