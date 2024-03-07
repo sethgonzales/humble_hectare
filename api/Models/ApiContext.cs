@@ -7,6 +7,7 @@ namespace Api.Models
   {
     public DbSet<Crop> Crops { get; set; }
     public DbSet<Varietal> Varietals { get; set; }
+    public DbSet<Event> Events { get; set; }
 
     public ApiContext(DbContextOptions<ApiContext> options) : base(options)
     {
@@ -30,6 +31,12 @@ namespace Api.Models
             new Varietal { VarietalId = 4, Name = "Chardonnay", Description = "White wine grape variety.", CropId = 2 },
             new Varietal { VarietalId = 5, Name = "Asian", Description = "Not sure how to describe this.", CropId = 3 }
         );
+      builder.Entity<Event>()
+        .HasData(
+            new Event { EventId = 1, EventType = "Process", DateStart = "1/23/24", DateEnd = "1/25/24", VarietalId = 1 },
+            new Event { EventId = 2, EventType = "Water", DateStart = "2/2/24", DateEnd = "", VarietalId = 2 },
+            new Event { EventId = 3, EventType = "Harvest", DateStart = "3/3/24", DateEnd = "3/5/24", VarietalId = 2 }
+            );
 
     }
   }

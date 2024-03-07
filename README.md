@@ -57,4 +57,5 @@ As a developer, my aim is to log my journey in building this application. This a
 
 ### 3/7/24
 
-- 
+- Created the model and corresponding controller for Events. 
+- I made a few refactors around where I wanted to store information like WaterEvery and FertilizeEvery. Originally I had these stored within events, but I ultimately decided these are best as properties of a crop varietal. 

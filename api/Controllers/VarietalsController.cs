@@ -45,6 +45,19 @@ namespace Api.Controllers
     }
 
 
+    // GET: api/varietals/{varietalId}/events
+    [HttpGet("{varietalId}/events")]
+    public async Task<ActionResult<IEnumerable<Event>>> GetEventsForCrop(int varietalId)
+    {
+      var varietal = await _db.Varietals.Include(c => c.Events).FirstOrDefaultAsync(c => c.VarietalId == varietalId);
+      if (varietal == null)
+      {
+        return NotFound("Varietal not found.");
+      }
+
+      return Ok(varietal.Events);
+    }
+
     // ! ###### For POST and PUT make sure that post payload does not contain the crop object #######
     // POST: api/crops/{cropId}/varietals //! Create an item 
     [HttpPost("~/api/crops/{cropId}/varietals")]
