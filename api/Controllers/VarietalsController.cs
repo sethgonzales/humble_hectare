@@ -21,21 +21,24 @@ namespace Api.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Varietal>>> Get(string keyword)
     {
-      IQueryable<Varietal> query = _db.Varietals.AsQueryable();
+      IQueryable<Varietal> query = _db.Varietals.Include(v => v.Events);
 
       if (!string.IsNullOrEmpty(keyword))
       {
         query = query.Where(entry => entry.Name.Contains(keyword) || entry.Description.Contains(keyword));
       }
 
-      return await query.ToListAsync();
+      var varietals = await query.ToListAsync();
+
+      return varietals;
     }
+
 
     //GET: api/varietals/{id} //! Get specific item by id
     [HttpGet("{id}")]
     public async Task<ActionResult<Varietal>> GetVarietal(int id)
     {
-      Varietal varietal = await _db.Varietals.FindAsync(id);
+      Varietal varietal = await _db.Varietals.Include(v => v.Events).FirstOrDefaultAsync(v => v.VarietalId == id);
       if (varietal == null)
       {
         return NotFound();
@@ -43,7 +46,6 @@ namespace Api.Controllers
 
       return varietal;
     }
-
 
     // GET: api/varietals/{varietalId}/events
     [HttpGet("{varietalId}/events")]

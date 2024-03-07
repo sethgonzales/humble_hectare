@@ -21,21 +21,23 @@ namespace Api.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Crop>>> Get(string keyword)
     {
-      IQueryable<Crop> query = _db.Crops.AsQueryable();
+      IQueryable<Crop> query = _db.Crops.Include(c => c.Varietals);
 
       if (!string.IsNullOrEmpty(keyword))
       {
         query = query.Where(entry => entry.Name.Contains(keyword) || entry.Type.Contains(keyword));
       }
 
-      return await query.ToListAsync();
+      var crops = await query.ToListAsync();
+      
+      return crops;
     }
 
     //GET: api/crops/{id} //! Get specific item by id
     [HttpGet("{id}")]
     public async Task<ActionResult<Crop>> GetCrop(int id)
     {
-      Crop crop = await _db.Crops.FindAsync(id);
+      Crop crop = await _db.Crops.Include(c => c.Varietals).FirstOrDefaultAsync(c => c.CropId == id);
       if (crop == null)
       {
         return NotFound();
@@ -43,6 +45,7 @@ namespace Api.Controllers
 
       return crop;
     }
+
 
     // GET: api/crops/{cropId}/varietals
     [HttpGet("{cropId}/varietals")]

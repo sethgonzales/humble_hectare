@@ -21,7 +21,7 @@ namespace Api.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Event>>> Get(string keyword)
     {
-      IQueryable<Event> query = _db.Events.AsQueryable();
+      IQueryable<Event> query = _db.Events.Include(e => e.Varietal);
 
       if (!string.IsNullOrEmpty(keyword))
       {
@@ -35,7 +35,8 @@ namespace Api.Controllers
     [HttpGet("{id}")]
     public async Task<ActionResult<Event>> GetEvent(int id)
     {
-      Event _event = await _db.Events.FindAsync(id);
+      Event _event = await _db.Events.Include(e => e.Varietal).FirstOrDefaultAsync(e => e.EventId == id);
+      
       if (_event == null)
       {
         return NotFound();
