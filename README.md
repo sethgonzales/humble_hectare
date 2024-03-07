@@ -54,3 +54,7 @@ As a developer, my aim is to log my journey in building this application. This a
 ### 3/1/24
 
 - Created the initial README for the overall project (API and Frontend specific to come later)
+
+### 3/7/24
+
+- 
