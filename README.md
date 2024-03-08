@@ -59,3 +59,6 @@ As a developer, my aim is to log my journey in building this application. This a
 
 - Created the model and corresponding controller for Events. 
 - I made a few refactors around where I wanted to store information like WaterEvery and FertilizeEvery. Originally I had these stored within events, but I ultimately decided these are best as properties of a crop varietal. 
+- I added a front end! At first I used create react app, and started building using Ionic UI. But honestly, I wanted to challenge myself with a newer framework and a UI library that I haven't used before. So... welcome Vite and Mantine.
+- I set up the basics of the app using Mantine, including the header, navbar, and routing system. I tested connecting to the db to make sure I was able to get all of the data I needed for Crops and Varietals using an axios connection. 
+- Next up... More UI! I need to really map out the app and create a UI that I am happy with.
