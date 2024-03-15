@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import CropList from './pages/CropList';
-import Crop from './components/Crop';
+// import Crop from './components/CropForm';
 
 const router = createBrowserRouter([
   {
@@ -12,10 +12,10 @@ const router = createBrowserRouter([
     path: '/crops',
     element: <CropList />,
   },
-  {
-    path: '/crops/:id',
-    element: <Crop />,
-  },
+  // {
+  //   path: '/crops/:id',
+  //   element: <Crop />,
+  // },
 ]);
 
 export function Router() {

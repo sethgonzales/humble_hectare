@@ -62,3 +62,10 @@ As a developer, my aim is to log my journey in building this application. This a
 - I added a front end! At first I used create react app, and started building using Ionic UI. But honestly, I wanted to challenge myself with a newer framework and a UI library that I haven't used before. So... welcome Vite and Mantine.
 - I set up the basics of the app using Mantine, including the header, navbar, and routing system. I tested connecting to the db to make sure I was able to get all of the data I needed for Crops and Varietals using an axios connection. 
 - Next up... More UI! I need to really map out the app and create a UI that I am happy with.
+
+### 3/14/24
+
+- After talking to J&B, the app users, I have started creating relational maps for adding attachments for events. 
+- Created a data table for showing varietals for each crop. Crops are in accordions.
+- Decided on some styling... Chose a logo and header color.
+- Started working on the Crop modal for Edit and Delete. Need to build out the actual functionality but I spent al ot of time reading through the Mantine docs for their text input tools.
