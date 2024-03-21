@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@mantine/core": "7.6.1",
+    "@mantine/form": "^7.6.2",
     "@mantine/hooks": "7.6.1",
     "@tabler/icons-react": "^2.47.0",
     "axios": "^1.6.7",

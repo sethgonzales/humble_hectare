@@ -8,6 +8,7 @@ import CropForm from '../components/CropForm';
 const CropList = (props) => {
   const { seeCrops } = props;
   const [crops, setCrops] = useState();
+  console.log('crops', crops);
 
   const [selectedCrop, setSelectedCrop] = useState();
   const [showCropModal, setShowCropModal] = useState(false);
@@ -17,7 +18,6 @@ const CropList = (props) => {
       const response = await axios.get('https://localhost:5001/api/crops');
       const crops = response.data;
 
-      console.log('crops', crops);
       setCrops(crops);
 
     } catch (error) {
@@ -30,12 +30,22 @@ const CropList = (props) => {
     setShowCropModal(true);
   }
 
+  const handleUpdateCrop = (updatedCrop) => {
+    setCrops((prevCrops) =>
+      prevCrops.map((crop) =>
+        crop.cropId === updatedCrop.cropId ? updatedCrop : crop
+      )
+    );
+    console.log('crop was updated');
+  };
+
   useEffect(() => {
     loadCrops();
   }, [seeCrops]);
 
   return (
     <>
+      <h1>Crops</h1>
       <Text size="md">Click through each crop to see what has been planted</Text>
       <Accordion chevronPosition="right" variant="contained">
         {crops
@@ -87,6 +97,7 @@ const CropList = (props) => {
         crop={selectedCrop}
         isOpen={showCropModal}
         onDismissCrop={() => setShowCropModal(false)}
+        onUpdateCrop={handleUpdateCrop}
       />
     </>
   )
