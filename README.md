@@ -69,3 +69,10 @@ As a developer, my aim is to log my journey in building this application. This a
 - Created a data table for showing varietals for each crop. Crops are in accordions.
 - Decided on some styling... Chose a logo and header color.
 - Started working on the Crop modal for Edit and Delete. Need to build out the actual functionality but I spent al ot of time reading through the Mantine docs for their text input tools.
+
+### 3/21/24
+
+- Made a TON of updates today! 
+- Now have full CRUD functionality with Crops. Had some fun remembering all of my API endpoints, as well as the syntax for using axois api calls.
+- Had a few issues with making sure I was sending the right payload, but I tested with Swagger to double check.
+- I incorporated checks for deleting crops and adding duplicates. I feel like I have learned so much from working on VinoSeeker, it is cool to see how it applies here!
