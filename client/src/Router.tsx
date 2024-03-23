@@ -1,6 +1,8 @@
+//Router.tsx
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import CropList from './pages/CropList';
+import Varietal from './pages/Varietal';
 // import Crop from './components/CropForm';
 
 const router = createBrowserRouter([
@@ -12,10 +14,10 @@ const router = createBrowserRouter([
     path: '/crops',
     element: <CropList />,
   },
-  // {
-  //   path: '/crops/:id',
-  //   element: <Crop />,
-  // },
+  {
+    path: '/varietal/:id',
+    element: <Varietal />,
+  },
 ]);
 
 export function Router() {

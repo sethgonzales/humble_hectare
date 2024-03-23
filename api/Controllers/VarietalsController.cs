@@ -38,7 +38,7 @@ namespace Api.Controllers
     [HttpGet("{id}")]
     public async Task<ActionResult<Varietal>> GetVarietal(int id)
     {
-      Varietal varietal = await _db.Varietals.Include(v => v.Events).FirstOrDefaultAsync(v => v.VarietalId == id);
+      Varietal varietal = await _db.Varietals.Include(v => v.Events).Include(v => v.Crop).FirstOrDefaultAsync(v => v.VarietalId == id);
       if (varietal == null)
       {
         return NotFound();

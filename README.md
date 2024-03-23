@@ -76,3 +76,10 @@ As a developer, my aim is to log my journey in building this application. This a
 - Now have full CRUD functionality with Crops. Had some fun remembering all of my API endpoints, as well as the syntax for using axois api calls.
 - Had a few issues with making sure I was sending the right payload, but I tested with Swagger to double check.
 - I incorporated checks for deleting crops and adding duplicates. I feel like I have learned so much from working on VinoSeeker, it is cool to see how it applies here!
+
+### 3/22/24
+
+- Worked on adding the varietal routes today! 
+- Updated the react router to include a page for each crop variety we select. 
+- I started adding CRUD functionality to varietals and was able to update varietals using the varietal form component. 
+- Next time, I want to work on delete and create for varietals, AND I need to work out an issue with the information pulled along with my get requests for each model. I need to limit/include related info being pulled.

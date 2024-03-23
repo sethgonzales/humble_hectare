@@ -25,8 +25,8 @@ namespace Api.Models
 
       builder.Entity<Varietal>()
         .HasData(
-            new Varietal { VarietalId = 1, Name = "Cherry Tomato", Description = "Small, sweet tomato variety.", CropId = 1 },
-            new Varietal { VarietalId = 2, Name = "Roma Tomato", Description = "Meatier, less juicy tomato variety.", CropId = 1 },
+            new Varietal { VarietalId = 1, Name = "Cherry", Description = "Small, sweet tomato variety.", CropId = 1 },
+            new Varietal { VarietalId = 2, Name = "Roma", Description = "Meatier, less juicy tomato variety.", CropId = 1 },
             new Varietal { VarietalId = 3, Name = "Cabernet Sauvignon", Description = "Red wine grape variety.", CropId = 2 },
             new Varietal { VarietalId = 4, Name = "Chardonnay", Description = "White wine grape variety.", CropId = 2 },
             new Varietal { VarietalId = 5, Name = "Asian", Description = "Not sure how to describe this.", CropId = 3 }
