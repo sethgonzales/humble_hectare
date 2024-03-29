@@ -83,3 +83,11 @@ As a developer, my aim is to log my journey in building this application. This a
 - Updated the react router to include a page for each crop variety we select. 
 - I started adding CRUD functionality to varietals and was able to update varietals using the varietal form component. 
 - Next time, I want to work on delete and create for varietals, AND I need to work out an issue with the information pulled along with my get requests for each model. I need to limit/include related info being pulled.
+
+### 3/28/24
+
+- Today I made some BIG strides on varietal data being displayed. 
+- I ran into some issues with displaying and formatting dates... JS dates have a bad rep! I was able to figure out some of the issues that were going on. Mainly, the dates needed to be reformatted into a string, which would then later need to be reformatted into mm/dd/yyyy. I did a lot of research into different ways to go about this and ended up using toISOString, and then finding some equations for the mm/dd/yyyy reformatting.
+- I have watering and fertilizing data formatted into tables. I am not 100% happy with how these look, so I will need to keep thinking about the best way to go about displaying the data.
+- ALSO it would be SICK if I could take the water and fertilize schedule and put it into a calendar, so that these values and dates can be seen. I would be REALLY happy about that!
+- Going forward, I still need to finish the UD of CRUD for Varietals. I got a bit stuck on UI today, so that got put on the back burner. 

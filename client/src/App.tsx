@@ -7,6 +7,7 @@ import { Router } from './Router';
 import { theme } from './theme';
 import { IconHome2, IconCarrot, IconChevronRight } from '@tabler/icons-react';
 import Logo from './img/logo.png'
+import '@mantine/dates/styles.css';
 
 export default function App() {
   // const [opened, { toggle }] = useDisclosure();
@@ -15,9 +16,9 @@ export default function App() {
 
   return (
     <MantineProvider theme={theme}>
-
+      {/* // todo: add alt styling for smaller screens on header */}
       <AppShell
-        header={{ height: 60 }}
+        header={{ height: 120 }}
         navbar={{
           width: 150,
           breakpoint: 'sm',
@@ -26,14 +27,13 @@ export default function App() {
         padding="md"
       >
 
-        <AppShell.Header style={{ overflow: 'hidden', border: 'none', background: '#d3ecbc', display: 'flex', alignContent: 'center' }}>
+        <AppShell.Header style={{ overflow: 'hidden', border: 'none', background: '#d3ecbc', display: 'flex', alignContent: 'center', paddingLeft: '1.5rem' }}>
           <Center>
-            <Group>
-              <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
-              <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
-              {/* // todo: add alt styling for smaller screens on header */}
-              <img src={Logo} alt="Humble Hectare Logo" style={{ width: 'auto', height: '4rem', marginLeft: 20 }} />
-              <h2>Humble Hectare</h2>
+            <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
+            <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
+            <Group style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingLeft: '1.5rem' }}>
+              <h1>Humble Hectare</h1>
+              <img src={Logo} alt="Humble Hectare Logo" style={{ width: 'auto', height: '8rem', marginLeft: 10 }} />
             </Group>
           </Center>
         </AppShell.Header>
@@ -55,14 +55,6 @@ export default function App() {
               <IconChevronRight size="1rem" stroke={2} className="mantine-rotate-rtl" />
             }
           />
-          {/* <NavLink
-            href="/data"
-            label="Data"
-            leftSection={<IconTable size="1rem" stroke={1.5} />}
-            rightSection={
-              <IconChevronRight size="0.8rem" stroke={1.5} className="mantine-rotate-rtl" />
-            }
-          /> */}
         </AppShell.Navbar>
 
         <AppShell.Main>

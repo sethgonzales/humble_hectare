@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from '@mantine/form';
 import axios from "axios";
-import { Modal, Button, TextInput, LoadingOverlay, Alert } from '@mantine/core';
+import { Modal, Button, TextInput, LoadingOverlay, Alert, NativeSelect } from '@mantine/core';
 
 const CropForm = (props) => {
   const {
@@ -152,11 +152,17 @@ const CropForm = (props) => {
             {...form.getInputProps('name')}
           />
 
-          <TextInput
+          <NativeSelect
             label="Type"
-            placeholder="Fruit, vegetable, etc."
+            // placeholder="Select the Crop Type"
+            data={[
+              { label: 'Select the Crop Type', value: '', disabled: true},
+              { label: 'Fruit', value: 'Fruit' },
+              { label: 'Vegetable', value: 'Vegetable' },
+            ]}
             {...form.getInputProps('type')}
           />
+
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
             <Button type="submit" variant="filled" size="xs" color="green">Save</Button>
             {crop && !addNewCrop && (
