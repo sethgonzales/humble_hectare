@@ -2,6 +2,7 @@
 using Api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace api.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20240328205202_ChangeVarietalWaterAndFertilizeToDateStart")]
+    partial class ChangeVarietalWaterAndFertilizeToDateStart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,6 +98,8 @@ namespace api.Migrations
                         new
                         {
                             EventId = 1,
+                            DateEnd = "1/25/24",
+                            DateStart = "1/23/24",
                             EventType = "Process",
                             VarietalId = 1,
                             Yield = 0.0
@@ -103,6 +107,8 @@ namespace api.Migrations
                         new
                         {
                             EventId = 2,
+                            DateEnd = "",
+                            DateStart = "2/2/24",
                             EventType = "Water",
                             VarietalId = 2,
                             Yield = 0.0
@@ -110,6 +116,8 @@ namespace api.Migrations
                         new
                         {
                             EventId = 3,
+                            DateEnd = "3/5/24",
+                            DateStart = "3/3/24",
                             EventType = "Harvest",
                             VarietalId = 2,
                             Yield = 0.0
@@ -156,7 +164,11 @@ namespace api.Migrations
                             VarietalId = 1,
                             CropId = 1,
                             Description = "Small, sweet tomato variety.",
-                            Name = "Cherry"
+                            FertilizeEvery = "day",
+                            FertilizeStart = "1/20/2024",
+                            Name = "Cherry",
+                            WaterEvery = "day",
+                            WaterStart = "1/20/2024"
                         },
                         new
                         {
@@ -164,8 +176,10 @@ namespace api.Migrations
                             CropId = 1,
                             Description = "Meatier, less juicy tomato variety.",
                             FertilizeEvery = "week",
+                            FertilizeStart = "2/20/2024",
                             Name = "Roma",
-                            WaterEvery = "day"
+                            WaterEvery = "day",
+                            WaterStart = "2/20/2024"
                         },
                         new
                         {
@@ -173,8 +187,10 @@ namespace api.Migrations
                             CropId = 2,
                             Description = "Red wine grape variety.",
                             FertilizeEvery = "month",
+                            FertilizeStart = "3/20/2024",
                             Name = "Cabernet Sauvignon",
-                            WaterEvery = "day"
+                            WaterEvery = "day",
+                            WaterStart = "3/20/2024"
                         },
                         new
                         {

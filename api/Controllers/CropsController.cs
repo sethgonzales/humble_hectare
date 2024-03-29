@@ -21,7 +21,9 @@ namespace Api.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Crop>>> Get(string keyword)
     {
-      IQueryable<Crop> query = _db.Crops.Include(c => c.Varietals);
+      IQueryable<Crop> query = _db.Crops
+                                    .Include(c => c.Varietals)
+                                      .ThenInclude(v => v.Events);
 
       if (!string.IsNullOrEmpty(keyword))
       {
@@ -29,7 +31,7 @@ namespace Api.Controllers
       }
 
       var crops = await query.ToListAsync();
-      
+
       return crops;
     }
 
