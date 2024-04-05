@@ -2,12 +2,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Table,
-  Group,
   Text,
-  Accordion,
-  Button,
-  HoverCard,
-  LoadingOverlay,
   Tooltip,
   Skeleton,
   Blockquote
@@ -16,10 +11,13 @@ import axios from "axios";
 import { useParams } from 'react-router-dom';
 import VarietalForm from "../components/VarietalForm";
 import { IconPencil } from '@tabler/icons-react';
+import { useNavigate } from "react-router-dom";
 
 // import { useNavigate } from "react-router-dom";
 
 const Varietal = () => {
+  const navigate = useNavigate();
+
   const [varietal, setVarietal] = useState();
   let { id: varietalId } = useParams();
 
@@ -53,6 +51,9 @@ const Varietal = () => {
       case 'Once per Month':
         daysToAdd = 30;
         break;
+      case 'Once per Year':
+        daysToAdd = 365.25;
+        break;
       default:
         daysToAdd = 0;
         break;
@@ -68,15 +69,27 @@ const Varietal = () => {
 
   // on load, pass in the varietal and start formatting dates
   const formatDates = (varietal) => {
-    const waterStartDate = new Date(varietal?.waterStart);
-    const fertilizeStartDate = new Date(varietal?.fertilizeStart);
+    if (varietal.waterStart && varietal.waterStart !== "") {
+      const waterStartDate = new Date(varietal?.waterStart);
+      setFormattedWaterStart(`${(waterStartDate.getMonth() + 1).toString().padStart(2, '0')}/${waterStartDate.getDate().toString().padStart(2, '0')}/${waterStartDate.getFullYear()}`);
+      if (varietal.waterEvery && varietal.waterEvery !== "Never") {
+        setNextWaterDate(calculateNextDate(varietal.waterStart, varietal.waterEvery));
+      }
+    } else {
+      setFormattedWaterStart("")
+      setNextWaterDate("")
+    }
 
-    setFormattedWaterStart(`${(waterStartDate.getMonth() + 1).toString().padStart(2, '0')}/${waterStartDate.getDate().toString().padStart(2, '0')}/${waterStartDate.getFullYear()}`);
-    setFormattedFertilizeStart(`${(fertilizeStartDate.getMonth() + 1).toString().padStart(2, '0')}/${fertilizeStartDate.getDate().toString().padStart(2, '0')}/${fertilizeStartDate.getFullYear()}`);
-
-    //set next water and fertilizing dates using calc next date helper
-    setNextWaterDate(calculateNextDate(varietal.waterStart, varietal.waterEvery));
-    setNextFertilizeDate(calculateNextDate(varietal.fertilizeStart, varietal.fertilizeEvery));
+    if (varietal.fertilizeStart && varietal.fertilizeStart !== "") {
+      const fertilizeStartDate = new Date(varietal?.fertilizeStart);
+      setFormattedFertilizeStart(`${(fertilizeStartDate.getMonth() + 1).toString().padStart(2, '0')}/${fertilizeStartDate.getDate().toString().padStart(2, '0')}/${fertilizeStartDate.getFullYear()}`);
+      if (varietal.fertilizeEvery && varietal.fertilizeEvery !== "Never") {
+        setNextFertilizeDate(calculateNextDate(varietal.fertilizeStart, varietal.fertilizeEvery));
+      }
+    } else {
+      setFormattedFertilizeStart("")
+      setNextFertilizeDate("")
+    }
   };
 
 
@@ -93,6 +106,7 @@ const Varietal = () => {
 
     } catch (error) {
       console.error('Error fetching data:', error);
+      navigate("/crops");
     };
     setIsLoading(false);
   }
@@ -101,18 +115,14 @@ const Varietal = () => {
     loadVarietal();
   }, []);
 
+
   const handleUpdateVarietal = (updatedVarietal) => {
-    setVarietal(updatedVarietal);
+    loadVarietal(updatedVarietal);
+    // setVarietal(updatedVarietal);
     // setAddNewCrop(false);
     // setSelectedCrop();
     console.log('varietal was updated', updatedVarietal);
   };
-
-  const handleDeleteVarietal = (varietalId) => {
-    // setCrops((prevCrops) => prevCrops.filter((crop) => crop.cropId !== cropId));
-    console.log('varietal was deleted, id:', varietalId);
-  };
-
 
   return (
     <>
@@ -136,11 +146,12 @@ const Varietal = () => {
         )}
 
         <h2>Watering Schedule</h2>
-        {varietal?.fertilizeEvery ? (
+        {varietal?.waterEvery || varietal?.waterStart ? (
           <Table highlightOnHover>
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Frequency</Table.Th>
+                <Table.Th>Duration</Table.Th>
                 <Table.Th>First Watering</Table.Th>
                 <Table.Th>Next Watering</Table.Th>
               </Table.Tr>
@@ -148,17 +159,18 @@ const Varietal = () => {
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>{varietal?.waterEvery}</Table.Td>
+                <Table.Td>{varietal?.waterTime ? `${varietal?.waterTime} min` : ''}</Table.Td>
                 <Table.Td>{formattedWaterStart}</Table.Td>
                 <Table.Td>{nextWaterDate}</Table.Td>
               </Table.Tr>
             </Table.Tbody>
           </Table>
         ) : (
-          <Text size="sm">No fertilizing schedule has been set for {varietal ? ` ${varietal.name}` : 'this variety'}</Text>
+          <Text size="sm">No watering schedule has been set for {varietal ? ` ${varietal.name}` : 'this variety'}</Text>
         )}
 
         <h2>Fertilizing Schedule</h2>
-        {varietal?.fertilizeEvery ? (
+        {varietal?.fertilizeEvery ||  varietal?.fertilizeStart ? (
           <Table highlightOnHover>
             <Table.Thead>
               <Table.Tr>
@@ -211,7 +223,6 @@ const Varietal = () => {
         isOpen={showVarietalModal}
         onDismissVarietal={() => setShowVarietalModal(false)}
         onUpdateVarietal={handleUpdateVarietal}
-        onDeleteVarietal={handleDeleteVarietal}
       />
     </>
   )

@@ -91,3 +91,9 @@ As a developer, my aim is to log my journey in building this application. This a
 - I have watering and fertilizing data formatted into tables. I am not 100% happy with how these look, so I will need to keep thinking about the best way to go about displaying the data.
 - ALSO it would be SICK if I could take the water and fertilize schedule and put it into a calendar, so that these values and dates can be seen. I would be REALLY happy about that!
 - Going forward, I still need to finish the UD of CRUD for Varietals. I got a bit stuck on UI today, so that got put on the back burner. 
+
+### 4/4/24
+
+- Today I finished full CRUD on varietals! 
+- Ran into some issues with some of my functions... Delete and post gave me a bit of a hard time. But ultimately I feel really good about the progress I have made. 
+- Next time I want to think more about events and creating logs for the farm. I need to clarify differences between the two in my head again. I have it laid out on Miro, so that will be a big help! 

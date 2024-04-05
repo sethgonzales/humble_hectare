@@ -128,8 +128,9 @@ const CropForm = (props) => {
       onDeleteCrop(crop.cropId);
 
       onDismissCrop();
+
     } catch (error) {
-      console.error("Error updating crop:", error);
+      console.error("Error deleting crop:", error);
     }
     form.reset();
     setDeleteConfirm(false);
@@ -156,9 +157,11 @@ const CropForm = (props) => {
             label="Type"
             // placeholder="Select the Crop Type"
             data={[
-              { label: 'Select the Crop Type', value: '', disabled: true},
+              { label: 'Select the Crop Type', value: '', disabled: true },
               { label: 'Fruit', value: 'Fruit' },
               { label: 'Vegetable', value: 'Vegetable' },
+              { label: 'Herb', value: 'Herb' },
+              { label: 'Legume', value: 'Legume' },
             ]}
             {...form.getInputProps('type')}
           />

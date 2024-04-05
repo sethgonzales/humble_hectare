@@ -18,27 +18,28 @@ export default function App() {
     <MantineProvider theme={theme}>
       {/* // todo: add alt styling for smaller screens on header */}
       <AppShell
-        header={{ height: 120 }}
+        // header={{ height: 120 }}
         navbar={{
-          width: 150,
+          width: 200,
           breakpoint: 'sm',
           collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
         }}
         padding="md"
       >
 
-        <AppShell.Header style={{ overflow: 'hidden', border: 'none', background: '#d3ecbc', display: 'flex', alignContent: 'center', paddingLeft: '1.5rem' }}>
+        {/* <AppShell.Header style={{ overflow: 'hidden', border: 'none', background: '#d3ecbc', display: 'flex', alignContent: 'center', paddingLeft: '1.5rem' }}>
           <Center>
             <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
             <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
             <Group style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingLeft: '1.5rem' }}>
-              <h1>Humble Hectare</h1>
-              <img src={Logo} alt="Humble Hectare Logo" style={{ width: 'auto', height: '8rem', marginLeft: 10 }} />
             </Group>
-          </Center>
-        </AppShell.Header>
+            </Center>
+          </AppShell.Header> */}
 
-        <AppShell.Navbar style={{ padding: '0.5rem' }}>
+        <AppShell.Navbar style={{ padding: '0.5rem', background: '#d3ecbc' }}>
+          <div style={{ textAlign: "center", fontSize: "larger", color: 'black', border: 'solid', borderRadius: '8rem', background: 'white', marginBottom: '1rem', marginTop: '1rem' }}>
+            <h1>Humble Hectare</h1>
+          </div>
           <NavLink
             href="/"
             label="Home"
@@ -59,6 +60,9 @@ export default function App() {
 
         <AppShell.Main>
           <Router />
+          <div style={{ textAlign: "center" }}>
+            <img src={Logo} alt="Humble Hectare Logo" style={{ width: '8rem', height: 'auto', marginTop: '3rem'}} />
+          </div>
         </AppShell.Main>
       </AppShell>
     </MantineProvider>

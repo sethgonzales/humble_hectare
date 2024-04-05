@@ -9,35 +9,52 @@ import {
   LoadingOverlay,
   Alert,
   Textarea,
-  NativeSelect
+  NativeSelect,
+  NumberInput
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
+import { useNavigate } from "react-router-dom";
 
 const VarietalForm = (props) => {
   const {
     varietal,
     isOpen,
     onDismissVarietal,
-    onDeleteVarietal,
     onUpdateVarietal,
+    addNewVarietal,
+    onAddNewVarietal,
+    crop,
   } = props;
+  
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
-  // const dateWaterStart = new Date(varietal?.waterStart);
+  const [duplicateWarning, setDuplicateWarning] = useState(false);
 
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
       name: "",
       description: "",
-      waterStart: "",
-      waterEvery: null,
-      fertilizeStart: "",
-      fertilizeEvery: null,
+      waterStart: null,
+      waterEvery: "",
+      waterTime: "",
+      fertilizeStart: null,
+      fertilizeEvery: "",
     },
     validate: {
       name: (value) => (value === "" || null ? "Please enter the variety's name" : null),
+      waterStart: (value) => {
+        if (!value) {
+          return null;
+        }
+      },
+      fertilizeStart: (value) => {
+        if (!value) {
+          return null;
+        }
+      },
     },
   });
 
@@ -49,6 +66,7 @@ const VarietalForm = (props) => {
         description: varietal?.description || "",
         waterStart: varietal?.waterStart ? new Date(varietal.waterStart) : null,
         waterEvery: varietal?.waterEvery || "",
+        waterTime: varietal?.waterTime || "",
         fertilizeStart: varietal?.fertilizeStart ? new Date(varietal.fertilizeStart) : null,
         fertilizeEvery: varietal?.fertilizeEvery || "",
       });
@@ -56,19 +74,19 @@ const VarietalForm = (props) => {
   }, [varietal]);
 
 
-  const handleUpdateVarietal = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+  const handleUpdateVarietal = async () => {
     try {
+      setIsLoading(true);
       if (form.isValid()) {
         const data = {
           varietalId: varietal?.varietalId,
           cropId: varietal?.cropId,
           name: form.values.name,
           description: form.values.description,
-          waterStart: form.values.waterStart.toISOString(),
+          waterStart: form.values.waterStart ? form.values.waterStart.toISOString() : "",
           waterEvery: form.values.waterEvery,
-          fertilizeStart: form.values.fertilizeStart.toISOString(),
+          waterTime: form.values.waterTime ? form.values.waterTime : 0,
+          fertilizeStart: form.values.fertilizeStart ? form.values.fertilizeStart.toISOString() : "",
           fertilizeEvery: form.values.fertilizeEvery,
         };
 
@@ -83,6 +101,7 @@ const VarietalForm = (props) => {
           description: data.description,
           waterStart: data.waterStart,
           waterEvery: data.waterEvery,
+          waterTime: data.waterTime,
           fertilizeStart: data.fertilizeStart,
           fertilizeEvery: data.fertilizeEvery,
         });
@@ -95,34 +114,84 @@ const VarietalForm = (props) => {
     setIsLoading(false);
   }
 
-  const handleDelete = async () => {
-    // setIsLoading(true);
-    // try {
+  const handleAddVarietal = async () => {
+    try {
+      if (form.isValid()) {
+        setIsLoading(true);
 
-    //   await axios.delete(
-    //     `https://localhost:5001/api/crops/${crop.cropId}`
-    //   );
+        const newVarietalName = form.values.name.toLowerCase();
+        const isDuplicate = crop.varietals?.some(existingVarietal => existingVarietal.name.toLowerCase() === newVarietalName);
 
-    //   onDeleteCrop(crop.cropId);
+        if (isDuplicate) {
+          setDuplicateWarning(true);
+          setIsLoading(false);
+          return;
+        }
 
-    //   onDismissVarietal();
-    // } catch (error) {
-    //   console.error("Error updating crop:", error);
-    // }
-    // form.reset();
-    // setDeleteConfirm(false);
-    // setIsLoading(false);
-  }
+        const data = {
+          cropId: crop.cropId,
+          name: form.values.name,
+          description: form.values.description,
+          waterStart: form.values.waterStart ? form.values.waterStart.toISOString() : "",
+          waterEvery: form.values.waterEvery,
+          waterTime: form.values.waterTime ? form.values.waterTime : 0,
+          fertilizeStart: form.values.fertilizeStart ? form.values.fertilizeStart.toISOString() : "",
+          fertilizeEvery: form.values.fertilizeEvery,
+        };
+
+        const response = await axios.post(
+          `https://localhost:5001/api/crops/${crop.cropId}/varietals`,
+          data
+        );
+
+        console.log('api var response', response);
+        onAddNewVarietal(response);
+        onDismissVarietal();
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error adding varietal:", error);
+    }
+    form.reset();
+    setIsLoading(false);
+  };
 
   const handleDismiss = () => {
     onDismissVarietal();
     setDeleteConfirm(false);
   }
 
+  const handleDelete = async () => {
+    setIsLoading(true);
+    try {
+      await axios.delete(
+        `https://localhost:5001/api/varietals/${varietal.varietalId}`
+      ); 
+
+      onDismissVarietal();
+      navigate('/crops');
+
+    } catch (error) {
+      console.error("Error deleting varietal:", error);
+    }
+    form.reset();
+    setDeleteConfirm(false);
+    setIsLoading(false);
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!addNewVarietal && varietal) {
+      handleUpdateVarietal();
+    } else {
+      handleAddVarietal();
+    }
+  };
+
   return (
     <Modal opened={isOpen} onClose={handleDismiss} title="Details">
-      {!deleteConfirm && (
-        <form onSubmit={handleUpdateVarietal}>
+      {!deleteConfirm && !duplicateWarning && (
+        <form onSubmit={handleSubmit}>
           <TextInput
             label="Name"
             placeholder="Name of this variety"
@@ -155,9 +224,18 @@ const VarietalForm = (props) => {
               { label: 'Every other Day', value: 'Every other Day' },
               { label: 'Once per Week', value: 'Once per Week' },
               { label: 'Once per Month', value: 'Once per Month' },
+              { label: 'Once per Year', value: 'Once per Year' },
               { label: 'Never', value: null },
             ]}
             {...form.getInputProps('waterEvery')}
+          />
+
+
+          <NumberInput
+            label="Watering Time (minutes)"
+            placeholder="Time in minutes"
+            min={0}
+            {...form.getInputProps('waterTime')}
           />
 
           <h3 style={{ marginBottom: "0" }}>Fertilizing Schedule</h3>
@@ -180,6 +258,7 @@ const VarietalForm = (props) => {
               { label: 'Every other Day', value: 'Every other Day' },
               { label: 'Once per Week', value: 'Once per Week' },
               { label: 'Once per Month', value: 'Once per Month' },
+              { label: 'Once per Year', value: 'Once per Year' },
               { label: 'Never', value: null },
             ]}
             {...form.getInputProps('fertilizeEvery')}
@@ -187,7 +266,9 @@ const VarietalForm = (props) => {
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
             <Button type="submit" variant="filled" size="xs" color="green">Save</Button>
-            <Button onClick={() => setDeleteConfirm(true)} variant="filled" size="xs" color="red">Delete</Button>
+            {varietal && !addNewVarietal && (
+              <Button onClick={() => setDeleteConfirm(true)} variant="filled" size="xs" color="red">Delete</Button>
+            )}
           </div>
         </form>
       )}
@@ -202,6 +283,14 @@ const VarietalForm = (props) => {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
             <Button onClick={handleDelete} variant="filled" size="xs" color="red">Permanently Delete</Button>
             <Button onClick={() => setDeleteConfirm(false)} variant="filled" size="xs" color="grey">Cancel</Button>
+          </div>
+        </Alert>
+      )}
+      {duplicateWarning && (
+        <Alert variant="light" color="blue" title="Hold up!">
+          There is another variety of this same name already added for this crop
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
+            <Button onClick={() => setDuplicateWarning(false)} variant="filled" size="xs" color="grey">Cancel</Button>
           </div>
         </Alert>
       )}

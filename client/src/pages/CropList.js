@@ -14,6 +14,7 @@ import CropForm from '../components/CropForm';
 import { useNavigate } from "react-router-dom";
 
 import { IconPencil, IconPlus } from '@tabler/icons-react';
+import VarietalForm from "../components/VarietalForm";
 
 // import { useNavigate } from "react-router-dom";
 
@@ -21,10 +22,16 @@ const CropList = (props) => {
   const { seeCrops } = props;
   const navigate = useNavigate();
 
+  // State for viewing, adding, and updating crops
   const [crops, setCrops] = useState();
   const [selectedCrop, setSelectedCrop] = useState();
   const [showCropModal, setShowCropModal] = useState(false);
   const [addNewCrop, setAddNewCrop] = useState(false);
+
+  // State for adding a varietal
+  const [showVarietalModal, setShowVarietalModal] = useState(false);
+  const [addNewVarietal, setAddNewVarietal] = useState(false);
+  const [cropToAddVarietal, setCropToAddVarietal] = useState();
 
   console.log(crops);
   const [isLoading, setIsLoading] = useState(false);
@@ -74,7 +81,6 @@ const CropList = (props) => {
     );
     setAddNewCrop(false);
     setSelectedCrop();
-    console.log('crop was updated');
   };
 
   const handleDeleteCrop = (cropId) => {
@@ -82,10 +88,37 @@ const CropList = (props) => {
   };
 
   const seeVarietal = (varietal) => {
-    console.log('navigate to varietal: ', varietal.name, varietal.varietalId)
+    console.log('navigate to varietal: ', varietal.name, varietal.varietalId) // ! console.log
     navigate(`/varietal/${varietal?.varietalId}`)
   };
 
+  const showVarietalForm = (crop) => {
+    setCropToAddVarietal(crop);
+    setShowVarietalModal(true);
+  }
+
+  const handleAddVarietal = (newVarietal) => {
+    // const cropIndex = crops.findIndex(crop => crop.cropId === cropToAddVarietal.cropId);
+
+    // If the crop is found, create a copy of the crops array and update the specific crop
+    // if (cropIndex !== -1) {
+    //   const updatedCrops = [...crops];
+    //   updatedCrops[cropIndex] = {
+    //     ...updatedCrops[cropIndex],
+    //     varietals: [...updatedCrops[cropIndex].varietals, newVarietal]
+    //   };
+    //   setCrops(updatedCrops);
+    // }
+    loadCrops(); // do this instead of update state.... New varietal does not have an index?? Not sure what is going on
+    setCropToAddVarietal();
+    setAddNewVarietal(false);
+    console.log('new varietal added', newVarietal);
+  };
+
+  const dismissVarietalForm = () => {
+    setShowVarietalModal(false);
+    setAddNewVarietal(false);
+  }
 
   useEffect(() => {
     loadCrops();
@@ -120,32 +153,38 @@ const CropList = (props) => {
                 <Accordion.Panel>
                   {/* <Text size="sm">{crop.content}</Text> */}
                   {crop?.varietals?.length > 0 ? (
-                    <Table striped highlightOnHover>
-                      <Table.Thead>
-                        <Table.Tr>
-                          <Table.Th>Variety</Table.Th>
-                          <Table.Th>Water Frequency</Table.Th>
-                          <Table.Th>Fertilize Frequency</Table.Th>
-                          <Table.Th>Events Logged</Table.Th>
-                        </Table.Tr>
-                      </Table.Thead>
-                      <Table.Tbody>
-                        {crop.varietals.map((varietal) => (
-                          <Table.Tr
-                            key={varietal.varietalId}
-                            onClick={() => seeVarietal(varietal)}
-                            style={{ cursor: "pointer" }}
-                          >
-                            <Table.Td>{varietal?.name}</Table.Td>
-                            <Table.Td>{varietal?.waterEvery} {varietal?.waterEveryUnit ? ` ${varietal?.waterEveryUnit}` : ''}</Table.Td>
-                            <Table.Td>{varietal?.fertilizeEvery} {varietal?.fertilizeEveryUnit ? ` ${varietal?.fertilizeEveryUnit}` : ''}</Table.Td>
-                            <Table.Td>{varietal?.events ? `${varietal?.events.length}` : '0'}</Table.Td>
+                    <>
+                      <Table striped highlightOnHover>
+                        <Table.Thead>
+                          <Table.Tr>
+                            <Table.Th>Variety</Table.Th>
+                            <Table.Th>Water Frequency</Table.Th>
+                            <Table.Th>Fertilize Frequency</Table.Th>
+                            <Table.Th>Events Logged</Table.Th>
                           </Table.Tr>
-                        ))}
-                      </Table.Tbody>
-                    </Table>
+                        </Table.Thead>
+                        <Table.Tbody>
+                          {crop.varietals.map((varietal) => (
+                            <Table.Tr
+                              key={varietal.varietalId}
+                              onClick={() => seeVarietal(varietal)}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <Table.Td>{varietal?.name}</Table.Td>
+                              <Table.Td>{varietal?.waterEvery} {varietal?.waterEveryUnit ? ` ${varietal?.waterEveryUnit}` : ''}</Table.Td>
+                              <Table.Td>{varietal?.fertilizeEvery} {varietal?.fertilizeEveryUnit ? ` ${varietal?.fertilizeEveryUnit}` : ''}</Table.Td>
+                              <Table.Td>{varietal?.events ? `${varietal?.events.length}` : '0'}</Table.Td>
+                            </Table.Tr>
+                          ))}
+                        </Table.Tbody>
+                      </Table>
+                      <Button onClick={() => showVarietalForm(crop)} variant="filled" size="xs" color="green" style={{ marginTop: '30px', marginLeft: '10px' }}>Add</Button>
+                    </>
                   ) : (
-                    <Text size="sm">No varieties of {crop ? ` ${crop.name}` : 'this crop'} have been planted</Text>
+                    <>
+                      <Text size="sm">No varieties of {crop ? ` ${crop.name}` : 'this crop'} have been planted</Text>
+                      <Button onClick={() => showVarietalForm(crop)} variant="filled" size="xs" color="green" style={{ marginTop: '30px' }}>Add</Button>
+                    </>
                   )}
                 </Accordion.Panel>
               </Accordion.Item>
@@ -162,6 +201,14 @@ const CropList = (props) => {
         onAddNewCrop={handleAddCrop}
         onUpdateCrop={handleUpdateCrop}
         onDeleteCrop={handleDeleteCrop}
+      />
+
+      <VarietalForm
+        isOpen={showVarietalModal}
+        addNewVarietal={addNewVarietal}
+        onDismissVarietal={dismissVarietalForm}
+        onAddNewVarietal={handleAddVarietal}
+        crop={cropToAddVarietal}
       />
     </>
   )

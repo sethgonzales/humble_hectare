@@ -16,6 +16,7 @@ namespace Api.Models
     //Can show on calendar, or as a 'rec next date:' on the crop varietal data sheet¸
     public string WaterStart { get; set; }
     public string WaterEvery { get; set; }
+    public int WaterTime { get; set; }
     public string FertilizeStart { get; set; }
     public string FertilizeEvery { get; set; }
 
