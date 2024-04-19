@@ -79,7 +79,7 @@ const Varietal = () => {
       setFormattedWaterStart("")
       setNextWaterDate("")
     }
-
+    
     if (varietal.fertilizeStart && varietal.fertilizeStart !== "") {
       const fertilizeStartDate = new Date(varietal?.fertilizeStart);
       setFormattedFertilizeStart(`${(fertilizeStartDate.getMonth() + 1).toString().padStart(2, '0')}/${fertilizeStartDate.getDate().toString().padStart(2, '0')}/${fertilizeStartDate.getFullYear()}`);
