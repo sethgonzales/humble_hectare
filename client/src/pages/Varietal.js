@@ -10,9 +10,11 @@ import {
 import axios from "axios";
 import { useParams } from 'react-router-dom';
 import VarietalForm from "../components/VarietalForm";
+// import EventForm from "../components/EventForm";
 import { IconPencil } from '@tabler/icons-react';
 import { useNavigate } from "react-router-dom";
-
+import { formatDate } from "../utils/DateTime";
+import { calculateNextDate } from "../utils/DateTime";
 // import { useNavigate } from "react-router-dom";
 
 const Varietal = () => {
@@ -26,72 +28,8 @@ const Varietal = () => {
   const [formattedFertilizeStart, setFormattedFertilizeStart] = useState('');
   const [nextWaterDate, setNextWaterDate] = useState('');
   const [nextFertilizeDate, setNextFertilizeDate] = useState('');
-  // const [addNewCrop, setAddNewCrop] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
-
-  // helper function to find the next date
-  const calculateNextDate = (startDate, frequency) => {
-    const today = new Date();
-    let daysToAdd;
-
-    switch (frequency) {
-      case 'Daily':
-        daysToAdd = 1;
-        break;
-      case 'Twice per Day':
-        daysToAdd = 0.5;
-        break;
-      case 'Every other Day':
-        daysToAdd = 2;
-        break;
-      case 'Once per Week':
-        daysToAdd = 7;
-        break;
-      case 'Once per Month':
-        daysToAdd = 30;
-        break;
-      case 'Once per Year':
-        daysToAdd = 365.25;
-        break;
-      default:
-        daysToAdd = 0;
-        break;
-    }
-
-    const firstDate = new Date(startDate);
-    const diffInDays = (today - firstDate) / (1000 * 60 * 60 * 24);
-
-    const nextDate = new Date(firstDate);
-    nextDate.setDate(firstDate.getDate() + Math.ceil(diffInDays / daysToAdd) * daysToAdd);
-    return `${(nextDate.getMonth() + 1).toString().padStart(2, '0')}/${nextDate.getDate().toString().padStart(2, '0')}/${nextDate.getFullYear()}`;
-  };
-
-  // on load, pass in the varietal and start formatting dates
-  const formatDates = (varietal) => {
-    if (varietal.waterStart && varietal.waterStart !== "") {
-      const waterStartDate = new Date(varietal?.waterStart);
-      setFormattedWaterStart(`${(waterStartDate.getMonth() + 1).toString().padStart(2, '0')}/${waterStartDate.getDate().toString().padStart(2, '0')}/${waterStartDate.getFullYear()}`);
-      if (varietal.waterEvery && varietal.waterEvery !== "Never") {
-        setNextWaterDate(calculateNextDate(varietal.waterStart, varietal.waterEvery));
-      }
-    } else {
-      setFormattedWaterStart("")
-      setNextWaterDate("")
-    }
-    
-    if (varietal.fertilizeStart && varietal.fertilizeStart !== "") {
-      const fertilizeStartDate = new Date(varietal?.fertilizeStart);
-      setFormattedFertilizeStart(`${(fertilizeStartDate.getMonth() + 1).toString().padStart(2, '0')}/${fertilizeStartDate.getDate().toString().padStart(2, '0')}/${fertilizeStartDate.getFullYear()}`);
-      if (varietal.fertilizeEvery && varietal.fertilizeEvery !== "Never") {
-        setNextFertilizeDate(calculateNextDate(varietal.fertilizeStart, varietal.fertilizeEvery));
-      }
-    } else {
-      setFormattedFertilizeStart("")
-      setNextFertilizeDate("")
-    }
-  };
-
 
   const loadVarietal = async () => {
     setIsLoading(true);
@@ -102,7 +40,35 @@ const Varietal = () => {
       console.log('Get varietal ', response.data);
 
       setVarietal(varietal);
-      formatDates(varietal);
+
+      if (varietal.waterStart && varietal.waterStart !== '') {
+        const frmtWaterSt = formatDate(varietal.waterStart);
+        setFormattedWaterStart(frmtWaterSt);
+
+        if (varietal.waterEvery && varietal.waterEvery !== 'Never') {
+          const nxtWaterDt = calculateNextDate(frmtWaterSt, varietal.waterEvery);
+          setNextWaterDate(nxtWaterDt);
+        } else {
+          setNextWaterDate('');
+        }
+      } else {
+        setFormattedWaterStart('');
+        setNextWaterDate('');
+      }
+
+      if (varietal.waterStart && varietal.waterStart !== '') {
+        const frmtFertSt = formatDate(varietal.fertilizeStart);
+        setFormattedFertilizeStart(frmtFertSt);
+        if (varietal.fertilizeEvery && varietal.fertilizeEvery !== 'Never') {
+          const nxtFertDt = calculateNextDate(frmtFertSt, varietal.fertilizeEvery);
+          setNextFertilizeDate(nxtFertDt);
+        } else {
+          setNextFertilizeDate('');
+        }
+      } else {
+        setFormattedFertilizeStart('');
+        setNextFertilizeDate('');
+      }
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -170,7 +136,7 @@ const Varietal = () => {
         )}
 
         <h2>Fertilizing Schedule</h2>
-        {varietal?.fertilizeEvery ||  varietal?.fertilizeStart ? (
+        {varietal?.fertilizeEvery || varietal?.fertilizeStart ? (
           <Table highlightOnHover>
             <Table.Thead>
               <Table.Tr>
@@ -224,6 +190,10 @@ const Varietal = () => {
         onDismissVarietal={() => setShowVarietalModal(false)}
         onUpdateVarietal={handleUpdateVarietal}
       />
+      {/* <EventForm
+        varietal={varietal}
+        isOpen={showEventModal}
+      /> */}
     </>
   )
 }

@@ -16,9 +16,8 @@ export default function App() {
 
   return (
     <MantineProvider theme={theme}>
-      {/* // todo: add alt styling for smaller screens on header */}
       <AppShell
-        // header={{ height: 120 }}
+        // header={{ height: 50 }}
         navbar={{
           width: 200,
           breakpoint: 'sm',
@@ -27,14 +26,12 @@ export default function App() {
         padding="md"
       >
 
-        {/* <AppShell.Header style={{ overflow: 'hidden', border: 'none', background: '#d3ecbc', display: 'flex', alignContent: 'center', paddingLeft: '1.5rem' }}>
+        <AppShell.Header style={{ overflow: 'hidden', display: 'flex', background: 'transparent', border: 'none', padding: '1rem' }}>
           <Center>
-            <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
-            <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
-            <Group style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingLeft: '1.5rem' }}>
-            </Group>
-            </Center>
-          </AppShell.Header> */}
+            <Burger style={{ background: 'white' }} opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
+            {/* <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" /> */}
+          </Center>
+        </AppShell.Header>
 
         <AppShell.Navbar style={{ padding: '0.5rem', background: '#d3ecbc' }}>
           <div style={{ textAlign: "center", fontSize: "larger", color: 'black', border: 'solid', borderRadius: '8rem', background: 'white', marginBottom: '1rem', marginTop: '1rem' }}>
@@ -61,7 +58,7 @@ export default function App() {
         <AppShell.Main>
           <Router />
           <div style={{ textAlign: "center" }}>
-            <img src={Logo} alt="Humble Hectare Logo" style={{ width: '8rem', height: 'auto', marginTop: '3rem'}} />
+            <img src={Logo} alt="Humble Hectare Logo" style={{ width: '8rem', height: 'auto', marginTop: '3rem' }} />
           </div>
         </AppShell.Main>
       </AppShell>
