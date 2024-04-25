@@ -14,8 +14,7 @@ namespace Api.Models
     
     public string DateStart { get; set; } //Start date of an event. Give option for single date, so that things like watering and fertilizing can happen on single day.
     public string DateEnd { get; set; } //Event date of an event.
-    public double Yield { get; set; } //Yield from a harvest or process event. In tandem with yield unit.
-    public string YieldUnit { get; set; }
+    public string Yield { get; set; } //Yield from a harvest or process event. In tandem with yield unit.
     public string Notes { get; set; } //Always give option to show notes.
     
     // Foreign key and navigation property for the one-to-many relationship with Varietal

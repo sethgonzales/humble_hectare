@@ -5,12 +5,13 @@ import {
   Text,
   Tooltip,
   Skeleton,
-  Blockquote
+  Blockquote,
+  Button
 } from '@mantine/core';
 import axios from "axios";
 import { useParams } from 'react-router-dom';
 import VarietalForm from "../components/VarietalForm";
-// import EventForm from "../components/EventForm";
+import EventForm from "../components/EventForm";
 import { IconPencil } from '@tabler/icons-react';
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../utils/DateTime";
@@ -24,6 +25,8 @@ const Varietal = () => {
   let { id: varietalId } = useParams();
 
   const [showVarietalModal, setShowVarietalModal] = useState(false);
+  const [showEventModal, setShowEventModal] = useState(false);
+
   const [formattedWaterStart, setFormattedWaterStart] = useState('');
   const [formattedFertilizeStart, setFormattedFertilizeStart] = useState('');
   const [nextWaterDate, setNextWaterDate] = useState('');
@@ -80,15 +83,6 @@ const Varietal = () => {
   useEffect(() => {
     loadVarietal();
   }, []);
-
-
-  const handleUpdateVarietal = (updatedVarietal) => {
-    loadVarietal(updatedVarietal);
-    // setVarietal(updatedVarietal);
-    // setAddNewCrop(false);
-    // setSelectedCrop();
-    console.log('varietal was updated', updatedVarietal);
-  };
 
   return (
     <>
@@ -170,7 +164,7 @@ const Varietal = () => {
               {varietal.events.map((event) => (
                 <Table.Tr
                   key={event.eventId}
-                // onClick={() => seeVarietal(varietal)}
+                // onClick={() => seeEvent(event)}
                 >
                   <Table.Td>{event?.eventType}</Table.Td>
                   <Table.Td>{event?.dateStart} {event?.dateEnd ? ` - ${event?.dateEnd}` : ''}</Table.Td>
@@ -181,6 +175,7 @@ const Varietal = () => {
         ) : (
           <Text size="sm">No events have been logged for {varietal ? ` ${varietal.name}` : 'this variety'}</Text>
         )}
+        <Button onClick={() => setShowEventModal(true)} variant="filled" size="xs" color="green" style={{ marginTop: '30px', marginLeft: '10px' }}>Add Event</Button>
       </Skeleton>
 
 
@@ -188,14 +183,16 @@ const Varietal = () => {
         varietal={varietal}
         isOpen={showVarietalModal}
         onDismissVarietal={() => setShowVarietalModal(false)}
-        onUpdateVarietal={handleUpdateVarietal}
+        onUpdateVarietal={loadVarietal}
       />
-      {/* <EventForm
+      <EventForm
         varietal={varietal}
         isOpen={showEventModal}
-      /> */}
+        onDismissEvent={() => setShowEventModal(false)}
+
+      />
     </>
-  )
-}
+  );
+};
 
 export default Varietal;

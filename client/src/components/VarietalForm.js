@@ -1,4 +1,4 @@
-//CropForm.jsx
+//VarietalForm.js
 import React, { useEffect, useState } from "react";
 import { useForm } from '@mantine/form';
 import axios from "axios";
@@ -189,7 +189,7 @@ const VarietalForm = (props) => {
   };
 
   return (
-    <Modal opened={isOpen} onClose={handleDismiss} title="Details">
+    <Modal opened={isOpen} onClose={handleDismiss} title={varietal ? "Varietal Details" : "New Varietal"} >
       {!deleteConfirm && !duplicateWarning && (
         <form onSubmit={handleSubmit}>
           <TextInput
@@ -294,8 +294,8 @@ const VarietalForm = (props) => {
           </div>
         </Alert>
       )}
-    </Modal >
-  )
-}
+    </Modal>
+  );
+};
 
 export default VarietalForm;

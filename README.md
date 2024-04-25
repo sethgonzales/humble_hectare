@@ -97,3 +97,11 @@ As a developer, my aim is to log my journey in building this application. This a
 - Today I finished full CRUD on varietals! 
 - Ran into some issues with some of my functions... Delete and post gave me a bit of a hard time. But ultimately I feel really good about the progress I have made. 
 - Next time I want to think more about events and creating logs for the farm. I need to clarify differences between the two in my head again. I have it laid out on Miro, so that will be a big help! 
+
+### 4/25/24
+
+- Big refactor today with the date time formatting functions. I moved these to their own util file to hopefully make them more reuseable for other functions and make the code more modular.
+- Began adding in forms for new events. Completed the form but have not completed CRUD functionality. Need to do that next.
+- TODO: Install a markdown editor for description and notes text areas. Write a HectareMarkdown wrapper for the text areas.
+- TODO: Complete CRUD for events
+- TODO: Fix validation for all forms. Need to validate on save and not clear the form.

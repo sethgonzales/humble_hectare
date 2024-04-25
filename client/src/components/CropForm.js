@@ -154,14 +154,20 @@ const CropForm = (props) => {
           />
 
           <NativeSelect
-            label="Type"
+            label="Type of Event"
             // placeholder="Select the Crop Type"
             data={[
               { label: 'Select the Crop Type', value: '', disabled: true },
-              { label: 'Fruit', value: 'Fruit' },
               { label: 'Vegetable', value: 'Vegetable' },
+              { label: 'Fruit', value: 'Fruit' },
+              { label: 'Berry', value: 'Berry' },
               { label: 'Herb', value: 'Herb' },
+              { label: 'Grain', value: 'Grain' },
+              { label: 'Tuber', value: 'Tuber' },
               { label: 'Legume', value: 'Legume' },
+              { label: 'Mushroom', value: 'Mushroom' },
+              { label: 'Root Crop', value: 'Root Crop' },
+              { label: 'Other', value: 'Other' },
             ]}
             {...form.getInputProps('type')}
           />

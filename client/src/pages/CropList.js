@@ -33,7 +33,6 @@ const CropList = (props) => {
   const [addNewVarietal, setAddNewVarietal] = useState(false);
   const [cropToAddVarietal, setCropToAddVarietal] = useState();
 
-  console.log(crops);
   const [isLoading, setIsLoading] = useState(false);
 
   const loadCrops = async () => {
@@ -88,7 +87,6 @@ const CropList = (props) => {
   };
 
   const seeVarietal = (varietal) => {
-    console.log('navigate to varietal: ', varietal.name, varietal.varietalId) // ! console.log
     navigate(`/varietal/${varietal?.varietalId}`)
   };
 
@@ -98,21 +96,9 @@ const CropList = (props) => {
   }
 
   const handleAddVarietal = (newVarietal) => {
-    // const cropIndex = crops.findIndex(crop => crop.cropId === cropToAddVarietal.cropId);
-
-    // If the crop is found, create a copy of the crops array and update the specific crop
-    // if (cropIndex !== -1) {
-    //   const updatedCrops = [...crops];
-    //   updatedCrops[cropIndex] = {
-    //     ...updatedCrops[cropIndex],
-    //     varietals: [...updatedCrops[cropIndex].varietals, newVarietal]
-    //   };
-    //   setCrops(updatedCrops);
-    // }
-    loadCrops(); // do this instead of update state.... New varietal does not have an index?? Not sure what is going on
     setCropToAddVarietal();
     setAddNewVarietal(false);
-    console.log('new varietal added', newVarietal);
+    loadCrops();
   };
 
   const dismissVarietalForm = () => {
@@ -133,7 +119,7 @@ const CropList = (props) => {
             <IconPlus size="1.5rem" stroke={2} color="black" />
           </Button>
         </div>
-        <Text size="md">Click through each crop to see what has been planted</Text>
+        <Text size="md">{crops?.length > 0 ? 'Click through each crop to see what has been planted' : 'No crops have been added yet'}</Text>
         <Accordion chevronPosition="right" variant="contained">
           {crops
             && (crops.map((crop) => (
@@ -151,7 +137,6 @@ const CropList = (props) => {
                   </div>
                 </Accordion.Control>
                 <Accordion.Panel>
-                  {/* <Text size="sm">{crop.content}</Text> */}
                   {crop?.varietals?.length > 0 ? (
                     <>
                       <Table striped highlightOnHover>
