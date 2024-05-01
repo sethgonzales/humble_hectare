@@ -1,6 +1,6 @@
 //EventForm.jsx
 import React, { useEffect, useState } from "react";
-import { useForm } from '@mantine/form';
+import { isNotEmpty, useForm } from '@mantine/form';
 import axios from "axios";
 import {
   Modal,
@@ -33,6 +33,7 @@ const EventForm = (props) => {
   const [multiDate, setMultiDate] = useState(false);
 
   const form = useForm({
+    mode: 'uncontrolled',
     validateInputOnChange: true,
     initialValues: {
       eventType: "",
@@ -42,7 +43,7 @@ const EventForm = (props) => {
       notes: "",
     },
     validate: {
-      eventType: (value) => (value === "" || null ? "Please enter the type of event" : null),
+      eventType: isNotEmpty('Please enter the type of event'),
       dateStart: (value) => {
         if (!value) {
           return null;
@@ -75,12 +76,14 @@ const EventForm = (props) => {
     setDeleteConfirm(false);
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // if (!addNewVarietal && varietal) {
-    //   handleUpdateVarietal();
-    // } else {
-    //   handleAddVarietal();
+  const handleSubmit = () => {
+    console.log('submitted', form.data)
+    // if (form.isValid()) {
+      // if (!addNewVarietal && varietal) {
+      //   handleUpdateVarietal();
+      // } else {
+      //   handleAddVarietal();
+      // }
     // }
   };
 
@@ -88,7 +91,7 @@ const EventForm = (props) => {
     <Modal opened={isOpen} onClose={handleDismiss} title={_event ? "Event Details" : "New Event"}>
       {!deleteConfirm && (
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
             label="Type"
             placeholder="Harvest, process, seed, blossom, etc."
@@ -101,7 +104,7 @@ const EventForm = (props) => {
             dropdownType="modal"
             clearable
             placeholder={!multiDate ? "Select the event date" : "Pick start date"}
-            maxDate={new Date()}
+            // maxDate={new Date()}
             {...form.getInputProps('startDate')}
           />
 

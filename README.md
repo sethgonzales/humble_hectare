@@ -106,3 +106,8 @@ As a developer, my aim is to log my journey in building this application. This a
 - TODO: Make model DTOs to reduce data transfers
 - TODO: Complete CRUD for events
 - TODO: Fix validation for all forms. Need to validate on save and not clear the form.
+
+### 4/30/24
+
+- Played around with creating DTOs today. Made a varietal DTO and applied it to the varietal get. Would like to figure out how to apply this to the crop get included.
+- Fixed the bug with data validation! Just had to check through the docs again... Found a silly mistake with my on submit handler.

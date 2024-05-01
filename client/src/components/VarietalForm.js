@@ -1,6 +1,6 @@
 //VarietalForm.js
 import React, { useEffect, useState } from "react";
-import { useForm } from '@mantine/form';
+import { isNotEmpty, useForm } from '@mantine/form';
 import axios from "axios";
 import {
   Modal,
@@ -25,7 +25,7 @@ const VarietalForm = (props) => {
     onAddNewVarietal,
     crop,
   } = props;
-  
+
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -33,6 +33,7 @@ const VarietalForm = (props) => {
   const [duplicateWarning, setDuplicateWarning] = useState(false);
 
   const form = useForm({
+    mode: 'uncontrolled',
     validateInputOnChange: true,
     initialValues: {
       name: "",
@@ -44,7 +45,7 @@ const VarietalForm = (props) => {
       fertilizeEvery: "",
     },
     validate: {
-      name: (value) => (value === "" || null ? "Please enter the variety's name" : null),
+      name: isNotEmpty("Please enter the variety's name"),
       waterStart: (value) => {
         if (!value) {
           return null;
@@ -77,37 +78,35 @@ const VarietalForm = (props) => {
   const handleUpdateVarietal = async () => {
     try {
       setIsLoading(true);
-      if (form.isValid()) {
-        const data = {
-          varietalId: varietal?.varietalId,
-          cropId: varietal?.cropId,
-          name: form.values.name,
-          description: form.values.description,
-          waterStart: form.values.waterStart ? form.values.waterStart.toISOString() : "",
-          waterEvery: form.values.waterEvery,
-          waterTime: form.values.waterTime ? form.values.waterTime : 0,
-          fertilizeStart: form.values.fertilizeStart ? form.values.fertilizeStart.toISOString() : "",
-          fertilizeEvery: form.values.fertilizeEvery,
-        };
+      const data = {
+        varietalId: varietal?.varietalId,
+        cropId: varietal?.cropId,
+        name: form.values.name,
+        description: form.values.description,
+        waterStart: form.values.waterStart ? form.values.waterStart.toISOString() : "",
+        waterEvery: form.values.waterEvery,
+        waterTime: form.values.waterTime ? form.values.waterTime : 0,
+        fertilizeStart: form.values.fertilizeStart ? form.values.fertilizeStart.toISOString() : "",
+        fertilizeEvery: form.values.fertilizeEvery,
+      };
 
-        await axios.put(
-          `https://localhost:5001/api/crops/${varietal.cropId}/varietals/${varietal.varietalId}`,
-          data
-        );
+      await axios.put(
+        `https://localhost:5001/api/crops/${varietal.cropId}/varietals/${varietal.varietalId}`,
+        data
+      );
 
-        onUpdateVarietal({
-          ...varietal,
-          name: data.name,
-          description: data.description,
-          waterStart: data.waterStart,
-          waterEvery: data.waterEvery,
-          waterTime: data.waterTime,
-          fertilizeStart: data.fertilizeStart,
-          fertilizeEvery: data.fertilizeEvery,
-        });
+      onUpdateVarietal({
+        ...varietal,
+        name: data.name,
+        description: data.description,
+        waterStart: data.waterStart,
+        waterEvery: data.waterEvery,
+        waterTime: data.waterTime,
+        fertilizeStart: data.fertilizeStart,
+        fertilizeEvery: data.fertilizeEvery,
+      });
 
-        onDismissVarietal();
-      }
+      onDismissVarietal();
     } catch (error) {
       console.error("Error updating varietal:", error);
     }
@@ -116,38 +115,36 @@ const VarietalForm = (props) => {
 
   const handleAddVarietal = async () => {
     try {
-      if (form.isValid()) {
-        setIsLoading(true);
+      setIsLoading(true);
 
-        const newVarietalName = form.values.name.toLowerCase();
-        const isDuplicate = crop.varietals?.some(existingVarietal => existingVarietal.name.toLowerCase() === newVarietalName);
+      const newVarietalName = form.values.name.toLowerCase();
+      const isDuplicate = crop.varietals?.some(existingVarietal => existingVarietal.name.toLowerCase() === newVarietalName);
 
-        if (isDuplicate) {
-          setDuplicateWarning(true);
-          setIsLoading(false);
-          return;
-        }
-
-        const data = {
-          cropId: crop.cropId,
-          name: form.values.name,
-          description: form.values.description,
-          waterStart: form.values.waterStart ? form.values.waterStart.toISOString() : "",
-          waterEvery: form.values.waterEvery,
-          waterTime: form.values.waterTime ? form.values.waterTime : 0,
-          fertilizeStart: form.values.fertilizeStart ? form.values.fertilizeStart.toISOString() : "",
-          fertilizeEvery: form.values.fertilizeEvery,
-        };
-
-        const response = await axios.post(
-          `https://localhost:5001/api/crops/${crop.cropId}/varietals`,
-          data
-        );
-
-        console.log('api var response', response);
-        onAddNewVarietal(response);
-        onDismissVarietal();
+      if (isDuplicate) {
+        setDuplicateWarning(true);
+        setIsLoading(false);
+        return;
       }
+
+      const data = {
+        cropId: crop.cropId,
+        name: form.values.name,
+        description: form.values.description,
+        waterStart: form.values.waterStart ? form.values.waterStart.toISOString() : "",
+        waterEvery: form.values.waterEvery,
+        waterTime: form.values.waterTime ? form.values.waterTime : 0,
+        fertilizeStart: form.values.fertilizeStart ? form.values.fertilizeStart.toISOString() : "",
+        fertilizeEvery: form.values.fertilizeEvery,
+      };
+
+      const response = await axios.post(
+        `https://localhost:5001/api/crops/${crop.cropId}/varietals`,
+        data
+      );
+
+      console.log('api var response', response);
+      onAddNewVarietal(response);
+      onDismissVarietal();
     } catch (error) {
       setIsLoading(false);
       console.error("Error adding varietal:", error);
@@ -159,6 +156,7 @@ const VarietalForm = (props) => {
   const handleDismiss = () => {
     onDismissVarietal();
     setDeleteConfirm(false);
+    form.reset();
   }
 
   const handleDelete = async () => {
@@ -166,7 +164,7 @@ const VarietalForm = (props) => {
     try {
       await axios.delete(
         `https://localhost:5001/api/varietals/${varietal.varietalId}`
-      ); 
+      );
 
       onDismissVarietal();
       navigate('/crops');
@@ -179,19 +177,20 @@ const VarietalForm = (props) => {
     setIsLoading(false);
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!addNewVarietal && varietal) {
-      handleUpdateVarietal();
-    } else {
-      handleAddVarietal();
+  const handleSubmit = () => {
+    if (form.isValid()) {
+      if (!addNewVarietal && varietal) {
+        handleUpdateVarietal();
+      } else {
+        handleAddVarietal();
+      }
     }
   };
 
   return (
     <Modal opened={isOpen} onClose={handleDismiss} title={varietal ? "Varietal Details" : "New Varietal"} >
       {!deleteConfirm && !duplicateWarning && (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
             label="Name"
             placeholder="Name of this variety"

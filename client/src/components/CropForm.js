@@ -1,6 +1,6 @@
 //CropForm.jsx
 import React, { useEffect, useState } from "react";
-import { useForm } from '@mantine/form';
+import { isNotEmpty, useForm } from '@mantine/form';
 import axios from "axios";
 import { Modal, Button, TextInput, LoadingOverlay, Alert, NativeSelect } from '@mantine/core';
 
@@ -20,6 +20,7 @@ const CropForm = (props) => {
   const [duplicateWarning, setDuplicateWarning] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const form = useForm({
+    mode: 'uncontrolled',
     validateInputOnChange: true,
     initialValues: {
       name: "",
@@ -27,8 +28,8 @@ const CropForm = (props) => {
     },
 
     validate: {
-      name: (value) => (value === "" ? 'Please enter a crop name' : null),
-      type: (value) => (value === "" ? 'Please identify the crop type' : null),
+      name: isNotEmpty('Enter a crop name'),
+      type: isNotEmpty('Enter a crop type'),
     },
   });
 
@@ -44,28 +45,27 @@ const CropForm = (props) => {
 
 
   const handleUpdateCrop = async () => {
+    console.log(form.values);
     try {
-      if (form.isValid()) {
-        setIsLoading(true);
-        const data = {
-          cropId: crop?.cropId,
-          name: form.values.name,
-          type: form.values.type,
-        };
+      setIsLoading(true);
+      const data = {
+        cropId: crop?.cropId,
+        name: form.values.name,
+        type: form.values.type,
+      };
 
-        await axios.put(
-          `https://localhost:5001/api/crops/${crop.cropId}`,
-          data
-        );
+      await axios.put(
+        `https://localhost:5001/api/crops/${crop.cropId}`,
+        data
+      );
 
-        onUpdateCrop({
-          ...crop,
-          name: data.name,
-          type: data.type,
-        });
+      onUpdateCrop({
+        ...crop,
+        name: data.name,
+        type: data.type,
+      });
 
-        onDismissCrop();
-      }
+      onDismissCrop();
     } catch (error) {
       setIsLoading(false);
       console.error("Error updating crop:", error);
@@ -75,31 +75,30 @@ const CropForm = (props) => {
   }
 
   const handleAddCrop = async () => {
+    console.log(form.values);
     try {
-      if (form.isValid()) {
-        setIsLoading(true);
-        const newCropName = form.values.name.toLowerCase();
-        const isDuplicate = crops?.some(existingCrop => existingCrop.name.toLowerCase() === newCropName);
+      setIsLoading(true);
+      const newCropName = form.values.name.toLowerCase();
+      const isDuplicate = crops?.some(existingCrop => existingCrop.name.toLowerCase() === newCropName);
 
-        if (isDuplicate) {
-          setDuplicateWarning(true);
-          setIsLoading(false);
-          return;
-        }
-
-        const data = {
-          name: form.values.name,
-          type: form.values.type,
-        };
-
-        const response = await axios.post(
-          `https://localhost:5001/api/crops/`,
-          data
-        );
-
-        onAddNewCrop(response);
-        onDismissCrop();
+      if (isDuplicate) {
+        setDuplicateWarning(true);
+        setIsLoading(false);
+        return;
       }
+
+      const data = {
+        name: form.values.name,
+        type: form.values.type,
+      };
+
+      const response = await axios.post(
+        `https://localhost:5001/api/crops/`,
+        data
+      );
+
+      onAddNewCrop(response);
+      onDismissCrop();
     } catch (error) {
       setIsLoading(false);
       console.error("Error adding crop:", error);
@@ -108,12 +107,13 @@ const CropForm = (props) => {
     setIsLoading(false);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!addNewCrop && crop) {
-      handleUpdateCrop();
-    } else {
-      handleAddCrop();
+  const handleSubmit = () => {
+    if (form.isValid()) {
+      if (!addNewCrop && crop) {
+        handleUpdateCrop();
+      } else {
+        handleAddCrop();
+      }
     }
   };
 
@@ -146,7 +146,7 @@ const CropForm = (props) => {
   return (
     <Modal opened={isOpen} onClose={handleDismiss} title={!addNewCrop ? "Crop Details" : "New Crop"}>
       {!deleteConfirm && !duplicateWarning && (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
             label="Name"
             placeholder="Name of the crop"
