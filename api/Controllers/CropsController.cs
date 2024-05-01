@@ -35,6 +35,37 @@ namespace Api.Controllers
       return crops;
     }
 
+    // [HttpGet]
+    // public async Task<ActionResult<IEnumerable<Crop>>> Get(string keyword)
+    // {
+    //   IQueryable<Crop> query = _db.Crops
+    //       .Include(c => c.Varietals);
+
+    //   if (!string.IsNullOrEmpty(keyword))
+    //   {
+    //     query = query.Where(entry => entry.Name.Contains(keyword) || entry.Type.Contains(keyword));
+    //   }
+
+    //   var crops = await query.ToListAsync();
+
+    //   // Convert Varietals to VarietalDTO
+    //   var cropsWithVarietalsDTO = crops.Select(c => new Crop
+    //   {
+    //     // Map other Crop properties
+    //     Varietals = c.Varietals.Select(v => new VarietalDTO
+    //     {
+    //       VarietalId = v.VarietalId,
+    //       Name = v.Name,
+    //       WaterEvery = v.WaterEvery,
+    //       FertilizeEvery = v.FertilizeEvery,
+    //       CropId = v.CropId,
+    //     }).ToList()
+    //   }).ToList();
+
+    //   return cropsWithVarietalsDTO;
+    // }
+
+
     //GET: api/crops/{id} //! Get specific item by id
     [HttpGet("{id}")]
     public async Task<ActionResult<Crop>> GetCrop(int id)

@@ -33,7 +33,7 @@ namespace api.Migrations
 
                     b.HasKey("CropId");
 
-                    b.ToTable("Crops");
+                    b.ToTable("Crops", (string)null);
                 });
 
             modelBuilder.Entity("Api.Models.Event", b =>
@@ -65,7 +65,7 @@ namespace api.Migrations
 
                     b.HasIndex("VarietalId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("Api.Models.Varietal", b =>
@@ -103,7 +103,7 @@ namespace api.Migrations
 
                     b.HasIndex("CropId");
 
-                    b.ToTable("Varietals");
+                    b.ToTable("Varietals", (string)null);
                 });
 
             modelBuilder.Entity("Api.Models.Event", b =>

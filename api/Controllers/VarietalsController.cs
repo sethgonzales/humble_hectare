@@ -17,22 +17,38 @@ namespace Api.Controllers
       _db = db;
     }
 
-    // GET: api/varietals //! Get a filtered list of items
+    // // GET: api/varietals //! Get a filtered list of items
+    // [HttpGet]
+    // public async Task<ActionResult<IEnumerable<Varietal>>> Get(string keyword)
+    // {
+    //   IQueryable<Varietal> query = _db.Varietals.Include(v => v.Events);
+
+    //   if (!string.IsNullOrEmpty(keyword))
+    //   {
+    //     query = query.Where(entry => entry.Name.Contains(keyword) || entry.Description.Contains(keyword));
+    //   }
+
+    //   var varietals = await query.ToListAsync();
+
+    //   return varietals;
+    // }
+
+    // ! Get with the DTO
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Varietal>>> Get(string keyword)
+    public IQueryable<VarietalDTO> GetVarietals()
     {
-      IQueryable<Varietal> query = _db.Varietals.Include(v => v.Events);
-
-      if (!string.IsNullOrEmpty(keyword))
-      {
-        query = query.Where(entry => entry.Name.Contains(keyword) || entry.Description.Contains(keyword));
-      }
-
-      var varietals = await query.ToListAsync();
-
+      var varietals = from v in _db.Varietals
+                  select new VarietalDTO()
+                  {
+                    VarietalId = v.VarietalId,
+                    Name = v.Name,
+                    WaterEvery = v.WaterEvery,
+                    WaterTime = v.WaterTime,
+                    FertilizeEvery = v.FertilizeEvery,
+                    CropId = v.CropId,
+                  };
       return varietals;
     }
-
 
     //GET: api/varietals/{id} //! Get specific item by id
     [HttpGet("{id}")]

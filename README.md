@@ -103,5 +103,6 @@ As a developer, my aim is to log my journey in building this application. This a
 - Big refactor today with the date time formatting functions. I moved these to their own util file to hopefully make them more reuseable for other functions and make the code more modular.
 - Began adding in forms for new events. Completed the form but have not completed CRUD functionality. Need to do that next.
 - TODO: Install a markdown editor for description and notes text areas. Write a HectareMarkdown wrapper for the text areas.
+- TODO: Make model DTOs to reduce data transfers
 - TODO: Complete CRUD for events
 - TODO: Fix validation for all forms. Need to validate on save and not clear the form.
