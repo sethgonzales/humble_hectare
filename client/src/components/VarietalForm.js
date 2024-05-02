@@ -72,7 +72,7 @@ const VarietalForm = (props) => {
         fertilizeEvery: varietal?.fertilizeEvery || "",
       });
     }
-  }, [varietal]);
+  }, [varietal, isOpen]);
 
 
   const handleUpdateVarietal = async () => {
@@ -142,15 +142,14 @@ const VarietalForm = (props) => {
         data
       );
 
-      console.log('api var response', response);
       onAddNewVarietal(response);
       onDismissVarietal();
     } catch (error) {
       setIsLoading(false);
       console.error("Error adding varietal:", error);
     }
-    form.reset();
     setIsLoading(false);
+    form.reset();
   };
 
   const handleDismiss = () => {

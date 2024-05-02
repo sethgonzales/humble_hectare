@@ -70,8 +70,8 @@ const CropForm = (props) => {
       setIsLoading(false);
       console.error("Error updating crop:", error);
     }
-    form.reset();
     setIsLoading(false);
+    form.reset();
   }
 
   const handleAddCrop = async () => {

@@ -19,10 +19,10 @@ namespace Api.Controllers
 
     // GET: api/crops //! Get a filtered list of crops
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Crop>>> Get(string keyword)
+    public async Task<ActionResult<IEnumerable<CropDTO>>> Get(string keyword)
     {
       IQueryable<Crop> query = _db.Crops
-                                    .Include(c => c.Varietals)
+                                  .Include(c => c.Varietals)
                                       .ThenInclude(v => v.Events);
 
       if (!string.IsNullOrEmpty(keyword))
@@ -32,39 +32,25 @@ namespace Api.Controllers
 
       var crops = await query.ToListAsync();
 
-      return crops;
+      var cropsDTO = crops.Select(c => new CropDTO
+      {
+        CropId = c.CropId,
+        Name = c.Name,
+        Type = c.Type,
+        Varietals = c.Varietals.Select(v => new VarietalDTO
+        {
+          VarietalId = v.VarietalId,
+          Name = v.Name,
+          WaterEvery = v.WaterEvery,
+          WaterTime = v.WaterTime,
+          FertilizeEvery = v.FertilizeEvery,
+          // Events containing only the EventId
+          Events = v.Events.Select(e => new EventDTO { EventId = e.EventId }).ToList()
+        }).ToList()
+      }).ToList();
+
+      return cropsDTO;
     }
-
-    // [HttpGet]
-    // public async Task<ActionResult<IEnumerable<Crop>>> Get(string keyword)
-    // {
-    //   IQueryable<Crop> query = _db.Crops
-    //       .Include(c => c.Varietals);
-
-    //   if (!string.IsNullOrEmpty(keyword))
-    //   {
-    //     query = query.Where(entry => entry.Name.Contains(keyword) || entry.Type.Contains(keyword));
-    //   }
-
-    //   var crops = await query.ToListAsync();
-
-    //   // Convert Varietals to VarietalDTO
-    //   var cropsWithVarietalsDTO = crops.Select(c => new Crop
-    //   {
-    //     // Map other Crop properties
-    //     Varietals = c.Varietals.Select(v => new VarietalDTO
-    //     {
-    //       VarietalId = v.VarietalId,
-    //       Name = v.Name,
-    //       WaterEvery = v.WaterEvery,
-    //       FertilizeEvery = v.FertilizeEvery,
-    //       CropId = v.CropId,
-    //     }).ToList()
-    //   }).ToList();
-
-    //   return cropsWithVarietalsDTO;
-    // }
-
 
     //GET: api/crops/{id} //! Get specific item by id
     [HttpGet("{id}")]
@@ -79,19 +65,18 @@ namespace Api.Controllers
       return crop;
     }
 
+    // // GET: api/crops/{cropId}/varietals
+    // [HttpGet("{cropId}/varietals")]
+    // public async Task<ActionResult<IEnumerable<Varietal>>> GetVarietalsForCrop(int cropId)
+    // {
+    //   var crop = await _db.Crops.Include(c => c.Varietals).FirstOrDefaultAsync(c => c.CropId == cropId);
+    //   if (crop == null)
+    //   {
+    //     return NotFound("Crop not found.");
+    //   }
 
-    // GET: api/crops/{cropId}/varietals
-    [HttpGet("{cropId}/varietals")]
-    public async Task<ActionResult<IEnumerable<Varietal>>> GetVarietalsForCrop(int cropId)
-    {
-      var crop = await _db.Crops.Include(c => c.Varietals).FirstOrDefaultAsync(c => c.CropId == cropId);
-      if (crop == null)
-      {
-        return NotFound("Crop not found.");
-      }
-
-      return Ok(crop.Varietals);
-    }
+    //   return Ok(crop.Varietals);
+    // }
 
     //POST: api/crops //! Create an item
     [HttpPost]

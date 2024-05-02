@@ -132,8 +132,6 @@ const CropList = (props) => {
                       </Tooltip>
                     </Group>
                     <Text>{crop?.name}</Text>
-
-
                   </div>
                 </Accordion.Control>
                 <Accordion.Panel>
@@ -145,6 +143,7 @@ const CropList = (props) => {
                             <Table.Th>Variety</Table.Th>
                             <Table.Th>Water Frequency</Table.Th>
                             <Table.Th>Fertilize Frequency</Table.Th>
+                            <Table.Th>Events Logged</Table.Th>
                           </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
@@ -155,8 +154,9 @@ const CropList = (props) => {
                               style={{ cursor: "pointer" }}
                             >
                               <Table.Td>{varietal?.name}</Table.Td>
-                              <Table.Td>{varietal?.waterEvery} {varietal?.waterTime > 0 ? `(${varietal?.waterTime} min)` : ''}</Table.Td>
-                              <Table.Td>{varietal?.fertilizeEvery}</Table.Td>
+                              <Table.Td>{varietal?.waterEvery || '-'} {varietal?.waterTime > 0 ? `(${varietal?.waterTime} min)` : ''}</Table.Td>
+                              <Table.Td>{varietal?.fertilizeEvery || '-'}</Table.Td>
+                              <Table.Td>{varietal?.events ? `${varietal?.events.length}` : '0'}</Table.Td>
                             </Table.Tr>
                           ))}
                         </Table.Tbody>

@@ -45,7 +45,7 @@ namespace Api.Controllers
                     WaterEvery = v.WaterEvery,
                     WaterTime = v.WaterTime,
                     FertilizeEvery = v.FertilizeEvery,
-                    CropId = v.CropId,
+                    // CropId = v.CropId,
                   };
       return varietals;
     }

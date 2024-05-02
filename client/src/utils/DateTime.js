@@ -9,6 +9,7 @@ const formatDate = (taskDate) => {
 
 // Finds the next date
 const calculateNextDate = (startDate, frequency) => {
+  const formattedStrtDate = formatDate(startDate);
   const today = new Date();
   let daysToAdd;
 
@@ -36,7 +37,7 @@ const calculateNextDate = (startDate, frequency) => {
       break;
   }
 
-  const firstDate = new Date(startDate);
+  const firstDate = new Date(formattedStrtDate);
   const diffInDays = (today - firstDate) / (1000 * 60 * 60 * 24);
   const nextDate = new Date(firstDate).setDate(firstDate.getDate() + Math.ceil(diffInDays / daysToAdd) * daysToAdd);
   const formattedNextDate = formatDate(nextDate)

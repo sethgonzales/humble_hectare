@@ -21,7 +21,7 @@ namespace Api.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Event>>> Get(string keyword)
     {
-      IQueryable<Event> query = _db.Events.Include(e => e.Varietal);
+      IQueryable<Event> query = _db.Events;
 
       if (!string.IsNullOrEmpty(keyword))
       {

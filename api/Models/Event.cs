@@ -11,7 +11,7 @@ namespace Api.Models
 
     [Required(ErrorMessage = "What is type of event is this?")]
     public string EventType { get; set; } //Type of Event (ie 'harvest, process(can), fertilize,  water, seed, blossom')
-    
+    public string CropVarietal { get; set; } //Type of Event (ie 'harvest, process(can), fertilize,  water, seed, blossom')
     public string DateStart { get; set; } //Start date of an event. Give option for single date, so that things like watering and fertilizing can happen on single day.
     public string DateEnd { get; set; } //Event date of an event.
     public string Yield { get; set; } //Yield from a harvest or process event. In tandem with yield unit.

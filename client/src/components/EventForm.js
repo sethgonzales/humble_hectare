@@ -30,7 +30,7 @@ const EventForm = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
-  const [multiDate, setMultiDate] = useState(false);
+  const [multiDate, setMultiDate] = useState(_event?.dateEnd && _event.dateEnd.length > 0); // ! fix this!
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -71,20 +71,50 @@ const EventForm = (props) => {
     }
   }, [_event]);
 
+  const handleAddEvent = async () => {
+    try {
+      setIsLoading(true);
+      const data = {
+        varietalId: varietal.varietalId,
+        EventType: form.values.eventType,
+        CropVarietal: crop && varietal ? `${varietal?.name} ${crop?.name}` : null,
+        DateStart: form.values.dateStart ? form.values.dateStart.toISOString() : "",
+        DateEnd: form.values.dateEnd ? form.values.dateEnd.toISOString() : "",
+        yield: form.values.yield,
+        notes: form.values.notes,
+      };
+
+      const response = await axios.post(
+        `https://localhost:5001/api/varietals/${varietal.varietalId}/events`,
+        data
+      );
+
+      console.log('api event response', response);
+      onAddNewEvent();
+      onDismissEvent();
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error adding event:", error);
+    }
+    setIsLoading(false);
+    form.reset();
+  };
+
   const handleDismiss = () => {
     onDismissEvent();
     setDeleteConfirm(false);
+    form.reset();
   }
 
   const handleSubmit = () => {
     console.log('submitted', form.data)
-    // if (form.isValid()) {
+    if (form.isValid()) {
       // if (!addNewVarietal && varietal) {
       //   handleUpdateVarietal();
       // } else {
-      //   handleAddVarietal();
+      handleAddEvent();
       // }
-    // }
+    }
   };
 
   return (
@@ -105,7 +135,7 @@ const EventForm = (props) => {
             clearable
             placeholder={!multiDate ? "Select the event date" : "Pick start date"}
             // maxDate={new Date()}
-            {...form.getInputProps('startDate')}
+            {...form.getInputProps('dateStart')}
           />
 
           {multiDate && (
@@ -115,13 +145,14 @@ const EventForm = (props) => {
                 dropdownType="modal"
                 clearable
                 placeholder="Pick end date"
-                {...form.getInputProps('endDate')}
+                {...form.getInputProps('dateEnd')}
               />
             </>
           )}
           <Checkbox
             style={{ marginTop: '8px' }}
             label="Multi-date"
+            checked={multiDate}
             onChange={() => setMultiDate(!multiDate)}
           />
           <br />
