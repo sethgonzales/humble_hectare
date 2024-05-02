@@ -27,10 +27,10 @@ const EventForm = (props) => {
     onAddNewEvent,
     crop,
   } = props;
-
+  
   const [isLoading, setIsLoading] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
-  const [multiDate, setMultiDate] = useState(_event?.dateEnd && _event.dateEnd.length > 0); // ! fix this!
+  const [multiDate, setMultiDate] = useState(false);
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -68,6 +68,7 @@ const EventForm = (props) => {
         yield: _event?.yield || "",
         notes: _event?.notes || "",
       });
+      setMultiDate(_event?.dateEnd && _event?.dateEnd.length > 0);
     }
   }, [_event]);
 
