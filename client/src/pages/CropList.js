@@ -7,7 +7,8 @@ import {
   Accordion,
   Button,
   Tooltip,
-  Skeleton
+  Skeleton,
+  Card
 } from '@mantine/core';
 import axios from "axios";
 import CropForm from '../components/CropForm';
@@ -114,13 +115,62 @@ const CropList = (props) => {
     <>
       <Skeleton visible={isLoading}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <h1>Crops</h1>
-          <Button onClick={() => addCropForm()} color="gray" variant="outline" radius="xl">
-            <IconPlus size="1.5rem" stroke={2} color="black" />
-          </Button>
+          <Group>
+            <h1>Crops</h1>
+            <Button onClick={() => addCropForm()} color="gray" variant="outline" radius="xl">
+              <IconPlus size="1.5rem" stroke={2} color="black" />
+            </Button>
+          </Group>
         </div>
         <Text size="md">{crops?.length > 0 ? 'Click through each crop to see what has been planted' : 'No crops have been added yet'}</Text>
-        <Accordion chevronPosition="right" variant="contained">
+        <div style={{ display: "flex", flex: "col", alignItems: "center", gap: "1rem" }}>
+          {crops
+            && (crops.map((crop) => (
+              <Card shadow="sm" padding="md" radius="md" withBorder style={{ minWidth: '48%' }}>
+                <Group justify="center">
+                  <Tooltip label="Click to edit" openDelay={500}>
+                    <IconPencil onClick={() => showCropForm(crop)} size="1rem" stroke={2} color="black" />
+                  </Tooltip>
+                </Group>
+                <Text>{crop?.name}</Text>
+                {crop?.varietals?.length > 0 ? (
+                  <>
+                    <Table striped highlightOnHover>
+                      <Table.Thead>
+                        <Table.Tr>
+                          <Table.Th>Variety</Table.Th>
+                          <Table.Th>Water Frequency</Table.Th>
+                          <Table.Th>Fertilize Frequency</Table.Th>
+                          <Table.Th>Events Logged</Table.Th>
+                        </Table.Tr>
+                      </Table.Thead>
+                      <Table.Tbody>
+                        {crop.varietals.map((varietal) => (
+                          <Table.Tr
+                            key={varietal.varietalId}
+                            onClick={() => seeVarietal(varietal)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <Table.Td>{varietal?.name}</Table.Td>
+                            <Table.Td>{varietal?.waterEvery || '-'} {varietal?.waterTime > 0 ? `(${varietal?.waterTime} min)` : ''}</Table.Td>
+                            <Table.Td>{varietal?.fertilizeEvery || '-'}</Table.Td>
+                            <Table.Td>{varietal?.events ? `${varietal?.events.length}` : '0'}</Table.Td>
+                          </Table.Tr>
+                        ))}
+                      </Table.Tbody>
+                    </Table>
+                    <Button onClick={() => showVarietalForm(crop)} variant="filled" size="xs" color="green" style={{ marginTop: '30px', marginLeft: '10px' }}>Add</Button>
+                  </>
+                ) : (
+                  <>
+                    <Text size="sm">No varieties of {crop ? ` ${crop.name}` : 'this crop'} have been planted</Text>
+                    <Button onClick={() => showVarietalForm(crop)} variant="filled" size="xs" color="green" style={{ marginTop: '30px' }}>Add</Button>
+                  </>
+                )}
+              </Card>
+            )))}
+        </div>
+        {/* <Accordion chevronPosition="right" variant="contained">
           {crops
             && (crops.map((crop) => (
               <Accordion.Item value={crop?.name} key={crop?.cropId}>
@@ -172,7 +222,61 @@ const CropList = (props) => {
                 </Accordion.Panel>
               </Accordion.Item>
             )))}
-        </Accordion>
+        <Card shadow="sm" padding="md" radius="md" withBorder>
+
+        {/* <Accordion chevronPosition="right" variant="contained">
+          {crops
+            && (crops.map((crop) => (
+              <Accordion.Item value={crop?.name} key={crop?.cropId}>
+                <Accordion.Control>
+                  <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
+                    <Group justify="center">
+                      <Tooltip label="Click to edit" openDelay={500}>
+                        <IconPencil onClick={() => showCropForm(crop)} size="1rem" stroke={2} color="black" />
+                      </Tooltip>
+                    </Group>
+                    <Text>{crop?.name}</Text>
+                  </div>
+                </Accordion.Control>
+                <Accordion.Panel>
+                  {crop?.varietals?.length > 0 ? (
+                    <>
+                      <Table striped highlightOnHover>
+                        <Table.Thead>
+                          <Table.Tr>
+                            <Table.Th>Variety</Table.Th>
+                            <Table.Th>Water Frequency</Table.Th>
+                            <Table.Th>Fertilize Frequency</Table.Th>
+                            <Table.Th>Events Logged</Table.Th>
+                          </Table.Tr>
+                        </Table.Thead>
+                        <Table.Tbody>
+                          {crop.varietals.map((varietal) => (
+                            <Table.Tr
+                              key={varietal.varietalId}
+                              onClick={() => seeVarietal(varietal)}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <Table.Td>{varietal?.name}</Table.Td>
+                              <Table.Td>{varietal?.waterEvery || '-'} {varietal?.waterTime > 0 ? `(${varietal?.waterTime} min)` : ''}</Table.Td>
+                              <Table.Td>{varietal?.fertilizeEvery || '-'}</Table.Td>
+                              <Table.Td>{varietal?.events ? `${varietal?.events.length}` : '0'}</Table.Td>
+                            </Table.Tr>
+                          ))}
+                        </Table.Tbody>
+                      </Table>
+                      <Button onClick={() => showVarietalForm(crop)} variant="filled" size="xs" color="green" style={{ marginTop: '30px', marginLeft: '10px' }}>Add</Button>
+                    </>
+                  ) : (
+                    <>
+                      <Text size="sm">No varieties of {crop ? ` ${crop.name}` : 'this crop'} have been planted</Text>
+                      <Button onClick={() => showVarietalForm(crop)} variant="filled" size="xs" color="green" style={{ marginTop: '30px' }}>Add</Button>
+                    </>
+                  )}
+                </Accordion.Panel>
+              </Accordion.Item>
+            )))}
+        </Accordion> */}
       </Skeleton>
 
       <CropForm

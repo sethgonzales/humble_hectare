@@ -23,11 +23,11 @@ const EventForm = (props) => {
     isOpen,
     onDismissEvent,
     onUpdateEvent,
-    addNewEvent,
-    onAddNewEvent,
+    // addNewEvent,
+    loadVarietal,
     crop,
   } = props;
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [multiDate, setMultiDate] = useState(false);
@@ -57,7 +57,6 @@ const EventForm = (props) => {
     },
   });
 
-
   // Update form values when event data changes
   useEffect(() => {
     if (_event) {
@@ -71,6 +70,43 @@ const EventForm = (props) => {
       setMultiDate(_event?.dateEnd && _event?.dateEnd.length > 0);
     }
   }, [_event]);
+
+  const handleDismiss = () => {
+    onDismissEvent();
+    setDeleteConfirm(false);
+    form.reset();
+  };
+
+  const handleUpdateEvent = async () => {
+    try {
+      setIsLoading(true);
+      const data = {
+        eventId: _event?.eventId,
+        varietalId: varietal?.varietalId,
+        EventType: form.values.eventType,
+        CropVarietal: crop && varietal ? `${varietal?.name} ${crop?.name}` : null,
+        DateStart: form.values.dateStart ? form.values.dateStart.toISOString() : "",
+        DateEnd: form.values.dateEnd ? form.values.dateEnd.toISOString() : "",
+        yield: form.values.yield,
+        notes: form.values.notes,
+      };
+
+      await axios.put(
+        `https://localhost:5001/api/varietals/${varietal.varietalId}/events/${_event.eventId}`,
+        data
+      );
+
+
+      // dismiss and reset the form
+      handleDismiss();
+      // reload the varietal
+      await loadVarietal();
+
+    } catch (error) {
+      console.error("Error updating varietal:", error);
+    }
+    setIsLoading(false);
+  }
 
   const handleAddEvent = async () => {
     try {
@@ -90,31 +126,46 @@ const EventForm = (props) => {
         data
       );
 
-      console.log('api event response', response);
-      onAddNewEvent();
-      onDismissEvent();
+      // dismiss and reset the form
+      handleDismiss();
+      // reload the varietal
+      await loadVarietal();
+
     } catch (error) {
       setIsLoading(false);
       console.error("Error adding event:", error);
     }
     setIsLoading(false);
-    form.reset();
   };
 
-  const handleDismiss = () => {
-    onDismissEvent();
-    setDeleteConfirm(false);
+  const handleDelete = async () => {
+    setIsLoading(true);
+    try {
+      await axios.delete(
+        `https://localhost:5001/api/events/${_event.eventId}`
+      );
+
+      // dismiss and reset the form
+      handleDismiss();
+      // reload the varietal
+      await loadVarietal();
+
+    } catch (error) {
+      console.error("Error deleting varietal:", error);
+    }
     form.reset();
+    setDeleteConfirm(false);
+    setIsLoading(false);
   }
 
   const handleSubmit = () => {
     console.log('submitted', form.data)
     if (form.isValid()) {
-      // if (!addNewVarietal && varietal) {
-      //   handleUpdateVarietal();
-      // } else {
-      handleAddEvent();
-      // }
+      if (_event) {
+        handleUpdateEvent();
+      } else {
+        handleAddEvent();
+      }
     }
   };
 
@@ -174,7 +225,7 @@ const EventForm = (props) => {
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
             <Button type="submit" variant="filled" size="xs" color="green">Save</Button>
-            {_event && !addNewEvent && (
+            {_event && (
               <Button onClick={() => setDeleteConfirm(true)} variant="filled" size="xs" color="red">Delete</Button>
             )}
           </div>

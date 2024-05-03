@@ -10,7 +10,8 @@ import {
   Grid,
   Accordion,
   Group,
-  GridCol
+  GridCol,
+  Card
 } from '@mantine/core';
 import axios from "axios";
 import { useParams } from 'react-router-dom';
@@ -73,9 +74,11 @@ const Varietal = () => {
   }, []);
 
   const showEventForm = (_event) => {
-    setEventToShow(_event);
+    if (_event) {
+      setEventToShow(_event);
+    }
     setShowEventModal(true);
-  }
+  };
 
   return (
     <>
@@ -98,56 +101,59 @@ const Varietal = () => {
           </Blockquote>
         )}
 
+        <h2>Schedules</h2>
         <Grid>
           <Grid.Col span={{ base: 12, md: 6 }}>
-            <h2>Watering Schedule</h2>
-            {varietal?.waterEvery || varietal?.waterStart ? (
-              <Table highlightOnHover>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>Frequency</Table.Th>
-                    <Table.Th>Duration</Table.Th>
-                    <Table.Th>Initial</Table.Th>
-                    <Table.Th>Next Expected</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                  <Table.Tr>
-                    <Table.Td>{varietal?.waterEvery || '-'}</Table.Td>
-                    <Table.Td>{varietal?.waterTime ? `${varietal?.waterTime} min` : '-'}</Table.Td>
-                    <Table.Td>{varietal?.waterStart ? formatDate(varietal.waterStart) : '-'}</Table.Td>
-                    <Table.Td>{nextWaterDate || '-'}</Table.Td>
-                  </Table.Tr>
-                </Table.Tbody>
-              </Table>
-            ) : (
-              <Text size="sm">Water schedule has not been set for this variety</Text>
-            )}
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, md: 1 }}>
+            <Card shadow="sm" padding="md" radius="md" withBorder>
+              <h3 style={{ marginTop: '0' }}>Watering</h3>
+              {varietal?.waterEvery || varietal?.waterStart ? (
+                <Table highlightOnHover>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>Frequency</Table.Th>
+                      <Table.Th>Duration</Table.Th>
+                      <Table.Th>Initial</Table.Th>
+                      <Table.Th>Next Expected</Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>
+                    <Table.Tr>
+                      <Table.Td>{varietal?.waterEvery || '-'}</Table.Td>
+                      <Table.Td>{varietal?.waterTime ? `${varietal?.waterTime} min` : '-'}</Table.Td>
+                      <Table.Td>{varietal?.waterStart ? formatDate(varietal.waterStart) : '-'}</Table.Td>
+                      <Table.Td>{nextWaterDate || '-'}</Table.Td>
+                    </Table.Tr>
+                  </Table.Tbody>
+                </Table>
+              ) : (
+                <Text size="sm">Water schedule has not been set for this variety</Text>
+              )}
+            </Card>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 5 }}>
-            <h2>Fertilizing Schedule</h2>
-            {varietal?.fertilizeEvery || varietal?.fertilizeStart ? (
-              <Table highlightOnHover>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>Frequency</Table.Th>
-                    <Table.Th>Initial</Table.Th>
-                    <Table.Th>Next Expected</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                  <Table.Tr>
-                    <Table.Td>{varietal?.fertilizeEvery}</Table.Td>
-                    <Table.Td>{varietal?.fertilizeStart ? formatDate(varietal.fertilizeStart) : '-'}</Table.Td>
-                    <Table.Td>{nextFertilizeDate}</Table.Td>
-                  </Table.Tr>
-                </Table.Tbody>
-              </Table>
-            ) : (
-              <Text size="sm">Fertilizing schedule has been set for this variety</Text>
-            )}
+            <Card shadow="sm" padding="lg" radius="md" withBorder>
+              <h3 style={{ marginTop: '0' }}>Fertilizing</h3>
+              {varietal?.fertilizeEvery || varietal?.fertilizeStart ? (
+                <Table highlightOnHover>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>Frequency</Table.Th>
+                      <Table.Th>Initial</Table.Th>
+                      <Table.Th>Next Expected</Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>
+                    <Table.Tr>
+                      <Table.Td>{varietal?.fertilizeEvery}</Table.Td>
+                      <Table.Td>{varietal?.fertilizeStart ? formatDate(varietal.fertilizeStart) : '-'}</Table.Td>
+                      <Table.Td>{nextFertilizeDate}</Table.Td>
+                    </Table.Tr>
+                  </Table.Tbody>
+                </Table>
+              ) : (
+                <Text size="sm">Fertilizing schedule has been set for this variety</Text>
+              )}
+            </Card>
           </Grid.Col>
         </Grid>
 
@@ -156,15 +162,16 @@ const Varietal = () => {
           <>
             <Accordion chevronPosition="right" variant="contained">
               {varietal.events.map((event) => (
-                <Accordion.Item value={event?.eventType} key={event?.eventId}>
+                <Accordion.Item value={event.eventType + event.eventId} key={event.eventId}>
                   <Accordion.Control>
-                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
-                      <Group justify="center">
+                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem", justifyContent: 'space-between' }}>
+                      <Group>
                         <Tooltip label="Click to edit" openDelay={500}>
                           <IconPencil onClick={() => showEventForm(event)} size="1rem" stroke={2} color="black" />
                         </Tooltip>
+                        <Text><b>{event?.eventType}</b></Text>
                       </Group>
-                      <Text><b>{event?.eventType}</b>{event.dateStart ? `: ${formatDate(event.dateStart)}` : ''} {event?.dateEnd ? ` - ${formatDate(event.dateEnd)}` : ''}</Text>
+                      <Text style={{ marginRight: "16px" }}>{event.dateStart ? formatDate(event.dateStart) : ''} {event?.dateEnd ? ` - ${formatDate(event.dateEnd)}` : ''}</Text>
                     </div>
                   </Accordion.Control>
                   <Accordion.Panel>
@@ -210,9 +217,9 @@ const Varietal = () => {
         ) : (
           <>
             <Text size="sm">{varietal?.name && varietal.crop?.name ? ` ${varietal.name} ${varietal.crop.name} ` : 'This variety'} has not been included in any logged events.</Text>
-            <Button onClick={() => setShowEventModal(true)} variant="filled" size="xs" color="green" style={{ marginTop: '30px' }}>Add Event</Button>
           </>
         )}
+        <Button onClick={() => setShowEventModal(true)} variant="filled" size="xs" color="green" style={{ marginTop: '30px' }}>Add Event</Button>
       </Skeleton >
 
 
@@ -227,8 +234,11 @@ const Varietal = () => {
         varietal={varietal}
         _event={eventToShow}
         isOpen={showEventModal}
-        onAddNewEvent={loadVarietal}
-        onDismissEvent={() => setShowEventModal(false)}
+        loadVarietal={loadVarietal}
+        onDismissEvent={() => {
+          setShowEventModal(false);
+          setEventToShow(null);
+        }}
       />
     </>
   );

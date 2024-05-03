@@ -74,6 +74,11 @@ const VarietalForm = (props) => {
     }
   }, [varietal, isOpen]);
 
+  const handleDismiss = () => {
+    onDismissVarietal();
+    setDeleteConfirm(false);
+    form.reset();
+  };
 
   const handleUpdateVarietal = async () => {
     try {
@@ -106,7 +111,7 @@ const VarietalForm = (props) => {
         fertilizeEvery: data.fertilizeEvery,
       });
 
-      onDismissVarietal();
+      handleDismiss();
     } catch (error) {
       console.error("Error updating varietal:", error);
     }
@@ -143,20 +148,14 @@ const VarietalForm = (props) => {
       );
 
       onAddNewVarietal(response);
-      onDismissVarietal();
+      handleDismiss();
     } catch (error) {
       setIsLoading(false);
       console.error("Error adding varietal:", error);
     }
     setIsLoading(false);
-    form.reset();
   };
 
-  const handleDismiss = () => {
-    onDismissVarietal();
-    setDeleteConfirm(false);
-    form.reset();
-  }
 
   const handleDelete = async () => {
     setIsLoading(true);
