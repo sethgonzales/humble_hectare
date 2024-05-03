@@ -115,27 +115,27 @@ const CropList = (props) => {
     <>
       <Skeleton visible={isLoading}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <h1>Crops</h1>
           <Group>
-            <h1>Crops</h1>
             <Button onClick={() => addCropForm()} color="gray" variant="outline" radius="xl">
               <IconPlus size="1.5rem" stroke={2} color="black" />
             </Button>
           </Group>
         </div>
-        <Text size="md">{crops?.length > 0 ? 'Click through each crop to see what has been planted' : 'No crops have been added yet'}</Text>
-        <div style={{ display: "flex", flex: "col", alignItems: "center", gap: "1rem" }}>
+        <Text size="md" style={{ color: 'gray' }}>{crops?.length > 0 ? 'Click through each crop to see what has been planted' : 'No crops have been added yet'}</Text>
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: '1rem', padding: '2rem' }}>
           {crops
             && (crops.map((crop) => (
-              <Card shadow="sm" padding="md" radius="md" withBorder style={{ minWidth: '48%' }}>
-                <Group justify="center">
+              <Card key={crop.cropId} shadow="sm" padding="md" radius="md" withBorder style={{ width: '32rem', minHeight: '15rem' }}>
+                <Group justify="left">
                   <Tooltip label="Click to edit" openDelay={500}>
-                    <IconPencil onClick={() => showCropForm(crop)} size="1rem" stroke={2} color="black" />
+                    <IconPencil onClick={() => showCropForm(crop)} size="1rem" stroke={2} color="black" style={{ cursor: "pointer" }} />
                   </Tooltip>
+                  <Text>{crop?.name}</Text>
                 </Group>
-                <Text>{crop?.name}</Text>
                 {crop?.varietals?.length > 0 ? (
                   <>
-                    <Table striped highlightOnHover>
+                    <Table striped highlightOnHover style={{ marginBottom: '35px' }}>
                       <Table.Thead>
                         <Table.Tr>
                           <Table.Th>Variety</Table.Th>
@@ -152,21 +152,20 @@ const CropList = (props) => {
                             style={{ cursor: "pointer" }}
                           >
                             <Table.Td>{varietal?.name}</Table.Td>
-                            <Table.Td>{varietal?.waterEvery || '-'} {varietal?.waterTime > 0 ? `(${varietal?.waterTime} min)` : ''}</Table.Td>
+                            <Table.Td>{varietal?.waterEvery || '-'}</Table.Td>
                             <Table.Td>{varietal?.fertilizeEvery || '-'}</Table.Td>
                             <Table.Td>{varietal?.events ? `${varietal?.events.length}` : '0'}</Table.Td>
                           </Table.Tr>
                         ))}
                       </Table.Tbody>
                     </Table>
-                    <Button onClick={() => showVarietalForm(crop)} variant="filled" size="xs" color="green" style={{ marginTop: '30px', marginLeft: '10px' }}>Add</Button>
                   </>
                 ) : (
                   <>
-                    <Text size="sm">No varieties of {crop ? ` ${crop.name}` : 'this crop'} have been planted</Text>
-                    <Button onClick={() => showVarietalForm(crop)} variant="filled" size="xs" color="green" style={{ marginTop: '30px' }}>Add</Button>
+                    <Text size="sm" style={{ padding: '1rem' }}>No varieties of {crop ? ` ${crop.name}` : 'this crop'} have been planted</Text>
                   </>
                 )}
+                <Button onClick={() => showVarietalForm(crop)} variant="filled" size="xs" color="green" style={{ position: 'absolute', bottom: '1rem', left: '1rem' }}>Add</Button>
               </Card>
             )))}
         </div>

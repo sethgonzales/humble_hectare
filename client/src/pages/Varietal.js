@@ -102,60 +102,57 @@ const Varietal = () => {
         )}
 
         <h2>Schedules</h2>
-        <Grid>
-          <Grid.Col span={{ base: 12, md: 6 }}>
-            <Card shadow="sm" padding="md" radius="md" withBorder>
-              <h3 style={{ marginTop: '0' }}>Watering</h3>
-              {varietal?.waterEvery || varietal?.waterStart ? (
-                <Table highlightOnHover>
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th>Frequency</Table.Th>
-                      <Table.Th>Duration</Table.Th>
-                      <Table.Th>Initial</Table.Th>
-                      <Table.Th>Next Expected</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    <Table.Tr>
-                      <Table.Td>{varietal?.waterEvery || '-'}</Table.Td>
-                      <Table.Td>{varietal?.waterTime ? `${varietal?.waterTime} min` : '-'}</Table.Td>
-                      <Table.Td>{varietal?.waterStart ? formatDate(varietal.waterStart) : '-'}</Table.Td>
-                      <Table.Td>{nextWaterDate || '-'}</Table.Td>
-                    </Table.Tr>
-                  </Table.Tbody>
-                </Table>
-              ) : (
-                <Text size="sm">Water schedule has not been set for this variety</Text>
-              )}
-            </Card>
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, md: 5 }}>
-            <Card shadow="sm" padding="lg" radius="md" withBorder>
-              <h3 style={{ marginTop: '0' }}>Fertilizing</h3>
-              {varietal?.fertilizeEvery || varietal?.fertilizeStart ? (
-                <Table highlightOnHover>
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th>Frequency</Table.Th>
-                      <Table.Th>Initial</Table.Th>
-                      <Table.Th>Next Expected</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    <Table.Tr>
-                      <Table.Td>{varietal?.fertilizeEvery}</Table.Td>
-                      <Table.Td>{varietal?.fertilizeStart ? formatDate(varietal.fertilizeStart) : '-'}</Table.Td>
-                      <Table.Td>{nextFertilizeDate}</Table.Td>
-                    </Table.Tr>
-                  </Table.Tbody>
-                </Table>
-              ) : (
-                <Text size="sm">Fertilizing schedule has been set for this variety</Text>
-              )}
-            </Card>
-          </Grid.Col>
-        </Grid>
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: '1rem' }} >
+          <Card shadow="sm" padding="lg" radius="md" withBorder style={{ width: '32rem', minHeight: '10rem' }}>
+            <h3 style={{ marginTop: '0' }}>Watering</h3>
+            {varietal?.waterEvery || varietal?.waterStart ? (
+              <Table highlightOnHover>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Frequency</Table.Th>
+                    <Table.Th>Duration</Table.Th>
+                    <Table.Th>Initial</Table.Th>
+                    <Table.Th>Next Expected</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  <Table.Tr>
+                    <Table.Td>{varietal?.waterEvery || '-'}</Table.Td>
+                    <Table.Td>{varietal?.waterTime ? `${varietal?.waterTime} min` : '-'}</Table.Td>
+                    <Table.Td>{varietal?.waterStart ? formatDate(varietal.waterStart) : '-'}</Table.Td>
+                    <Table.Td>{nextWaterDate || '-'}</Table.Td>
+                  </Table.Tr>
+                </Table.Tbody>
+              </Table>
+            ) : (
+              <Text size="sm">Water schedule has not been set for this variety</Text>
+            )}
+          </Card>
+
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <h3 style={{ marginTop: '0' }}>Fertilizing</h3>
+            {varietal?.fertilizeEvery || varietal?.fertilizeStart ? (
+              <Table highlightOnHover>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Frequency</Table.Th>
+                    <Table.Th>Initial</Table.Th>
+                    <Table.Th>Next Expected</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  <Table.Tr>
+                    <Table.Td>{varietal?.fertilizeEvery}</Table.Td>
+                    <Table.Td>{varietal?.fertilizeStart ? formatDate(varietal.fertilizeStart) : '-'}</Table.Td>
+                    <Table.Td>{nextFertilizeDate}</Table.Td>
+                  </Table.Tr>
+                </Table.Tbody>
+              </Table>
+            ) : (
+              <Text size="sm">Fertilizing schedule has not been set for this variety</Text>
+            )}
+          </Card>
+        </div>
 
         <h2>Event Log</h2>
         {varietal?.events?.length > 0 ? (
