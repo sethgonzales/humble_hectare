@@ -154,7 +154,7 @@ const CropForm = (props) => {
           />
 
           <NativeSelect
-            label="Type of Event"
+            label="Type of Crop"
             // placeholder="Select the Crop Type"
             data={[
               { label: 'Select the Crop Type', value: '', disabled: true },
