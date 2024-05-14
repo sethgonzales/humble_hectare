@@ -116,6 +116,6 @@ As a developer, my aim is to log my journey in building this application. This a
 
 - Made a lot of changes throughout this week! Was able to finish CRUD for events, and now I can start moving on to actual log entries. Lots to add there! 
 - TODO: Add every six months to the 'every date' model entry. Create a custom every other? or just a check box for only once, but in this date.  
-- TODO: Create Log model, include things like dates, have the log create and store its own date. Figure our how to store weather information... Add attachments to logs. Make it so the log entries show up on a calendar... Make it so events show up on a calendar... 
+- TODO: Create Log model, include things like dates, have the log create and store its own date. Figure our how to store weather information... Add attachments to logs. Make it so the log entries show up on a calendar... Make it so events show up on a calendar.
 - TODO:  Come up with notifications for crop varietals to show up on the crop list. Look at the next up date vs the current user date. Make the 'next up' dates part of the varietal model.
 - TODO: Change the headers for varietal pages... Remove the crop name from the name? Change the formatting for it?
