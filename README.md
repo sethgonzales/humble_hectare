@@ -119,3 +119,10 @@ As a developer, my aim is to log my journey in building this application. This a
 - TODO: Create Log model, include things like dates, have the log create and store its own date. Figure our how to store weather information... Add attachments to logs. Make it so the log entries show up on a calendar... Make it so events show up on a calendar.
 - TODO:  Come up with notifications for crop varietals to show up on the crop list. Look at the next up date vs the current user date. Make the 'next up' dates part of the varietal model.
 - TODO: Change the headers for varietal pages... Remove the crop name from the name? Change the formatting for it?
+
+### 5/20/24
+
+- Decided to refactor my components to separate business from front end logic. Pulled out CRUD for crops and loading and updating for varietals. 
+- The goal is to follow better practices and make more reusable components/hooks for future use.
+- TODO: Finish pulling out CRUD for varietals. 
+- TODO: Move on to pulling out CRUD for events.

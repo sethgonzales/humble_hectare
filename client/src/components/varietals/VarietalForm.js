@@ -15,14 +15,21 @@ import {
 import { DatePickerInput } from '@mantine/dates';
 import { useNavigate } from "react-router-dom";
 
+import useVarietals from "../../utils/varietals/useVarietals";
+
+
 const VarietalForm = (props) => {
+
+  const {
+    updateVarietal,
+  } = useVarietals();
+
   const {
     varietal,
     isOpen,
     onDismissVarietal,
-    onUpdateVarietal,
-    addNewVarietal,
-    onAddNewVarietal,
+    // onUpdateVarietal,
+    // onAddNewVarietal,
     crop,
   } = props;
 
@@ -81,41 +88,8 @@ const VarietalForm = (props) => {
   };
 
   const handleUpdateVarietal = async () => {
-    try {
-      setIsLoading(true);
-      const data = {
-        varietalId: varietal?.varietalId,
-        cropId: varietal?.cropId,
-        name: form.values.name,
-        description: form.values.description,
-        waterStart: form.values.waterStart ? form.values.waterStart.toISOString() : "",
-        waterEvery: form.values.waterEvery,
-        waterTime: form.values.waterTime ? form.values.waterTime : 0,
-        fertilizeStart: form.values.fertilizeStart ? form.values.fertilizeStart.toISOString() : "",
-        fertilizeEvery: form.values.fertilizeEvery,
-      };
-
-      await axios.put(
-        `https://localhost:5001/api/crops/${varietal.cropId}/varietals/${varietal.varietalId}`,
-        data
-      );
-
-      onUpdateVarietal({
-        ...varietal,
-        name: data.name,
-        description: data.description,
-        waterStart: data.waterStart,
-        waterEvery: data.waterEvery,
-        waterTime: data.waterTime,
-        fertilizeStart: data.fertilizeStart,
-        fertilizeEvery: data.fertilizeEvery,
-      });
-
-      handleDismiss();
-    } catch (error) {
-      console.error("Error updating varietal:", error);
-    }
-    setIsLoading(false);
+    await updateVarietal(varietal.varietalId, varietal.cropId, form.values);
+    handleDismiss();
   }
 
   const handleAddVarietal = async () => {
@@ -147,7 +121,7 @@ const VarietalForm = (props) => {
         data
       );
 
-      onAddNewVarietal(response);
+      // onAddNewVarietal(response);
       handleDismiss();
     } catch (error) {
       setIsLoading(false);
@@ -177,7 +151,7 @@ const VarietalForm = (props) => {
 
   const handleSubmit = () => {
     if (form.isValid()) {
-      if (!addNewVarietal && varietal) {
+      if (varietal) {
         handleUpdateVarietal();
       } else {
         handleAddVarietal();
@@ -263,7 +237,7 @@ const VarietalForm = (props) => {
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
             <Button type="submit" variant="filled" size="xs" color="green">Save</Button>
-            {varietal && !addNewVarietal && (
+            {varietal && (
               <Button onClick={() => setDeleteConfirm(true)} variant="filled" size="xs" color="red">Delete</Button>
             )}
           </div>

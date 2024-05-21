@@ -1,7 +1,6 @@
 //CropForm.jsx
 import React, { useEffect, useState } from "react";
-import { isNotEmpty, useForm } from '@mantine/form';
-import axios from "axios";
+import { isNotEmpty, useForm } from '@mantine/form';;
 import { Modal, Button, TextInput, LoadingOverlay, Alert, NativeSelect } from '@mantine/core';
 
 const CropForm = (props) => {
@@ -9,11 +8,10 @@ const CropForm = (props) => {
     crop,
     crops,
     isOpen,
-    onDismissCrop,
-    onDeleteCrop,
-    onUpdateCrop,
-    onAddNewCrop,
-    addNewCrop,
+    addCrop,
+    updateCrop,
+    deleteCrop,
+    dismissCropForm,
   } = props;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -43,73 +41,33 @@ const CropForm = (props) => {
     }
   }, [crop]);
 
-
-  const handleUpdateCrop = async () => {
-    console.log(form.values);
-    try {
-      setIsLoading(true);
-      const data = {
-        cropId: crop?.cropId,
-        name: form.values.name,
-        type: form.values.type,
-      };
-
-      await axios.put(
-        `https://localhost:5001/api/crops/${crop.cropId}`,
-        data
-      );
-
-      onUpdateCrop({
-        ...crop,
-        name: data.name,
-        type: data.type,
-      });
-
-      onDismissCrop();
-    } catch (error) {
-      setIsLoading(false);
-      console.error("Error updating crop:", error);
-    }
-    setIsLoading(false);
+  const handleDismiss = () => {
+    dismissCropForm();
+    setDeleteConfirm(false);
     form.reset();
   }
 
+  const handleUpdateCrop = async () => {
+    updateCrop(crop.cropId, form.values);
+    handleDismiss();
+  }
+
   const handleAddCrop = async () => {
-    console.log(form.values);
-    try {
-      setIsLoading(true);
-      const newCropName = form.values.name.toLowerCase();
-      const isDuplicate = crops?.some(existingCrop => existingCrop.name.toLowerCase() === newCropName);
+    const newCropName = form.values.name.toLowerCase();
+    const isDuplicate = crops?.some(existingCrop => existingCrop.name.toLowerCase() === newCropName);
 
-      if (isDuplicate) {
-        setDuplicateWarning(true);
-        setIsLoading(false);
-        return;
-      }
-
-      const data = {
-        name: form.values.name,
-        type: form.values.type,
-      };
-
-      const response = await axios.post(
-        `https://localhost:5001/api/crops/`,
-        data
-      );
-
-      onAddNewCrop(response);
-      onDismissCrop();
-    } catch (error) {
-      setIsLoading(false);
-      console.error("Error adding crop:", error);
+    if (isDuplicate) {
+      setDuplicateWarning(true);
+      return;
+    } else {
+      await addCrop(form.values);
     }
-    form.reset();
-    setIsLoading(false);
+    handleDismiss();
   };
 
   const handleSubmit = () => {
     if (form.isValid()) {
-      if (!addNewCrop && crop) {
+      if (crop) {
         handleUpdateCrop();
       } else {
         handleAddCrop();
@@ -118,33 +76,12 @@ const CropForm = (props) => {
   };
 
   const handleDelete = async () => {
-    try {
-      setIsLoading(true);
-
-      await axios.delete(
-        `https://localhost:5001/api/crops/${crop.cropId}`
-      );
-
-      onDeleteCrop(crop.cropId);
-
-      onDismissCrop();
-
-    } catch (error) {
-      console.error("Error deleting crop:", error);
-    }
-    form.reset();
-    setDeleteConfirm(false);
-    setIsLoading(false);
-  }
-
-  const handleDismiss = () => {
-    onDismissCrop();
-    setDeleteConfirm(false);
-    form.reset();
+    await deleteCrop(crop);
+    handleDismiss();
   }
 
   return (
-    <Modal opened={isOpen} onClose={handleDismiss} title={!addNewCrop ? "Crop Details" : "New Crop"}>
+    <Modal opened={isOpen} onClose={handleDismiss} title={crop ? "Crop Details" : "New Crop"}>
       {!deleteConfirm && !duplicateWarning && (
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
@@ -155,7 +92,6 @@ const CropForm = (props) => {
 
           <NativeSelect
             label="Type of Crop"
-            // placeholder="Select the Crop Type"
             data={[
               { label: 'Select the Crop Type', value: '', disabled: true },
               { label: 'Vegetable', value: 'Vegetable' },
@@ -174,7 +110,7 @@ const CropForm = (props) => {
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
             <Button type="submit" variant="filled" size="xs" color="green">Save</Button>
-            {crop && !addNewCrop && (
+            {crop && (
               <Button onClick={() => setDeleteConfirm(true)} variant="filled" size="xs" color="red">Delete</Button>
             )}
           </div>
@@ -196,7 +132,7 @@ const CropForm = (props) => {
       )}
       {duplicateWarning && (
         <Alert variant="light" color="blue" title="Hold up!">
-          There is another crop of this same name already added
+          There is another crop of this name already added
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
             <Button onClick={() => setDuplicateWarning(false)} variant="filled" size="xs" color="grey">Cancel</Button>
           </div>

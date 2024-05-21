@@ -13,65 +13,30 @@ import {
   GridCol,
   Card
 } from '@mantine/core';
-import axios from "axios";
-import { useParams } from 'react-router-dom';
-import VarietalForm from "../components/VarietalForm";
-import EventForm from "../components/EventForm";
 import { IconPencil } from '@tabler/icons-react';
-import { useNavigate } from "react-router-dom";
+import { useParams } from 'react-router-dom';
+
 import { formatDate } from "../utils/DateTime";
-import { calculateNextDate } from "../utils/DateTime";
-// import { useNavigate } from "react-router-dom";
+
+import VarietalForm from "../components/varietals/VarietalForm";
+import useVarietals from "../utils/varietals/useVarietals";
+import EventForm from "../components/events/EventForm";
+
 
 const Varietal = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  // const [varietal, setVarietal] = useState();
 
-  const [varietal, setVarietal] = useState();
-  let { id: varietalId } = useParams();
+  const {
+    varietal,
+    nextWaterDate,
+    nextFertilizeDate,
+    isLoading,
+  } = useVarietals();
 
   const [showVarietalModal, setShowVarietalModal] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
   const [eventToShow, setEventToShow] = useState();
-
-  const [nextWaterDate, setNextWaterDate] = useState('');
-  const [nextFertilizeDate, setNextFertilizeDate] = useState('');
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  const loadVarietal = async () => {
-    setIsLoading(true);
-    try {
-
-      const response = await axios.get(`https://localhost:5001/api/varietals/${varietalId}`);
-      const varietal = response.data;
-      console.log('Get varietal ', response.data);
-
-      setVarietal(varietal);
-
-      if (varietal.waterStart && varietal.waterStart !== '' && varietal.waterEvery && varietal.waterEvery !== 'Never') {
-        const nxtWaterDt = calculateNextDate(varietal.waterStart, varietal.waterEvery);
-        setNextWaterDate(nxtWaterDt);
-      } else {
-        setNextWaterDate('');
-      }
-
-      if (varietal.fertilizeStart && varietal.fertilizeStart !== '' && varietal.fertilizeEvery && varietal.fertilizeEvery !== 'Never') {
-        const nxtFertDt = calculateNextDate(varietal.fertilizeStart, varietal.fertilizeEvery);
-        setNextFertilizeDate(nxtFertDt);
-      } else {
-        setNextFertilizeDate('');
-      }
-
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      navigate("/crops");
-    };
-    setIsLoading(false);
-  }
-
-  useEffect(() => {
-    loadVarietal();
-  }, []);
 
   const showEventForm = (_event) => {
     if (_event) {
@@ -223,14 +188,14 @@ const Varietal = () => {
         varietal={varietal}
         isOpen={showVarietalModal}
         onDismissVarietal={() => setShowVarietalModal(false)}
-        onUpdateVarietal={loadVarietal}
+        // onUpdateVarietal={loadVarietal}
       />
       <EventForm
         crop={varietal?.crop}
         varietal={varietal}
         _event={eventToShow}
         isOpen={showEventModal}
-        loadVarietal={loadVarietal}
+        // loadVarietal={loadVarietal}
         onDismissEvent={() => {
           setShowEventModal(false);
           setEventToShow(null);
