@@ -1,4 +1,4 @@
-//CropList.jsx
+//Varietal.jsx
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -14,19 +14,15 @@ import {
   Card
 } from '@mantine/core';
 import { IconPencil } from '@tabler/icons-react';
-import { useParams } from 'react-router-dom';
 
 import { formatDate } from "../utils/DateTime";
 
 import VarietalForm from "../components/varietals/VarietalForm";
-import useVarietals from "../utils/varietals/useVarietals";
+import useVarietals from "../hooks/varietals/useVarietals";
 import EventForm from "../components/events/EventForm";
 
 
 const Varietal = () => {
-  // const navigate = useNavigate();
-  // const [varietal, setVarietal] = useState();
-
   const {
     varietal,
     nextWaterDate,

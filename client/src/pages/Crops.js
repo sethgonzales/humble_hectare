@@ -1,4 +1,4 @@
-//CropList.jsx
+//Crops.jsx
 import React, { useState } from "react";
 import {
   Group,
@@ -12,7 +12,7 @@ import { IconPlus } from '@tabler/icons-react';
 import VarietalForm from "../components/varietals/VarietalForm";
 import CropList from "../components/crops/CropList";
 import CropForm from '../components/crops/CropForm';
-import useCrops from '../utils/crops/useCrops';
+import useCrops from '../hooks/crops/useCrops';
 
 const Crops = () => {
   const {

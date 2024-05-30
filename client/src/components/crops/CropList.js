@@ -8,7 +8,6 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { IconPencil } from '@tabler/icons-react';
-
 import { useNavigate } from "react-router-dom";
 
 const CropList = (props) => {

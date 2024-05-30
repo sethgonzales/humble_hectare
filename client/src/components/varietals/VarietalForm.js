@@ -15,7 +15,7 @@ import {
 import { DatePickerInput } from '@mantine/dates';
 import { useNavigate } from "react-router-dom";
 
-import useVarietals from "../../utils/varietals/useVarietals";
+import useVarietals from "../../hooks/varietals/useVarietals";
 
 
 const VarietalForm = (props) => {

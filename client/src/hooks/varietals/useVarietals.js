@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { calculateNextDate } from "../DateTime";
+import { calculateNextDate } from "../../utils/DateTime";
 import { useNavigate, useParams } from "react-router-dom";
 
 import axios from "axios";
