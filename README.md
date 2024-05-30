@@ -125,4 +125,4 @@ As a developer, my aim is to log my journey in building this application. This a
 - Decided to refactor my components to separate business from front end logic. Pulled out CRUD for crops and loading and updating for varietals. 
 - The goal is to follow better practices and make more reusable components/hooks for future use.
 - TODO: Finish pulling out CRUD for varietals. 
-- TODO: Move on to pulling out CRUD for events.
+- TODO: Move on to pulling out CRUD for events
