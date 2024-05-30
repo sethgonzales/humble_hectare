@@ -126,3 +126,13 @@ As a developer, my aim is to log my journey in building this application. This a
 - The goal is to follow better practices and make more reusable components/hooks for future use.
 - TODO: Finish pulling out CRUD for varietals. 
 - TODO: Move on to pulling out CRUD for events
+
+### 5/30/24
+- Finished my refactor of useCrop, Events, and Varietals.
+  ! try this out later
+    const data = {
+      varietalId: varietal.varietalId,
+      cropVarietal: cropVarietal,
+      ...form.values,
+    }
+- Updated styles for data on watering and fertilizing, as well as placing each component in a card. Makes the UI more interesting!

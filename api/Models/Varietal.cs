@@ -17,8 +17,10 @@ namespace Api.Models
     public string WaterStart { get; set; }
     public string WaterEvery { get; set; }
     public int WaterTime { get; set; }
+    public string WaterNotes { get; set; }
     public string FertilizeStart { get; set; }
     public string FertilizeEvery { get; set; }
+    public string FertilizeNotes { get; set; }
 
     // Foreign key and navigation property for the one-to-many relationship with Crop
     public int CropId { get; set; }

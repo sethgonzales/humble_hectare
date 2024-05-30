@@ -1,28 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from "axios";
 
 const useCrops = () => {
-  const [crops, setCrops] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const loadCrops = async () => {
     setIsLoading(true);
     try {
-
       const response = await axios.get('https://localhost:5001/api/crops');
       const _crops = response.data;
-
-      setCrops(_crops);
-
+      setIsLoading(false);
+      return _crops;
     } catch (error) {
       console.error('Error fetching data:', error);
+      setIsLoading(false);
+      return null;
     };
-    setIsLoading(false);
   };
-
-  useEffect(() => {
-    loadCrops();
-  }, []);
 
   const addCrop = async (crop) => {
     setIsLoading(true);
@@ -37,12 +31,14 @@ const useCrops = () => {
         data
       );
 
-      setCrops((prevCrops) => [...prevCrops, response.data]);
+      setIsLoading(false);
+      return response.data;
+
     } catch (error) {
       setIsLoading(false);
       console.error("Error adding crop:", error);
+      return null;
     }
-    setIsLoading(false);
   };
 
   const updateCrop = async (cropId, crop) => {
@@ -53,26 +49,20 @@ const useCrops = () => {
         name: crop.name,
         type: crop.type,
       };
-
       await axios.put(`https://localhost:5001/api/crops/${cropId}`, data);
-
-      setCrops((prevCrops) => prevCrops.map((crp) => (crp.cropId === cropId ? data : crp)));
-
     } catch (error) {
       console.error("Error updating crop:", error);
     }
     setIsLoading(false);
   }
 
-  const deleteCrop = async (crop) => {
+  const deleteCrop = async (cropId) => {
     try {
       setIsLoading(true);
 
       await axios.delete(
-        `https://localhost:5001/api/crops/${crop.cropId}`
+        `https://localhost:5001/api/crops/${cropId}`
       );
-
-      setCrops((prevCrops) => prevCrops.filter((crp) => crp.cropId !== crop.cropId));
 
     } catch (error) {
       console.error("Error deleting crop:", error);
@@ -82,7 +72,6 @@ const useCrops = () => {
 
   return {
     isLoading,
-    crops,
     loadCrops,
     addCrop,
     updateCrop,

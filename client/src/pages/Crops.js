@@ -1,5 +1,5 @@
 //Crops.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Group,
   Text,
@@ -16,35 +16,53 @@ import useCrops from '../hooks/crops/useCrops';
 
 const Crops = () => {
   const {
-    crops,
-    addCrop,
-    updateCrop,
-    deleteCrop,
+    loadCrops,
     isLoading,
   } = useCrops();
 
   // State for viewing, adding, and updating crops
-  const [crop, setCrop] = useState();
+  const [crops, setCrops] = useState();
+  const [cropToShow, setCropToShow] = useState();
   const [showCropModal, setShowCropModal] = useState(false);
 
   // State for adding a varietal
   const [showVarietalModal, setShowVarietalModal] = useState(false);
   const [cropToAddVarietal, setCropToAddVarietal] = useState();
 
+  const handleLoadCrops = async () => {
+    const cropList = await loadCrops();
+    if (cropList) {
+      setCrops(cropList);
+    }
+  };
+
+  useEffect(() => {
+    handleLoadCrops();
+  }, []);
+
+  const handleAddCrop = (newCrop) => {
+    setCrops((prevCrops) => [...prevCrops, newCrop]);
+  };
+
+  const handleUpdateCrop = (cropId, updatedCrop) => {
+    const updatedList = [...crops].map((crp) => (crp.cropId === cropId ? {...crp, ...updatedCrop} : crp));
+    setCrops(updatedList);
+  };
+
+  const handleDeleteCrop = (cropId) => {
+    const updatedList = [...crops].filter((crp) => crp.cropId !== cropId) 
+    setCrops(updatedList);
+  };
+
   const showCropForm = (_crop) => {
-    setCrop(_crop);
+    setCropToShow(_crop);
     setShowCropModal(true);
   };
 
-  const showNewVarietalForm = (crop) => {
-    setCropToAddVarietal(crop);
+  const showNewVarietalForm = (_crop) => {
+    setCropToAddVarietal(_crop);
     setShowVarietalModal(true);
   };
-
-  // const handleAddVarietal = () => {
-  //   setCropToAddVarietal(null);
-  //   loadCrops();
-  // };
 
   return (
     <>
@@ -65,7 +83,7 @@ const Crops = () => {
                 key={crop?.cropId}
                 crop={crop}
                 showCropForm={() => showCropForm(crop)}
-                showNewVarietalForm={showNewVarietalForm}
+                showNewVarietalForm={() => showNewVarietalForm(crop)}
               />
             )))}
         </Accordion>
@@ -73,15 +91,16 @@ const Crops = () => {
 
       <CropForm
         crops={crops}
-        crop={crop}
+        crop={cropToShow}
         isOpen={showCropModal}
         dismissCropForm={() => {
-          setCrop(null);
+          setCropToShow(null);
           setShowCropModal(false);
         }}
-        addCrop={addCrop}
-        updateCrop={updateCrop}
-        deleteCrop={deleteCrop}
+        // handlers for updating local crop state
+        onAddCrop={(newCrop) => handleAddCrop(newCrop)}
+        onUpdateCrop={(cropId, updatedCrop) => handleUpdateCrop(cropId, updatedCrop)}
+        onDeleteCrop={(cropId) => handleDeleteCrop(cropId)}
       />
 
       <VarietalForm
@@ -90,7 +109,7 @@ const Crops = () => {
           setShowVarietalModal(false);
           setCropToAddVarietal(null);
         }}
-        // onAddNewVarietal={handleAddVarietal}
+        reloadCrops={handleLoadCrops}
         crop={cropToAddVarietal}
       />
     </>

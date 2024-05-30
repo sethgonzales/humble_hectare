@@ -9,28 +9,31 @@ import {
   LoadingOverlay,
   Alert,
   Textarea,
-  NativeSelect,
-  NumberInput,
   Checkbox
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import { useNavigate } from "react-router-dom";
+import useEvents from "../../hooks/useEvents./useEvents";
 
 const EventForm = (props) => {
   const {
-    varietal,
+    crop,
     _event,
     isOpen,
+    varietal,
     onDismissEvent,
-    onUpdateEvent,
-    // addNewEvent,
-    loadVarietal,
-    crop,
+    reloadVarietal,
   } = props;
 
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    addEvent,
+    updateEvent,
+    deleteEvent,
+    isLoading,
+  } = useEvents();
+
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [multiDate, setMultiDate] = useState(false);
+  const cropVarietal = crop && varietal ? `${varietal?.name} ${crop?.name}` : null;
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -77,89 +80,34 @@ const EventForm = (props) => {
     form.reset();
   };
 
-  const handleUpdateEvent = async () => {
-    try {
-      setIsLoading(true);
-      const data = {
-        eventId: _event?.eventId,
-        varietalId: varietal?.varietalId,
-        EventType: form.values.eventType,
-        CropVarietal: crop && varietal ? `${varietal?.name} ${crop?.name}` : null,
-        DateStart: form.values.dateStart ? form.values.dateStart.toISOString() : "",
-        DateEnd: form.values.dateEnd ? form.values.dateEnd.toISOString() : "",
-        yield: form.values.yield,
-        notes: form.values.notes,
-      };
-
-      await axios.put(
-        `https://localhost:5001/api/varietals/${varietal.varietalId}/events/${_event.eventId}`,
-        data
-      );
-
-
-      // dismiss and reset the form
-      handleDismiss();
-      // reload the varietal
-      await loadVarietal();
-
-    } catch (error) {
-      console.error("Error updating varietal:", error);
-    }
-    setIsLoading(false);
-  }
-
   const handleAddEvent = async () => {
-    try {
-      setIsLoading(true);
-      const data = {
-        varietalId: varietal.varietalId,
-        EventType: form.values.eventType,
-        CropVarietal: crop && varietal ? `${varietal?.name} ${crop?.name}` : null,
-        DateStart: form.values.dateStart ? form.values.dateStart.toISOString() : "",
-        DateEnd: form.values.dateEnd ? form.values.dateEnd.toISOString() : "",
-        yield: form.values.yield,
-        notes: form.values.notes,
-      };
+    // add to db
+    await addEvent(varietal.varietalId, cropVarietal, form.values)
+    // dismiss and reset the form
+    handleDismiss();
+    // reload the varietal
+    reloadVarietal();
+  };
 
-      const response = await axios.post(
-        `https://localhost:5001/api/varietals/${varietal.varietalId}/events`,
-        data
-      );
-
-      // dismiss and reset the form
-      handleDismiss();
-      // reload the varietal
-      await loadVarietal();
-
-    } catch (error) {
-      setIsLoading(false);
-      console.error("Error adding event:", error);
-    }
-    setIsLoading(false);
+  const handleUpdateEvent = async () => {
+    // add to db
+    await updateEvent(varietal.varietalId, _event.eventId, cropVarietal, form.values)
+    // dismiss and reset the form
+    handleDismiss();
+    // reload the varietal
+    reloadVarietal();
   };
 
   const handleDelete = async () => {
-    setIsLoading(true);
-    try {
-      await axios.delete(
-        `https://localhost:5001/api/events/${_event.eventId}`
-      );
-
-      // dismiss and reset the form
-      handleDismiss();
-      // reload the varietal
-      await loadVarietal();
-
-    } catch (error) {
-      console.error("Error deleting varietal:", error);
-    }
-    form.reset();
-    setDeleteConfirm(false);
-    setIsLoading(false);
+    await deleteEvent(_event.eventId);
+    // dismiss and reset the form
+    handleDismiss();
+    // reload the varietal
+    reloadVarietal();
   }
 
   const handleSubmit = () => {
-    console.log('submitted', form.data)
+    console.log('submitted', form.values)
     if (form.isValid()) {
       if (_event) {
         handleUpdateEvent();

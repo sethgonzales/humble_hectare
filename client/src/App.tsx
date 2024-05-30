@@ -1,11 +1,11 @@
 //App.tsx
 import '@mantine/core/styles.css';
-import { AppShell, Burger, Center, Group, MantineProvider, NavLink, Skeleton } from '@mantine/core';
+import { AppShell, Burger, Card, Center, MantineProvider, NavLink } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
 import { Router } from './Router';
 import { theme } from './theme';
-import { IconHome2, IconCarrot, IconChevronRight } from '@tabler/icons-react';
+import { IconHome2, IconCarrot, IconChevronRight, IconList } from '@tabler/icons-react';
 import Logo from './img/logo.png'
 import '@mantine/dates/styles.css';
 
@@ -17,7 +17,7 @@ export default function App() {
   return (
     <MantineProvider theme={theme}>
       <AppShell
-        // header={{ height: 50 }}
+        // header={{ height: 0 }}
         navbar={{
           width: 200,
           breakpoint: 'sm',
@@ -28,7 +28,7 @@ export default function App() {
 
         <AppShell.Header style={{ overflow: 'hidden', display: 'flex', background: 'transparent', border: 'none', padding: '1rem' }}>
           <Center>
-            <Burger style={{ background: 'white' }} opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
+            <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
             {/* <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" /> */}
           </Center>
         </AppShell.Header>
@@ -53,12 +53,21 @@ export default function App() {
               <IconChevronRight size="1rem" stroke={2} className="mantine-rotate-rtl" />
             }
           />
+          <NavLink
+            href="/logs"
+            label="Logs"
+            leftSection={<IconList size="1.5rem" stroke={2} />}
+            rightSection={
+              <IconChevronRight size="1rem" stroke={2} className="mantine-rotate-rtl" />
+            }
+          />
         </AppShell.Navbar>
-
-        <AppShell.Main>
-          <Router />
+        <AppShell.Main style={{ background: '#d3ecbc' }}>
+          <Card shadow="sm" padding="xl" radius="lg" withBorder>
+            <Router />
+          </Card>
           <div style={{ textAlign: "center" }}>
-            <img src={Logo} alt="Humble Hectare Logo" style={{ width: '8rem', height: 'auto', marginTop: '3rem' }} />
+            <img src={Logo} alt="Humble Hectare Logo" style={{ width: '8rem' }} />
           </div>
         </AppShell.Main>
       </AppShell>

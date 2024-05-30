@@ -2,19 +2,26 @@
 import React, { useEffect, useState } from "react";
 import { isNotEmpty, useForm } from '@mantine/form';;
 import { Modal, Button, TextInput, LoadingOverlay, Alert, NativeSelect } from '@mantine/core';
+import useCrops from "../../hooks/crops/useCrops";
 
 const CropForm = (props) => {
   const {
     crop,
     crops,
     isOpen,
-    addCrop,
-    updateCrop,
-    deleteCrop,
+    onAddCrop,
+    onUpdateCrop,
+    onDeleteCrop,
     dismissCropForm,
   } = props;
 
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    isLoading,
+    addCrop,
+    updateCrop,
+    deleteCrop,
+  } = useCrops();
+
   const [duplicateWarning, setDuplicateWarning] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const form = useForm({
@@ -45,23 +52,27 @@ const CropForm = (props) => {
     dismissCropForm();
     setDeleteConfirm(false);
     form.reset();
-  }
-
-  const handleUpdateCrop = async () => {
-    updateCrop(crop.cropId, form.values);
-    handleDismiss();
-  }
+  };
 
   const handleAddCrop = async () => {
     const newCropName = form.values.name.toLowerCase();
     const isDuplicate = crops?.some(existingCrop => existingCrop.name.toLowerCase() === newCropName);
 
-    if (isDuplicate) {
-      setDuplicateWarning(true);
-      return;
-    } else {
-      await addCrop(form.values);
+    if (!isDuplicate) {
+      // update db
+      const newCrop = await addCrop(form.values);
+      // update local state
+      onAddCrop(newCrop);
     }
+    handleDismiss();
+  };
+
+  const handleUpdateCrop = async () => {
+    // update db
+    await updateCrop(crop.cropId, form.values);
+    // update local state
+    onUpdateCrop(crop.cropId, form.values);
+  
     handleDismiss();
   };
 
@@ -76,9 +87,13 @@ const CropForm = (props) => {
   };
 
   const handleDelete = async () => {
-    await deleteCrop(crop);
+    // update db
+    await deleteCrop(crop.cropId);
+    // update local state
+    onDeleteCrop(crop.cropId);
+  
     handleDismiss();
-  }
+  };
 
   return (
     <Modal opened={isOpen} onClose={handleDismiss} title={crop ? "Crop Details" : "New Crop"}>

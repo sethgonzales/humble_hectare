@@ -14,22 +14,23 @@ import {
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useNavigate } from "react-router-dom";
-
 import useVarietals from "../../hooks/varietals/useVarietals";
 
 
 const VarietalForm = (props) => {
 
   const {
+    addVarietal,
     updateVarietal,
+    deleteVarietal,
   } = useVarietals();
 
   const {
     varietal,
     isOpen,
     onDismissVarietal,
-    // onUpdateVarietal,
-    // onAddNewVarietal,
+    updateVarietalState,
+    reloadCrops,
     crop,
   } = props;
 
@@ -89,64 +90,32 @@ const VarietalForm = (props) => {
 
   const handleUpdateVarietal = async () => {
     await updateVarietal(varietal.varietalId, varietal.cropId, form.values);
+    updateVarietalState(form.values);
     handleDismiss();
   }
 
   const handleAddVarietal = async () => {
-    try {
-      setIsLoading(true);
+    const newVarietalName = form.values.name.toLowerCase();
+    const isDuplicate = crop.varietals?.some(existingVarietal => existingVarietal.name.toLowerCase() === newVarietalName);
 
-      const newVarietalName = form.values.name.toLowerCase();
-      const isDuplicate = crop.varietals?.some(existingVarietal => existingVarietal.name.toLowerCase() === newVarietalName);
-
-      if (isDuplicate) {
-        setDuplicateWarning(true);
-        setIsLoading(false);
-        return;
-      }
-
-      const data = {
-        cropId: crop.cropId,
-        name: form.values.name,
-        description: form.values.description,
-        waterStart: form.values.waterStart ? form.values.waterStart.toISOString() : "",
-        waterEvery: form.values.waterEvery,
-        waterTime: form.values.waterTime ? form.values.waterTime : 0,
-        fertilizeStart: form.values.fertilizeStart ? form.values.fertilizeStart.toISOString() : "",
-        fertilizeEvery: form.values.fertilizeEvery,
-      };
-
-      const response = await axios.post(
-        `https://localhost:5001/api/crops/${crop.cropId}/varietals`,
-        data
-      );
-
-      // onAddNewVarietal(response);
+    if (isDuplicate) {
+      setDuplicateWarning(true);
+    } else {
+      // update db
+      await addVarietal(form.values, crop.cropId);
+      // reload crop list
       handleDismiss();
-    } catch (error) {
-      setIsLoading(false);
-      console.error("Error adding varietal:", error);
+      reloadCrops();
     }
-    setIsLoading(false);
   };
 
 
   const handleDelete = async () => {
-    setIsLoading(true);
-    try {
-      await axios.delete(
-        `https://localhost:5001/api/varietals/${varietal.varietalId}`
-      );
-
-      onDismissVarietal();
-      navigate('/crops');
-
-    } catch (error) {
-      console.error("Error deleting varietal:", error);
-    }
-    form.reset();
-    setDeleteConfirm(false);
-    setIsLoading(false);
+    // update db
+    await deleteVarietal(varietal.varietalId);
+    handleDismiss();
+    // navigate back to crops list
+    navigate('/crops');
   }
 
   const handleSubmit = () => {
