@@ -136,3 +136,4 @@ As a developer, my aim is to log my journey in building this application. This a
       ...form.values,
     }
 - Updated styles for data on watering and fertilizing, as well as placing each component in a card. Makes the UI more interesting!
+- TODO: Finish adding water and fertilize notes to forms!

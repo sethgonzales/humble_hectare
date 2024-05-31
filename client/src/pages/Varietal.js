@@ -15,7 +15,7 @@ import {
   Timeline,
   Center
 } from '@mantine/core';
-import { IconCalendar, IconClockHour4, IconDroplet, IconHourglassLow, IconPencil, IconSeeding } from '@tabler/icons-react';
+import { IconCalendar, IconClockHour4, IconDroplet, IconHourglassLow, IconNote, IconPencil, IconSeeding } from '@tabler/icons-react';
 import { useParams } from "react-router-dom";
 import { formatDate } from "../utils/DateTime";
 
@@ -28,8 +28,6 @@ const Varietal = () => {
   const {
     isLoading,
     loadVarietal,
-    // nextWaterDate,
-    // nextFertilizeDate,
   } = useVarietals();
 
   let { id: varietalId } = useParams();
@@ -122,6 +120,9 @@ const Varietal = () => {
                 <Timeline.Item title="Next expected date" bullet={<IconHourglassLow size={20} />}>
                   <Text c="dimmed" size="med">{nextWaterDate || '-'}</Text>
                 </Timeline.Item>
+                <Timeline.Item title="Notes" bullet={<IconNote size={20} />}>
+                  <Text c="dimmed" size="med">{varietal?.waterNotes || '-'}</Text>
+                </Timeline.Item>
               </Timeline>
             </Center>
           </GridCol>
@@ -136,6 +137,9 @@ const Varietal = () => {
                 </Timeline.Item>
                 <Timeline.Item title="Next expected date" bullet={<IconHourglassLow size={20} />}>
                   <Text c="dimmed" size="med">{nextFertilizeDate || '-'}</Text>
+                </Timeline.Item>
+                <Timeline.Item title="Notes" bullet={<IconNote size={20} />}>
+                  <Text c="dimmed" size="med">{varietal?.fertilizeNotes || '-'}</Text>
                 </Timeline.Item>
               </Timeline>
             </Center>

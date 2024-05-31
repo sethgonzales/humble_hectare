@@ -49,8 +49,10 @@ const VarietalForm = (props) => {
       waterStart: null,
       waterEvery: "",
       waterTime: "",
+      // waterNotes: "",
       fertilizeStart: null,
       fertilizeEvery: "",
+      // fertilizeNotes: "",
     },
     validate: {
       name: isNotEmpty("Please enter the variety's name"),
@@ -76,8 +78,10 @@ const VarietalForm = (props) => {
         waterStart: varietal?.waterStart ? new Date(varietal.waterStart) : null,
         waterEvery: varietal?.waterEvery || "",
         waterTime: varietal?.waterTime || "",
+        // waterNotes: varietal?.waterNotes || "",
         fertilizeStart: varietal?.fertilizeStart ? new Date(varietal.fertilizeStart) : null,
         fertilizeEvery: varietal?.fertilizeEvery || "",
+        // fertilizeNotes: varietal?.fertilizeNotes || "",
       });
     }
   }, [varietal, isOpen]);
