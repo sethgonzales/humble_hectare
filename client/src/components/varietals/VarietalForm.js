@@ -1,7 +1,6 @@
 //VarietalForm.js
 import React, { useEffect, useState } from "react";
 import { isNotEmpty, useForm } from '@mantine/form';
-import axios from "axios";
 import {
   Modal,
   Button,
@@ -20,6 +19,7 @@ import useVarietals from "../../hooks/varietals/useVarietals";
 const VarietalForm = (props) => {
 
   const {
+    isLoading,
     addVarietal,
     updateVarietal,
     deleteVarietal,
@@ -36,9 +36,20 @@ const VarietalForm = (props) => {
 
   const navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [duplicateWarning, setDuplicateWarning] = useState(false);
+
+  const frequencyValues = [
+    { label: 'Select Frequency', value: '', disabled: true },
+    { label: 'Daily', value: 'Daily' },
+    { label: 'Twice per Day', value: 'Twice per Day' },
+    { label: 'Every other Day', value: 'Every other Day' },
+    { label: 'Once per Week', value: 'Once per Week' },
+    { label: 'Once per Month', value: 'Once per Month' },
+    { label: 'Once per Six Months', value: 'Once per Six Months' },
+    { label: 'Once per Year', value: 'Once per Year' },
+    { label: 'Never', value: null },
+  ];
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -49,10 +60,10 @@ const VarietalForm = (props) => {
       waterStart: null,
       waterEvery: "",
       waterTime: "",
-      // waterNotes: "",
+      waterNotes: "",
       fertilizeStart: null,
       fertilizeEvery: "",
-      // fertilizeNotes: "",
+      fertilizeNotes: "",
     },
     validate: {
       name: isNotEmpty("Please enter the variety's name"),
@@ -78,10 +89,10 @@ const VarietalForm = (props) => {
         waterStart: varietal?.waterStart ? new Date(varietal.waterStart) : null,
         waterEvery: varietal?.waterEvery || "",
         waterTime: varietal?.waterTime || "",
-        // waterNotes: varietal?.waterNotes || "",
+        waterNotes: varietal?.waterNotes || "",
         fertilizeStart: varietal?.fertilizeStart ? new Date(varietal.fertilizeStart) : null,
         fertilizeEvery: varietal?.fertilizeEvery || "",
-        // fertilizeNotes: varietal?.fertilizeNotes || "",
+        fertilizeNotes: varietal?.fertilizeNotes || "",
       });
     }
   }, [varietal, isOpen]);
@@ -161,16 +172,7 @@ const VarietalForm = (props) => {
 
           <NativeSelect
             label="Frequency"
-            data={[
-              { label: 'Select Frequency', value: '', disabled: true },
-              { label: 'Daily', value: 'Daily' },
-              { label: 'Twice per Day', value: 'Twice per Day' },
-              { label: 'Every other Day', value: 'Every other Day' },
-              { label: 'Once per Week', value: 'Once per Week' },
-              { label: 'Once per Month', value: 'Once per Month' },
-              { label: 'Once per Year', value: 'Once per Year' },
-              { label: 'Never', value: null },
-            ]}
+            data={frequencyValues}
             {...form.getInputProps('waterEvery')}
           />
 
@@ -180,6 +182,13 @@ const VarietalForm = (props) => {
             placeholder="Time in minutes"
             min={0}
             {...form.getInputProps('waterTime')}
+          />
+
+          <Textarea
+            label="Watering Notes"
+            resize="vertical"
+            placeholder="Specific instructions or reminders..."
+            {...form.getInputProps('waterNotes')}
           />
 
           <h3 style={{ marginBottom: "0" }}>Fertilizing Schedule</h3>
@@ -195,17 +204,15 @@ const VarietalForm = (props) => {
 
           <NativeSelect
             label="Frequency"
-            data={[
-              { label: 'Select Frequency', value: '', disabled: true },
-              { label: 'Daily', value: 'Daily' },
-              { label: 'Twice per Day', value: 'Twice per Day' },
-              { label: 'Every other Day', value: 'Every other Day' },
-              { label: 'Once per Week', value: 'Once per Week' },
-              { label: 'Once per Month', value: 'Once per Month' },
-              { label: 'Once per Year', value: 'Once per Year' },
-              { label: 'Never', value: null },
-            ]}
+            data={frequencyValues}
             {...form.getInputProps('fertilizeEvery')}
+          />
+          
+          <Textarea
+            label="Fertilizing Notes"
+            resize="vertical"
+            placeholder="Specific instructions or reminders..."
+            {...form.getInputProps('fertilizeNotes')}
           />
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>

@@ -13,9 +13,10 @@ import {
   Group,
   GridCol,
   Timeline,
-  Center
+  Center,
+  Avatar
 } from '@mantine/core';
-import { IconCalendar, IconClockHour4, IconDroplet, IconHourglassLow, IconNote, IconPencil, IconSeeding } from '@tabler/icons-react';
+import { IconCalendar, IconClockHour4, IconDroplet, IconHourglassLow, IconNote, IconPencil, IconScale, IconSeeding, IconTractor } from '@tabler/icons-react';
 import { useParams } from "react-router-dom";
 import { formatDate } from "../utils/DateTime";
 
@@ -117,7 +118,7 @@ const Varietal = () => {
                 <Timeline.Item title="Started on" bullet={<IconCalendar size={20} />} lineVariant="dashed">
                   <Text c="dimmed" size="med">{varietal?.waterStart ? formatDate(varietal.waterStart) : '-'}</Text>
                 </Timeline.Item>
-                <Timeline.Item title="Next expected date" bullet={<IconHourglassLow size={20} />}>
+                <Timeline.Item title="Next expected date" bullet={<IconHourglassLow size={20} />} lineVariant="dashed">
                   <Text c="dimmed" size="med">{nextWaterDate || '-'}</Text>
                 </Timeline.Item>
                 <Timeline.Item title="Notes" bullet={<IconNote size={20} />}>
@@ -135,7 +136,7 @@ const Varietal = () => {
                 <Timeline.Item title="Started on" bullet={<IconCalendar size={20} />} lineVariant="dashed">
                   <Text c="dimmed" size="med">{varietal?.fertilizeStart ? formatDate(varietal.fertilizeStart) : '-'}</Text>
                 </Timeline.Item>
-                <Timeline.Item title="Next expected date" bullet={<IconHourglassLow size={20} />}>
+                <Timeline.Item title="Next expected date" bullet={<IconHourglassLow size={20} />} lineVariant="dashed">
                   <Text c="dimmed" size="med">{nextFertilizeDate || '-'}</Text>
                 </Timeline.Item>
                 <Timeline.Item title="Notes" bullet={<IconNote size={20} />}>
@@ -160,7 +161,7 @@ const Varietal = () => {
                         </Tooltip>
                         <Text><b>{event?.eventType}</b></Text>
                       </Group>
-                      <Text style={{ marginRight: "16px" }}>{event.dateStart ? formatDate(event.dateStart) : ''} {event?.dateEnd ? ` - ${formatDate(event.dateEnd)}` : ''}</Text>
+                      <Text c="dimmed" style={{ marginRight: "16px" }}>{event.dateStart ? formatDate(event.dateStart) : ''} {event?.dateEnd ? ` - ${formatDate(event.dateEnd)}` : ''}</Text>
                     </div>
                   </Accordion.Control>
                   <Accordion.Panel>
@@ -169,16 +170,17 @@ const Varietal = () => {
                         <Table striped highlightOnHover>
                           <Table.Tbody>
                             <Table.Tr>
-                              <Table.Td><b>Event</b></Table.Td>
-                              <Table.Td>{event?.eventType}</Table.Td>
-                            </Table.Tr>
-                            <Table.Tr>
-                              <Table.Td><b>Date</b></Table.Td>
-                              <Table.Td>{event.dateStart ? formatDate(event.dateStart) : ''} {event?.dateEnd ? ` - ${formatDate(event.dateEnd)}` : ''}</Table.Td>
-                            </Table.Tr>
-                            <Table.Tr>
-                              <Table.Td><b>Yield</b></Table.Td>
-                              <Table.Td>{event?.yield || '-'}</Table.Td>
+                              <Timeline active={2} bulletSize={30} lineWidth={2} color="yellow">
+                                <Timeline.Item bullet={<IconTractor size={20} />} title="Event">
+                                  <Text c="dimmed" size="med">{event.eventType}</Text>
+                                </Timeline.Item>
+                                <Timeline.Item title="Date" bullet={<IconCalendar size={20} />}>
+                                  <Text c="dimmed" size="med">{event.dateStart ? formatDate(event.dateStart) : '-'} {event?.dateEnd ? ` - ${formatDate(event.dateEnd)}` : ''}</Text>
+                                </Timeline.Item>
+                                <Timeline.Item title="Yield" bullet={<IconScale size={20} />}>
+                                  <Text c="dimmed" size="med">{event?.yield || '-'}</Text>
+                                </Timeline.Item>
+                              </Timeline>
                             </Table.Tr>
                           </Table.Tbody>
                         </Table>
@@ -187,12 +189,19 @@ const Varietal = () => {
                         <Table striped highlightOnHover>
                           <Table.Thead>
                             <Table.Tr>
-                              <Table.Th>Notes</Table.Th>
+                              <Table.Th>
+                                <Group justify="space-between">
+                                  <Text>Notes</Text>
+                                  <Avatar color="yellow" radius="lg">
+                                    <IconNote size="1.5rem" />
+                                  </Avatar>
+                                </Group>
+                              </Table.Th>
                             </Table.Tr>
                           </Table.Thead>
                           <Table.Tbody>
                             <Table.Tr>
-                              <Table.Td>{event?.notes || '-'}</Table.Td>
+                              <Table.Td c="dimmed">{event?.notes || '-'}</Table.Td>
                             </Table.Tr>
                           </Table.Tbody>
                         </Table>

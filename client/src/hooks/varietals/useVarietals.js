@@ -32,8 +32,10 @@ const useVarietals = () => {
         waterStart: varietal.waterStart ? varietal.waterStart.toISOString() : "",
         waterEvery: varietal.waterEvery,
         waterTime: varietal.waterTime ? varietal.waterTime : 0,
+        waterNotes: varietal.waterNotes,
         fertilizeStart: varietal.fertilizeStart ? varietal.fertilizeStart.toISOString() : "",
         fertilizeEvery: varietal.fertilizeEvery,
+        fertilizeNotes: varietal.fertilizeNotes,
       };
 
       const response = await axios.post(
@@ -57,8 +59,10 @@ const useVarietals = () => {
         waterStart: varietal.waterStart ? varietal.waterStart.toISOString() : "",
         waterEvery: varietal.waterEvery,
         waterTime: varietal.waterTime ? varietal.waterTime : 0,
+        waterNotes: varietal.waterNotes,
         fertilizeStart: varietal.fertilizeStart ? varietal.fertilizeStart.toISOString() : "",
         fertilizeEvery: varietal.fertilizeEvery,
+        fertilizeNotes: varietal.fertilizeNotes,
       };
 
       await axios.put(

@@ -29,6 +29,9 @@ const calculateNextDate = (startDate, frequency) => {
     case 'Once per Month':
       daysToAdd = 30;
       break;
+    case 'Once per Six Months':
+      daysToAdd = 182.5;
+      break;
     case 'Once per Year':
       daysToAdd = 365.25;
       break;
