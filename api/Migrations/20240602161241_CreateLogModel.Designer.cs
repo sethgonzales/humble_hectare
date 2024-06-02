@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace api.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20240531233132_CreateLogModelAndDTO")]
-    partial class CreateLogModelAndDTO
+    [Migration("20240602161241_CreateLogModel")]
+    partial class CreateLogModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -83,6 +83,9 @@ namespace api.Migrations
                     b.Property<int>("LogId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("CreatedAt")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Entry")
                         .HasColumnType("longtext");

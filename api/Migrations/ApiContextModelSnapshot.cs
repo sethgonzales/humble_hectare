@@ -82,6 +82,9 @@ namespace api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("CreatedAt")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Entry")
                         .HasColumnType("longtext");
 
