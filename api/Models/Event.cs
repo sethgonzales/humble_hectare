@@ -21,7 +21,7 @@ namespace Api.Models
     public Varietal Varietal { get; set; }
     
     // Foreign key and navigation property for the one-to-many relationship with Log
-    public int LogId { get; set; }
+    public int? LogId { get; set; }
     public Log Log { get; set; }
   }
 }

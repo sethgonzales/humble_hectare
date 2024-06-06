@@ -147,14 +147,14 @@ const Varietal = () => {
           </GridCol>
         </Grid>
 
-        <h2>Event Log</h2>
+        <h2>Event History</h2>
         {varietal?.events?.length > 0 ? (
           <>
             <Accordion chevronPosition="right" variant="contained">
               {varietal.events.map((event) => (
                 <Accordion.Item value={event.eventType + event.eventId} key={event.eventId}>
                   <Accordion.Control>
-                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem", justifyContent: 'space-between' }}>
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: ".5rem", justifyContent: 'space-between' }}>
                       <Group>
                         <Tooltip label="Click to edit" openDelay={500}>
                           <IconPencil onClick={() => showEventForm(event)} size="1rem" stroke={2} color="black" />
@@ -167,23 +167,17 @@ const Varietal = () => {
                   <Accordion.Panel>
                     <Grid>
                       <GridCol span={{ base: 12, md: 4 }}>
-                        <Table striped highlightOnHover>
-                          <Table.Tbody>
-                            <Table.Tr>
-                              <Timeline active={2} bulletSize={30} lineWidth={2} color="yellow">
-                                <Timeline.Item bullet={<IconTractor size={20} />} title="Event">
-                                  <Text c="dimmed" size="med">{event.eventType}</Text>
-                                </Timeline.Item>
-                                <Timeline.Item title="Date" bullet={<IconCalendar size={20} />}>
-                                  <Text c="dimmed" size="med">{event.dateStart ? formatDate(event.dateStart) : '-'} {event?.dateEnd ? ` - ${formatDate(event.dateEnd)}` : ''}</Text>
-                                </Timeline.Item>
-                                <Timeline.Item title="Yield" bullet={<IconScale size={20} />}>
-                                  <Text c="dimmed" size="med">{event?.yield || '-'}</Text>
-                                </Timeline.Item>
-                              </Timeline>
-                            </Table.Tr>
-                          </Table.Tbody>
-                        </Table>
+                        <Timeline active={2} bulletSize={30} lineWidth={2} color="yellow">
+                          <Timeline.Item bullet={<IconTractor size={20} />} title="Event">
+                            <Text c="dimmed" size="med">{event.eventType}</Text>
+                          </Timeline.Item>
+                          <Timeline.Item title="Date" bullet={<IconCalendar size={20} />}>
+                            <Text c="dimmed" size="med">{event.dateStart ? formatDate(event.dateStart) : '-'} {event?.dateEnd ? ` - ${formatDate(event.dateEnd)}` : ''}</Text>
+                          </Timeline.Item>
+                          <Timeline.Item title="Yield" bullet={<IconScale size={20} />}>
+                            <Text c="dimmed" size="med">{event?.yield || '-'}</Text>
+                          </Timeline.Item>
+                        </Timeline>
                       </GridCol>
                       <GridCol span={{ base: 12, md: 8 }}>
                         <Table striped highlightOnHover>
@@ -214,7 +208,7 @@ const Varietal = () => {
           </>
         ) : (
           <>
-            <Text size="sm">This variety has not been included in any logged events.</Text>
+            <Text size="sm">No events have been recorded for this variety.</Text>
           </>
         )}
         <Button onClick={() => setShowEventModal(true)} variant="filled" size="xs" color="green" style={{ marginTop: '30px' }}>Add Event</Button>

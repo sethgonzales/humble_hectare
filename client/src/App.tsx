@@ -31,7 +31,7 @@ export default function App() {
           </Center>
         </AppShell.Header>
 
-        <AppShell.Navbar style={{ background: '#cce3d2', border: 'none' }} >
+        <AppShell.Navbar style={{ background: '#d2e0c8', border: 'none' }} >
           <div style={{ textAlign: "center", fontSize: "larger", color: 'black', borderRadius: '4rem', background: 'white', margin: '1rem' }}>
             <h1>Humble Hectare</h1>
           </div>
@@ -60,7 +60,7 @@ export default function App() {
             }
           />
         </AppShell.Navbar>
-        <AppShell.Main style={{ background: '#cce3d2' }}>
+        <AppShell.Main style={{ background: '#d2e0c8' }}>
           <Card shadow="sm" padding="xl" radius="lg" withBorder>
             <Router />
           </Card>

@@ -4,15 +4,15 @@ import axios from "axios";
 const useEvents = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const addEvent = async (varietalId, cropVarietal, newEvent) => {
+  const addEvent = async (varietalId, newEvent, logId) => {
     try {
       setIsLoading(true);
       const data = {
         varietalId: varietalId,
-        EventType: newEvent.eventType,
-        CropVarietal: cropVarietal,
-        DateStart: newEvent.dateStart ? newEvent.dateStart.toISOString() : "",
-        DateEnd: newEvent.dateEnd ? newEvent.dateEnd.toISOString() : "",
+        logId: logId || null,
+        eventType: newEvent.eventType,
+        dateStart: newEvent.dateStart ? newEvent.dateStart.toISOString() : "",
+        dateEnd: newEvent.dateEnd ? newEvent.dateEnd.toISOString() : "",
         yield: newEvent.yield,
         notes: newEvent.notes,
       };
@@ -28,16 +28,16 @@ const useEvents = () => {
     setIsLoading(false);
   };
 
-  const updateEvent = async (varietalId, eventId, cropVarietal, updatedEvent) => {
+  const updateEvent = async (varietalId, eventId, logId, updatedEvent) => {
     try {
       setIsLoading(true);
       const data = {
         eventId: eventId,
         varietalId: varietalId,
-        EventType: updatedEvent.eventType,
-        CropVarietal: cropVarietal,
-        DateStart: updatedEvent.dateStart ? updatedEvent.dateStart.toISOString() : "",
-        DateEnd: updatedEvent.dateEnd ? updatedEvent.dateEnd.toISOString() : "",
+        logId: logId,
+        eventType: updatedEvent.eventType,
+        dateStart: updatedEvent.dateStart ? updatedEvent.dateStart.toISOString() : "",
+        dateEnd: updatedEvent.dateEnd ? updatedEvent.dateEnd.toISOString() : "",
         yield: updatedEvent.yield,
         notes: updatedEvent.notes,
       };

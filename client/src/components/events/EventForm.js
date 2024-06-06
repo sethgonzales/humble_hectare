@@ -1,7 +1,6 @@
 //EventForm.jsx
 import React, { useEffect, useState } from "react";
 import { isNotEmpty, useForm } from '@mantine/form';
-import axios from "axios";
 import {
   Modal,
   Button,
@@ -12,7 +11,7 @@ import {
   Checkbox
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import useEvents from "../../hooks/useEvents./useEvents";
+import useEvents from "../../hooks/events/useEvents";
 
 const EventForm = (props) => {
   const {
@@ -33,7 +32,6 @@ const EventForm = (props) => {
 
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [multiDate, setMultiDate] = useState(false);
-  const cropVarietal = crop && varietal ? `${varietal?.name} ${crop?.name}` : null;
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -82,7 +80,7 @@ const EventForm = (props) => {
 
   const handleAddEvent = async () => {
     // add to db
-    await addEvent(varietal.varietalId, cropVarietal, form.values)
+    await addEvent(varietal.varietalId, form.values)
     // dismiss and reset the form
     handleDismiss();
     // reload the varietal
@@ -91,7 +89,7 @@ const EventForm = (props) => {
 
   const handleUpdateEvent = async () => {
     // add to db
-    await updateEvent(varietal.varietalId, _event.eventId, cropVarietal, form.values)
+    await updateEvent(varietal.varietalId, _event.eventId, _event.logId, form.values)
     // dismiss and reset the form
     handleDismiss();
     // reload the varietal
@@ -107,7 +105,6 @@ const EventForm = (props) => {
   }
 
   const handleSubmit = () => {
-    console.log('submitted', form.values)
     if (form.isValid()) {
       if (_event) {
         handleUpdateEvent();
