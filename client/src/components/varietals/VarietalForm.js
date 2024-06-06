@@ -104,7 +104,12 @@ const VarietalForm = (props) => {
   };
 
   const handleUpdateVarietal = async () => {
-    await updateVarietal(varietal.varietalId, varietal.cropId, form.values);
+    const formData = {
+      varietalId: varietal.varietalId,
+      cropId: varietal.cropId,
+      ...form.values,
+    }
+    await updateVarietal(formData);
     updateVarietalState(form.values);
     handleDismiss();
   }

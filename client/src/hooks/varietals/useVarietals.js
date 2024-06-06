@@ -48,25 +48,25 @@ const useVarietals = () => {
     setIsLoading(false);
   };
 
-  const updateVarietal = async (varietalId, cropId, varietal) => {
+  const updateVarietal = async (formData) => {
     setIsLoading(true);
     try {
       const data = {
-        varietalId: varietalId,
-        cropId: cropId,
-        name: varietal.name,
-        description: varietal.description,
-        waterStart: varietal.waterStart ? varietal.waterStart.toISOString() : "",
-        waterEvery: varietal.waterEvery,
-        waterTime: varietal.waterTime ? varietal.waterTime : 0,
-        waterNotes: varietal.waterNotes,
-        fertilizeStart: varietal.fertilizeStart ? varietal.fertilizeStart.toISOString() : "",
-        fertilizeEvery: varietal.fertilizeEvery,
-        fertilizeNotes: varietal.fertilizeNotes,
+        varietalId: formData.varietalId,
+        cropId: formData.cropId,
+        name: formData.name,
+        description: formData.description,
+        waterStart: formData.waterStart ? formData.waterStart.toISOString() : "",
+        waterEvery: formData.waterEvery,
+        waterTime: formData.waterTime ? formData.waterTime : 0,
+        waterNotes: formData.waterNotes,
+        fertilizeStart: formData.fertilizeStart ? formData.fertilizeStart.toISOString() : "",
+        fertilizeEvery: formData.fertilizeEvery,
+        fertilizeNotes: formData.fertilizeNotes,
       };
 
       await axios.put(
-        `https://localhost:5001/api/crops/${cropId}/varietals/${varietalId}`,
+        `https://localhost:5001/api/crops/${formData.cropId}/varietals/${formData.varietalId}`,
         data
       );
 

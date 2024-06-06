@@ -89,7 +89,13 @@ const EventForm = (props) => {
 
   const handleUpdateEvent = async () => {
     // add to db
-    await updateEvent(varietal.varietalId, _event.eventId, _event.logId, form.values)
+    const formData = {
+      varietalId: varietal.varietalId,
+      eventId: _event.eventId,
+      logId: _event.logId,
+      ...form.values,
+    }
+    await updateEvent(formData)
     // dismiss and reset the form
     handleDismiss();
     // reload the varietal

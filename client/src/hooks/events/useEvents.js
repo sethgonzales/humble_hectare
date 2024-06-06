@@ -28,22 +28,22 @@ const useEvents = () => {
     setIsLoading(false);
   };
 
-  const updateEvent = async (varietalId, eventId, logId, updatedEvent) => {
+  const updateEvent = async (formData) => {
     try {
       setIsLoading(true);
       const data = {
-        eventId: eventId,
-        varietalId: varietalId,
-        logId: logId,
-        eventType: updatedEvent.eventType,
-        dateStart: updatedEvent.dateStart ? updatedEvent.dateStart.toISOString() : "",
-        dateEnd: updatedEvent.dateEnd ? updatedEvent.dateEnd.toISOString() : "",
-        yield: updatedEvent.yield,
-        notes: updatedEvent.notes,
+        eventId: formData.eventId,
+        varietalId: formData.varietalId,
+        logId: formData.logId,
+        eventType: formData.eventType,
+        dateStart: formData.dateStart ? formData.dateStart.toISOString() : "",
+        dateEnd: formData.dateEnd ? formData.dateEnd.toISOString() : "",
+        yield: formData.yield,
+        notes: formData.notes,
       };
 
       await axios.put(
-        `https://localhost:5001/api/varietals/${varietalId}/events/${eventId}`,
+        `https://localhost:5001/api/varietals/${formData.varietalId}/events/${formData.eventId}`,
         data
       );
 
