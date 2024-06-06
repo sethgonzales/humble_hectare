@@ -49,7 +49,6 @@ namespace Api.Controllers
     [HttpPost("~/api/logs")]
     public async Task<ActionResult<Log>> Post(Log log)
     {
-
       _db.Logs.Add(log);
       await _db.SaveChangesAsync();
       return CreatedAtAction(nameof(GetLog), new { id = log.LogId }, log);
