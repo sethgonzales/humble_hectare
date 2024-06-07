@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Crops from './pages/Crops';
 import Varietal from './pages/Varietal';
 import Logs from './pages/Logs';
+import Log from './pages/Log';
 // import Crop from './components/CropForm';
 
 const router = createBrowserRouter([
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: '/logs',
     element: <Logs />,
+  },
+  {
+    path: '/logs/:id',
+    element: <Log />,
   },
 ]);
 

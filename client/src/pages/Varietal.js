@@ -16,8 +16,8 @@ import {
   Center,
   Avatar
 } from '@mantine/core';
-import { IconCalendar, IconClockHour4, IconDroplet, IconHourglassLow, IconNote, IconPencil, IconScale, IconSeeding, IconTractor } from '@tabler/icons-react';
-import { useParams } from "react-router-dom";
+import { IconArrowLeft, IconCalendar, IconClockHour4, IconDroplet, IconHourglassLow, IconNote, IconPencil, IconScale, IconSeeding, IconTractor } from '@tabler/icons-react';
+import { useParams, useNavigate } from "react-router-dom";
 import { formatDate } from "../utils/DateTime";
 
 import VarietalForm from "../components/varietals/VarietalForm";
@@ -32,6 +32,7 @@ const Varietal = () => {
   } = useVarietals();
 
   let { id: varietalId } = useParams();
+  const navigate = useNavigate();
 
   const [varietal, setVarietal] = useState();
   const [nextWaterDate, setNextWaterDate] = useState('');
@@ -87,7 +88,16 @@ const Varietal = () => {
     <>
       <Skeleton visible={isLoading}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <h1>{varietal ? `${varietal?.name}` : "Variety"}</h1>
+          <Group>
+            <IconArrowLeft
+              onClick={() => navigate("/crops")}
+              size="1.5rem"
+              stroke={2}
+              color="black"
+              style={{ cursor: "pointer" }}
+            />
+            <h1>{varietal ? `${varietal?.name}` : "Variety"}</h1>
+          </Group>
           <Tooltip label="Click to edit" openDelay={500}>
             <IconPencil
               onClick={() => setShowVarietalModal(true)}
