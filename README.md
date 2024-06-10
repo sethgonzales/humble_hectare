@@ -137,3 +137,12 @@ As a developer, my aim is to log my journey in building this application. This a
     }
 - Updated styles for data on watering and fertilizing, as well as placing each component in a card. Makes the UI more interesting!
 - TODO: Finish adding water and fertilize notes to forms!
+
+### 6/6/24
+- Cleaned up all of the water and fertilizer forms. Was able to make Logs models and basic page and component UI
+
+
+### 6/10/24
+- Completed some basic formatting for log entry if editing or if not editing
+- Decided to use MDX editor to allow users to create markdown entries. Using React Markdown for display, mixed with rehype to correctly render html when needed. 
+- I need to do some more UI work for this form.

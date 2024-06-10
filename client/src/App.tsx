@@ -31,7 +31,7 @@ export default function App() {
           </Center>
         </AppShell.Header>
 
-        <AppShell.Navbar style={{ background: '#d2e0c8', border: 'none' }} >
+        <AppShell.Navbar style={{ background: '#a4ba95', border: 'none' }} >
           <div style={{ textAlign: "center", fontSize: "larger", color: 'black', borderRadius: '4rem', background: 'white', margin: '1rem' }}>
             <h1>Humble Hectare</h1>
           </div>
