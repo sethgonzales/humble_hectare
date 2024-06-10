@@ -1,8 +1,8 @@
 //Log.jsx
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { isNotEmpty, useForm } from '@mantine/form';
-import { Button, Input, Text, TextInput, Title } from "@mantine/core";
+import { Button, Group, Input, Text, TextInput, Title, Tooltip } from "@mantine/core";
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw';
 
@@ -19,6 +19,8 @@ import { headingsPlugin } from '@mdxeditor/editor'
 import '@mdxeditor/editor/style.css'
 
 import useLogs from "../hooks/logs/useLogs";
+import { IconArrowLeft } from "@tabler/icons-react";
+import { formatDate } from "../utils/DateTime";
 
 const Log = () => {
   const {
@@ -28,9 +30,10 @@ const Log = () => {
   } = useLogs();
 
   let { id: logId } = useParams();
+  const navigate = useNavigate();
 
   const [log, setLog] = useState();
-  const [isEditing, setIsEditing] = useState();
+  const [isEditing, setIsEditing] = useState(false);
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -83,8 +86,6 @@ const Log = () => {
 
   return (
     <>
-      <Button onClick={() => setIsEditing(!isEditing)} variant="filled" size="xs" color="green">Edit</Button>
-
       {isEditing ?
         (
           <>
@@ -99,32 +100,60 @@ const Log = () => {
               <label htmlFor="entry">
                 Entry
               </label>
-              <MDXEditor
-                markdown={form.values.entry}
-                onChange={(markdown) => form.setFieldValue('entry', markdown)}
-                plugins={[
-                  headingsPlugin(),
-                  listsPlugin(),
-                  markdownShortcutPlugin(),
-                  toolbarPlugin({
-                    toolbarContents: () => (
-                      <>
-                        <UndoRedo />
-                        <BoldItalicUnderlineToggles />
-                        <ListsToggle />
-                      </>
-                    ),
-                  }),
-                ]}
-              />
+              <div style={{ border: 'solid 1px #c9c9c9', borderRadius: '0.5rem', minHeight: '20rem' }}>
+                <MDXEditor
+                  markdown={form.values.entry}
+                  onChange={(markdown) => form.setFieldValue('entry', markdown)}
+                  plugins={[
+                    headingsPlugin(),
+                    listsPlugin(),
+                    markdownShortcutPlugin(),
+                    toolbarPlugin({
+                      toolbarContents: () => (
+                        <>
+                          <UndoRedo />
+                          <BoldItalicUnderlineToggles />
+                          <ListsToggle />
+                        </>
+                      ),
+                    }),
+                  ]}
+                  placeholder='Add your new entry...'
+                />
+              </div>
+              <br />
               <Button type="submit" variant="filled" size="xs" color="green">Save</Button>
+              <Button type="submit" variant="filled" size="xs" color="gray" style={{ marginLeft: '0.5rem' }} onClick={() => setIsEditing(false)}>Cancel</Button>
 
             </form>
           </>
         ) : (
           <>
-            <Title>{log?.title}</Title>
-            <ReactMarkdown rehypePlugins={[rehypeRaw]}>{log?.entry}</ReactMarkdown>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <Group>
+                <IconArrowLeft
+                  onClick={() => navigate("/logs")}
+                  size="1.5rem"
+                  stroke={2}
+                  color="black"
+                  style={{ cursor: "pointer" }}
+                />
+                <h1>{log?.title}</h1>
+              </Group>
+              <Text c="dimmed" style={{ marginRight: "1rem" }}>{log?.createdAt ? formatDate(log.createdAt) : '-'}</Text>
+            </div>
+            <br />
+            {log?.entry ? (
+              <div style={{ border: 'solid 1px #c9c9c9', borderRadius: '0.5rem', minHeight: '20rem', padding: '1rem', color:'grey'}}>
+                <ReactMarkdown rehypePlugins={[rehypeRaw]}>{log.entry}</ReactMarkdown>
+              </div>
+            ) : (
+              <div style={{ border: 'solid 1px #c9c9c9', borderRadius: '0.5rem', minHeight: '20rem', padding: '1rem' }}>
+                <Text c="dimmed">Click edit to start adding your new entry</Text>
+              </div>
+            )}
+            <br />
+            <Button onClick={() => setIsEditing(true)} variant="filled" size="xs" color="green" style={{ width: '5.5rem' }}>Edit Entry</Button>
           </>
         )
       }
