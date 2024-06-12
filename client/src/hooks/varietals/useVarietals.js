@@ -23,6 +23,20 @@ const useVarietals = () => {
     };
   };
 
+  const loadVarietals = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get('https://localhost:5001/api/varietals');
+      const _varietals = response.data;
+      setIsLoading(false);
+      return _varietals;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setIsLoading(false);
+      return null;
+    };
+  };
+
   const addVarietal = async (varietal, cropId) => {
     try {
       const data = {
@@ -90,6 +104,7 @@ const useVarietals = () => {
 
   return {
     isLoading,
+    loadVarietals,
     loadVarietal,
     addVarietal,
     updateVarietal,

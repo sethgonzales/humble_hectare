@@ -4,21 +4,21 @@ import axios from "axios";
 const useEvents = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const addEvent = async (varietalId, newEvent, logId) => {
+  const addEvent = async (data) => {
     try {
       setIsLoading(true);
-      const data = {
-        varietalId: varietalId,
-        logId: logId || null,
-        eventType: newEvent.eventType,
-        dateStart: newEvent.dateStart ? newEvent.dateStart.toISOString() : "",
-        dateEnd: newEvent.dateEnd ? newEvent.dateEnd.toISOString() : "",
-        yield: newEvent.yield,
-        notes: newEvent.notes,
-      };
+      // const data = {
+      //   varietalId: varietalId,
+      //   logId: logId || null,
+      //   eventType: newEvent.eventType,
+      //   dateStart: newEvent.dateStart ? newEvent.dateStart.toISOString() : "",
+      //   dateEnd: newEvent.dateEnd ? newEvent.dateEnd.toISOString() : "",
+      //   yield: newEvent.yield,
+      //   notes: newEvent.notes,
+      // };
 
       const response = await axios.post(
-        `https://localhost:5001/api/varietals/${varietalId}/events`,
+        `https://localhost:5001/api/varietals/${data.varietalId}/events`,
         data
       );
 

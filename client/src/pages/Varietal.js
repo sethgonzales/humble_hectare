@@ -234,7 +234,7 @@ const Varietal = () => {
       <EventForm
         crop={varietal?.crop}
         varietal={varietal}
-        reloadVarietal={handleLoadVarietal}
+        reloadPage={handleLoadVarietal}
         _event={eventToShow}
         isOpen={showEventModal}
         onDismissEvent={() => {

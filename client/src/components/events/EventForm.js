@@ -8,19 +8,21 @@ import {
   LoadingOverlay,
   Alert,
   Textarea,
-  Checkbox
+  Checkbox,
+  NativeSelect
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import useEvents from "../../hooks/events/useEvents";
+import useVarietals from "../../hooks/varietals/useVarietals";
 
 const EventForm = (props) => {
   const {
-    crop,
+    _log,
     _event,
     isOpen,
     varietal,
     onDismissEvent,
-    reloadVarietal,
+    reloadPage,
   } = props;
 
   const {
@@ -30,14 +32,21 @@ const EventForm = (props) => {
     isLoading,
   } = useEvents();
 
+  const {
+    loadVarietals,
+  } = useVarietals();
+
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [multiDate, setMultiDate] = useState(false);
+
+  const [varietalList, setVarietalList] = useState([]);
 
   const form = useForm({
     mode: 'uncontrolled',
     validateInputOnChange: true,
     initialValues: {
       eventType: "",
+      varietalId: "",
       dateStart: null,
       dateEnd: null,
       yield: "",
@@ -58,11 +67,17 @@ const EventForm = (props) => {
     },
   });
 
+  const handleLoadVarietals = async () => {
+    const _varietals = await loadVarietals();
+    setVarietalList(_varietals);
+  }
+
   // Update form values when event data changes
   useEffect(() => {
     if (_event) {
       form.setValues({
         eventType: _event?.eventType || "",
+        varietalId: _event?.varietalId || "",
         dateStart: _event?.dateStart ? new Date(_event.dateStart) : null,
         dateEnd: _event?.dateEnd ? new Date(_event.dateEnd) : null,
         yield: _event?.yield || "",
@@ -70,6 +85,11 @@ const EventForm = (props) => {
       });
       setMultiDate(_event?.dateEnd && _event?.dateEnd.length > 0);
     }
+
+    if (!varietal) {
+      handleLoadVarietals();
+    }
+
   }, [_event]);
 
   const handleDismiss = () => {
@@ -79,27 +99,38 @@ const EventForm = (props) => {
   };
 
   const handleAddEvent = async () => {
+    const data = {
+      varietalId: varietal?.varietalId || form.values.varietalId,
+      logId: _log?.logId ? _log.logId : null,
+      eventType: form.values.eventType,
+      dateStart: form.values.dateStart ? form.values.dateStart.toISOString() : "",
+      dateEnd: form.values.dateEnd ? form.values.dateEnd.toISOString() : "",
+      yield: form.values.yield,
+      notes: form.values.notes,
+    };
+    // const varietalId = varietal?.varietalId || form.values.varietalId
     // add to db
-    await addEvent(varietal.varietalId, form.values)
+    // await addEvent(varietalId, form.values, logId ? logId : null)
+    await addEvent(data)
     // dismiss and reset the form
     handleDismiss();
     // reload the varietal
-    reloadVarietal();
+    reloadPage();
   };
 
   const handleUpdateEvent = async () => {
     // add to db
     const formData = {
-      varietalId: varietal.varietalId,
+      varietalId: varietal?.varietalId ? varietal.varietalId : form.values.varietalId,
       eventId: _event.eventId,
-      logId: _event.logId,
+      logId: _log?.logId ? _log.logId : null,
       ...form.values,
     }
     await updateEvent(formData)
     // dismiss and reset the form
     handleDismiss();
     // reload the varietal
-    reloadVarietal();
+    reloadPage();
   };
 
   const handleDelete = async () => {
@@ -107,7 +138,7 @@ const EventForm = (props) => {
     // dismiss and reset the form
     handleDismiss();
     // reload the varietal
-    reloadVarietal();
+    reloadPage();
   }
 
   const handleSubmit = () => {
@@ -131,6 +162,22 @@ const EventForm = (props) => {
             {...form.getInputProps('eventType')}
           />
           <br />
+
+          {/* If no varietal has been sent in, and we are able to load our list of available varietals */}
+          {!varietal && varietalList?.length > 0 && (
+            <NativeSelect
+              data={[
+                { label: 'Select the Varietal', value: '', disabled: true },
+                ...varietalList.map((varietal) => ({
+                  label: varietal.name,
+                  value: varietal.varietalId.toString(),
+                })),
+              ]}
+
+              label="Varietal for this Event"
+              {...form.getInputProps('varietalId')}
+            />
+          )}
 
           <DatePickerInput
             label={!multiDate ? "Date" : "Start Date"}

@@ -146,3 +146,9 @@ As a developer, my aim is to log my journey in building this application. This a
 - Completed some basic formatting for log entry if editing or if not editing
 - Decided to use MDX editor to allow users to create markdown entries. Using React Markdown for display, mixed with rehype to correctly render html when needed. 
 - I need to do some more UI work for this form.
+
+### 6/12/24
+- Got started on adding events to logs! Was able to update CRUD for adding events to a log
+- Build in some better resizing tools for log entries.
+- TODO: Make sure that the varietal name is part of the log data that is sent through/ so that we have a full list of events and the names of their related logs. 
+- TODO: Make sure that log ID is set to null for any related events when a log is deleted
