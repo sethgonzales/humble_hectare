@@ -151,4 +151,4 @@ As a developer, my aim is to log my journey in building this application. This a
 - Got started on adding events to logs! Was able to update CRUD for adding events to a log
 - Build in some better resizing tools for log entries.
 - TODO: Make sure that the varietal name is part of the log data that is sent through/ so that we have a full list of events and the names of their related logs. 
-- TODO: Make sure that log ID is set to null for any related events when a log is deleted
+- TODO: Make sure that log ID is set to null for any related events when a log is deleted!!!
