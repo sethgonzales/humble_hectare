@@ -102,10 +102,10 @@ As a developer, my aim is to log my journey in building this application. This a
 
 - Big refactor today with the date time formatting functions. I moved these to their own util file to hopefully make them more reuseable for other functions and make the code more modular.
 - Began adding in forms for new events. Completed the form but have not completed CRUD functionality. Need to do that next.
-- TODO: Install a markdown editor for description and notes text areas. Write a HectareMarkdown wrapper for the text areas.
-- TODO: Make model DTOs to reduce data transfers
-- TODO: Complete CRUD for events
-- TODO: Fix validation for all forms. Need to validate on save and not clear the form.
+- ~~TODO: Install a markdown editor for description and notes text areas. Write a HectareMarkdown wrapper for the text areas.~~
+- ~~TODO: Make model DTOs to reduce data transfers~~
+- ~~TODO: Complete CRUD for events~~
+- ~~TODO: Fix validation for all forms. Need to validate on save and not clear the form.~~
 
 ### 4/30/24
 
@@ -115,17 +115,22 @@ As a developer, my aim is to log my journey in building this application. This a
 ### 5/5/24
 
 - Made a lot of changes throughout this week! Was able to finish CRUD for events, and now I can start moving on to actual log entries. Lots to add there! 
-- TODO: Add every six months to the 'every date' model entry. Create a custom every other? or just a check box for only once, but in this date.  
-- TODO: Create Log model, include things like dates, have the log create and store its own date. Figure our how to store weather information... Add attachments to logs. Make it so the log entries show up on a calendar... Make it so events show up on a calendar.
+- ~~TODO: Add every six months to the 'every date' model entry. Create a custom every other? or just a check box for only once, but in this date.  ~~
+- TODO: 
+  - ~~Create Log model, include things like dates, have the log create and store its own date. ~~ 
+  - Figure our how to store weather information... 
+  - Add attachments to logs. 
+  - Make it so the log entries show up on a calendar... 
+  - Make it so events show up on a calendar.
 - TODO:  Come up with notifications for crop varietals to show up on the crop list. Look at the next up date vs the current user date. Make the 'next up' dates part of the varietal model.
-- TODO: Change the headers for varietal pages... Remove the crop name from the name? Change the formatting for it?
+- ~~TODO: Change the headers for varietal pages... Remove the crop name from the name? Change the formatting for it?~~
 
 ### 5/20/24
 
 - Decided to refactor my components to separate business from front end logic. Pulled out CRUD for crops and loading and updating for varietals. 
 - The goal is to follow better practices and make more reusable components/hooks for future use.
-- TODO: Finish pulling out CRUD for varietals. 
-- TODO: Move on to pulling out CRUD for events
+- ~~TODO: Finish pulling out CRUD for varietals.~~
+- ~~TODO: Move on to pulling out CRUD for events~~
 
 ### 5/30/24
 - Finished my refactor of useCrop, Events, and Varietals.
@@ -136,7 +141,7 @@ As a developer, my aim is to log my journey in building this application. This a
       ...form.values,
     }
 - Updated styles for data on watering and fertilizing, as well as placing each component in a card. Makes the UI more interesting!
-- TODO: Finish adding water and fertilize notes to forms!
+- ~~TODO: Finish adding water and fertilize notes to forms!~~
 
 ### 6/6/24
 - Cleaned up all of the water and fertilizer forms. Was able to make Logs models and basic page and component UI
@@ -150,5 +155,11 @@ As a developer, my aim is to log my journey in building this application. This a
 ### 6/12/24
 - Got started on adding events to logs! Was able to update CRUD for adding events to a log
 - Build in some better resizing tools for log entries.
-- TODO: Make sure that the varietal name is part of the log data that is sent through/ so that we have a full list of events and the names of their related logs. 
-- TODO: Make sure that log ID is set to null for any related events when a log is deleted!!
+- ~~TODO: Make sure that the varietal name is part of the log data that is sent through/ so that we have a full list of events and the names of their related logs.~~
+- ~~TODO: Make sure that log ID is set to null for any related events when a log is deleted!!~~
+
+### 6/26/24
+- Made some UI updates for log and varietal pages. Wanted to give users a path to travel from one to another if a log has a varietal and vice-versa. Went back and forth on a few design choices for this... It is always difficult trying to come up with a design as you are building a UI component.
+- I was also able to update the log controller to pull specific related information when it comes to events and their varietals.
+- I was also able to deal with some TODOs, namely setting the log Id to null for any events related to a deleted log
+- TODO: Pull out the event list into its own component. Lots of repetitive code here. Now that it works... Refactor!

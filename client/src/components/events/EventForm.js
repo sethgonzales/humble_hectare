@@ -108,9 +108,7 @@ const EventForm = (props) => {
       yield: form.values.yield,
       notes: form.values.notes,
     };
-    // const varietalId = varietal?.varietalId || form.values.varietalId
     // add to db
-    // await addEvent(varietalId, form.values, logId ? logId : null)
     await addEvent(data)
     // dismiss and reset the form
     handleDismiss();

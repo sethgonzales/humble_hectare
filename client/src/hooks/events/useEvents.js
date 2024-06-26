@@ -7,20 +7,11 @@ const useEvents = () => {
   const addEvent = async (data) => {
     try {
       setIsLoading(true);
-      // const data = {
-      //   varietalId: varietalId,
-      //   logId: logId || null,
-      //   eventType: newEvent.eventType,
-      //   dateStart: newEvent.dateStart ? newEvent.dateStart.toISOString() : "",
-      //   dateEnd: newEvent.dateEnd ? newEvent.dateEnd.toISOString() : "",
-      //   yield: newEvent.yield,
-      //   notes: newEvent.notes,
-      // };
-
       const response = await axios.post(
         `https://localhost:5001/api/varietals/${data.varietalId}/events`,
         data
       );
+      return response.data;
 
     } catch (error) {
       console.error("Error adding event:", error);
@@ -28,22 +19,22 @@ const useEvents = () => {
     setIsLoading(false);
   };
 
-  const updateEvent = async (formData) => {
+  const updateEvent = async (newData) => {
     try {
       setIsLoading(true);
       const data = {
-        eventId: formData.eventId,
-        varietalId: formData.varietalId,
-        logId: formData.logId,
-        eventType: formData.eventType,
-        dateStart: formData.dateStart ? formData.dateStart.toISOString() : "",
-        dateEnd: formData.dateEnd ? formData.dateEnd.toISOString() : "",
-        yield: formData.yield,
-        notes: formData.notes,
+        eventId: newData.eventId,
+        varietalId: newData.varietalId,
+        logId: newData.logId,
+        eventType: newData.eventType,
+        dateStart: newData.dateStart instanceof Date ? newData.dateStart.toISOString() : null, // Handle null or invalid dates
+        dateEnd: newData.dateEnd instanceof Date ? newData.dateEnd.toISOString() : null, // Handle null or invalid dates
+        yield: newData.yield,
+        notes: newData.notes,
       };
 
       await axios.put(
-        `https://localhost:5001/api/varietals/${formData.varietalId}/events/${formData.eventId}`,
+        `https://localhost:5001/api/varietals/${newData.varietalId}/events/${newData.eventId}`,
         data
       );
 

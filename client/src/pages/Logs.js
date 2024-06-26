@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { Button, Group, Skeleton, Table, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 
-import useLogs from "../hooks/logs/useLogs";
-import LogList from "../components/logs/LogList";
-import LogForm from "../components/logs/LogForm";
+import useLogs from "../hooks/_logs/useLogs";
+import LogList from "../components/_logs/LogList";
+import LogForm from "../components/_logs/LogForm";
 
 export default function Logs() {
   const navigate = useNavigate();

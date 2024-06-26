@@ -18,9 +18,10 @@ import {
   Timeline,
   Tooltip
 } from "@mantine/core";
+import { IconArrowLeft, IconArrowRight, IconCalendar, IconCarrot, IconNote, IconPencil, IconScale, IconTractor } from "@tabler/icons-react";
+
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw';
-
 import {
   MDXEditor,
   UndoRedo,
@@ -34,8 +35,10 @@ import { headingsPlugin } from '@mdxeditor/editor'
 import '@mdxeditor/editor/style.css'
 
 import EventForm from "../components/events/EventForm";
-import useLogs from "../hooks/logs/useLogs";
-import { IconArrowLeft, IconArrowRight, IconCalendar, IconCarrot, IconNote, IconPencil, IconScale, IconTractor } from "@tabler/icons-react";
+
+import useLogs from "../hooks/_logs/useLogs";
+import useEvents from "../hooks/events/useEvents";
+
 import { formatDate } from "../utils/DateTime";
 
 const Log = () => {
@@ -45,6 +48,11 @@ const Log = () => {
     updateLog,
     deleteLog,
   } = useLogs();
+
+  const {
+    updateEvent,
+  } = useEvents();
+
 
   let { id: logId } = useParams();
   const navigate = useNavigate();
@@ -109,8 +117,21 @@ const Log = () => {
   }
 
   const handleDeleteLog = async () => {
+    // Update related events to set logId to null
+    await Promise.all(
+      log?.events.map(async (event) => {
+        if (event.logId === log.logId) {
+          const updatedEvent = {
+            ...event,
+            logId: null,
+          };
+          await updateEvent(updatedEvent);
+        }
+      })
+    );
+
+    // Delete the log
     await deleteLog(log.logId);
-    // remove the logId/set to null from any events
     setIsEditing(false);
     navigate("/logs");
   }
