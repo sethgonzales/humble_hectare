@@ -5,18 +5,18 @@ const useEvents = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const addEvent = async (data) => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const response = await axios.post(
         `https://localhost:5001/api/varietals/${data.varietalId}/events`,
         data
       );
+      setIsLoading(false);
       return response.data;
-
     } catch (error) {
       console.error("Error adding event:", error);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const updateEvent = async (newData) => {
