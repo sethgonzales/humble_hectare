@@ -16,7 +16,19 @@ import {
   Center,
   Avatar
 } from '@mantine/core';
-import { IconArrowLeft, IconCalendar, IconClockHour4, IconDroplet, IconHourglassLow, IconNote, IconPencil, IconScale, IconSeeding, IconTractor } from '@tabler/icons-react';
+import { IconArrowLeft,
+  IconArrowRight,
+  IconCalendar,
+  IconClockHour4,
+  IconDroplet,
+  IconHourglassLow,
+  IconNote,
+  IconNotebook,
+  IconPencil,
+  IconScale,
+  IconSeeding,
+  IconTractor 
+} from '@tabler/icons-react';
 import { useParams, useNavigate } from "react-router-dom";
 import { formatDate } from "../utils/DateTime";
 
@@ -178,6 +190,16 @@ const Varietal = () => {
                     <Grid>
                       <GridCol span={{ base: 12, md: 4 }}>
                         <Timeline active={2} bulletSize={30} lineWidth={2} color="yellow">
+                          <Timeline.Item bullet={<IconNotebook size={20} />} title="Log">
+                              <Text
+                                c="dimmed"
+                                size="med"
+                                style={event.logId ? { cursor: "pointer" } : null}
+                                onClick={event.logId ? () => navigate(`/logs/${event.log.logId}`) : null}
+                              >
+                                {event.log?.title ? `${event.log.title} (${formatDate(event.log?.createdAt)})` : '-'}
+                              </Text>
+                          </Timeline.Item>
                           <Timeline.Item bullet={<IconTractor size={20} />} title="Event">
                             <Text c="dimmed" size="med">{event.eventType}</Text>
                           </Timeline.Item>
@@ -209,6 +231,20 @@ const Varietal = () => {
                             </Table.Tr>
                           </Table.Tbody>
                         </Table>
+                      </GridCol>
+                      <GridCol span={12}>
+                        {event.logId && (
+                          <Text
+                            c="dimmed"
+                            ta="right"
+                            w="100%"
+                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', cursor: 'pointer' }}
+                            onClick={() => navigate(`/logs/${event.logId}`)}
+                          >
+                            Go to Log
+                            <IconArrowRight />
+                          </Text>
+                        )}
                       </GridCol>
                     </Grid>
                   </Accordion.Panel>

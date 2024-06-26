@@ -2,7 +2,22 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { isNotEmpty, useForm } from '@mantine/form';
-import { Accordion, Alert, Avatar, Button, Flex, Grid, GridCol, Group, Input, Modal, Table, Text, TextInput, Timeline, Title, Tooltip } from "@mantine/core";
+import {
+  Accordion,
+  Alert,
+  Avatar,
+  Button,
+  Flex,
+  Grid,
+  GridCol,
+  Group,
+  Modal,
+  Table,
+  Text,
+  TextInput,
+  Timeline,
+  Tooltip
+} from "@mantine/core";
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw';
 
@@ -20,7 +35,7 @@ import '@mdxeditor/editor/style.css'
 
 import EventForm from "../components/events/EventForm";
 import useLogs from "../hooks/logs/useLogs";
-import { IconArrowLeft, IconCalendar, IconCarrot, IconNote, IconPencil, IconScale, IconTractor } from "@tabler/icons-react";
+import { IconArrowLeft, IconArrowRight, IconCalendar, IconCarrot, IconNote, IconPencil, IconScale, IconTractor } from "@tabler/icons-react";
 import { formatDate } from "../utils/DateTime";
 
 const Log = () => {
@@ -208,8 +223,19 @@ const Log = () => {
                     <Grid>
                       <GridCol span={{ base: 12, md: 4 }}>
                         <Timeline active={2} bulletSize={30} lineWidth={2} color="yellow">
-                          <Timeline.Item bullet={<IconCarrot size={20} />} title="Varietal">
-                            <Text c="dimmed" size="med">{event.varietal?.name}</Text>
+                          <Timeline.Item
+                            bullet={<IconCarrot size={20} />}
+                            title="Crop Variety"
+                          >
+                            <Text
+                              c="dimmed"
+                              size="med"
+                              style={{ cursor: "pointer" }}
+                              onClick={event.varietal?.varietalId ? () => navigate(`/varietal/${event.varietal.varietalId}`) : null}
+
+                            >
+                              {event.varietal?.name}
+                            </Text>
                           </Timeline.Item>
                           <Timeline.Item bullet={<IconTractor size={20} />} title="Event">
                             <Text c="dimmed" size="med">{event.eventType}</Text>
@@ -243,6 +269,20 @@ const Log = () => {
                           </Table.Tbody>
                         </Table>
                       </GridCol>
+                      <GridCol span={12}>
+                        {event.varietal?.varietalId && (
+                          <Text
+                            c="dimmed"
+                            ta="right"
+                            w="100%"
+                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', cursor: 'pointer' }}
+                            onClick={() => navigate(`/varietal/${event.varietal.varietalId}`)}
+                          >
+                            Go to Variety
+                            <IconArrowRight />
+                          </Text>
+                        )}
+                      </GridCol>
                     </Grid>
                   </Accordion.Panel>
                 </Accordion.Item>
@@ -267,7 +307,7 @@ const Log = () => {
             setEventToShow(null);
           }}
         />
-      </div>
+      </div >
       {deleteConfirm && (
         <Modal title="Confirm Delete" onClose={() => setDeleteConfirm(false)} opened={deleteConfirm}>
           <Alert variant="light" color="blue" title="Hold up!">
@@ -278,7 +318,8 @@ const Log = () => {
             </div>
           </Alert>
         </Modal>
-      )}
+      )
+      }
     </>
   );
 };

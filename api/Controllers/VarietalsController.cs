@@ -38,15 +38,15 @@ namespace Api.Controllers
     public IQueryable<VarietalDTO> GetVarietals()
     {
       var varietals = from v in _db.Varietals
-                  select new VarietalDTO()
-                  {
-                    VarietalId = v.VarietalId,
-                    Name = v.Name,
-                    WaterEvery = v.WaterEvery,
-                    WaterTime = v.WaterTime,
-                    FertilizeEvery = v.FertilizeEvery,
-                    // CropId = v.CropId,
-                  };
+                      select new VarietalDTO()
+                      {
+                        VarietalId = v.VarietalId,
+                        Name = v.Name,
+                        WaterEvery = v.WaterEvery,
+                        WaterTime = v.WaterTime,
+                        FertilizeEvery = v.FertilizeEvery,
+                        // CropId = v.CropId,
+                      };
       return varietals;
     }
 
@@ -54,7 +54,10 @@ namespace Api.Controllers
     [HttpGet("{id}")]
     public async Task<ActionResult<Varietal>> GetVarietal(int id)
     {
-      Varietal varietal = await _db.Varietals.Include(v => v.Events).Include(v => v.Crop).FirstOrDefaultAsync(v => v.VarietalId == id);
+      Varietal varietal = await _db.Varietals
+                  .Include(v => v.Events)
+                    .ThenInclude(e => e.Log)
+                  .FirstOrDefaultAsync(v => v.VarietalId == id);
       if (varietal == null)
       {
         return NotFound();

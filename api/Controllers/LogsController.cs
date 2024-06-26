@@ -32,10 +32,14 @@ namespace Api.Controllers
     }
 
     //GET: api/logs/{id} //! Get specific item by id
+    // GET: api/logs/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult<Log>> GetLog(int id)
     {
-      Log log = await _db.Logs.Include(e => e.Events).FirstOrDefaultAsync(e => e.LogId == id);
+      var log = await _db.Logs
+        .Include(l => l.Events)
+          .ThenInclude(e => e.Varietal)
+        .FirstOrDefaultAsync(l => l.LogId == id);
 
       if (log == null)
       {
@@ -91,7 +95,7 @@ namespace Api.Controllers
 
     // DELETE: api/logs/5
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteLog (int id)
+    public async Task<IActionResult> DeleteLog(int id)
     {
       Log log = await _db.Logs.FindAsync(id);
       if (log == null)
