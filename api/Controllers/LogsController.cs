@@ -21,18 +21,31 @@ namespace Api.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Log>>> Get(string keyword)
     {
-      IQueryable<Log> query = _db.Logs;
+      IQueryable<Log> query = _db.Logs.Include(l => l.Events);
 
       if (!string.IsNullOrEmpty(keyword))
       {
         query = query.Where(entry => entry.Title.Contains(keyword) || entry.CreatedAt.Contains(keyword));
       }
 
-      return await query.ToListAsync();
+      // return await query.ToListAsync();
+      var logs = await query.ToListAsync();
+      var logsDTO = logs.Select(l => new LogDTO
+      {
+        LogId = l.LogId,
+        Title = l.Title,
+        CreatedAt = l.CreatedAt,
+        // Events containing only the EventId
+        Events = l.Events.Select(e => new EventDTO
+        {
+          EventId = e.EventId,
+        }).ToList()
+      }).ToList();
+
+      return Ok(logsDTO);
     }
 
     //GET: api/logs/{id} //! Get specific item by id
-    // GET: api/logs/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult<Log>> GetLog(int id)
     {

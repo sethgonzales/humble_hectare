@@ -46,6 +46,7 @@ export default function Logs() {
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Title</Table.Th>
+                <Table.Th>Recorded Events</Table.Th>
                 <Table.Th>Date</Table.Th>
               </Table.Tr>
             </Table.Thead>
