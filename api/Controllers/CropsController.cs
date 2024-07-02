@@ -30,7 +30,7 @@ namespace Api.Controllers
         query = query.Where(entry => entry.Name.Contains(keyword) || entry.Type.Contains(keyword));
       }
 
-      var crops = await query.ToListAsync();
+      var crops = await query.OrderBy(c => c.Name).ToListAsync();
 
       var cropsDTO = crops.Select(c => new CropDTO
       {

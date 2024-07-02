@@ -1,18 +1,24 @@
 //Crops.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Group,
   Text,
   Accordion,
   Button,
   Skeleton,
+  Box,
+  Table,
+  Tooltip,
 } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
+import { IconPencil, IconPlus } from '@tabler/icons-react';
+import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 
 import VarietalForm from "../components/varietals/VarietalForm";
-import CropList from "../components/crops/CropList";
 import CropForm from '../components/crops/CropForm';
 import useCrops from '../hooks/crops/useCrops';
+import '../styles.css';
+
+import { useNavigate } from "react-router-dom";
 
 const Crops = () => {
   const {
@@ -21,13 +27,15 @@ const Crops = () => {
   } = useCrops();
 
   // State for viewing, adding, and updating crops
-  const [crops, setCrops] = useState();
+  const [crops, setCrops] = useState([]);
   const [cropToShow, setCropToShow] = useState();
   const [showCropModal, setShowCropModal] = useState(false);
 
   // State for adding a varietal
   const [showVarietalModal, setShowVarietalModal] = useState(false);
   const [cropToAddVarietal, setCropToAddVarietal] = useState();
+
+  const navigate = useNavigate();
 
   const handleLoadCrops = async () => {
     const cropList = await loadCrops();
@@ -45,12 +53,12 @@ const Crops = () => {
   };
 
   const handleUpdateCrop = (cropId, updatedCrop) => {
-    const updatedList = [...crops].map((crp) => (crp.cropId === cropId ? {...crp, ...updatedCrop} : crp));
+    const updatedList = [...crops].map((crp) => (crp.cropId === cropId ? { ...crp, ...updatedCrop } : crp));
     setCrops(updatedList);
   };
 
   const handleDeleteCrop = (cropId) => {
-    const updatedList = [...crops].filter((crp) => crp.cropId !== cropId) 
+    const updatedList = [...crops].filter((crp) => crp.cropId !== cropId)
     setCrops(updatedList);
   };
 
@@ -64,6 +72,83 @@ const Crops = () => {
     setShowVarietalModal(true);
   };
 
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: 'edit',
+        header: '',
+        size: '50',
+        Cell: ({ row }) => (
+          <Tooltip label="Click to edit" openDelay={500}>
+            <IconPencil onClick={() => showCropForm(row.original)} size="1rem" stroke={2} color="black" cursor='pointer' />
+          </Tooltip>
+        ),
+        enableSorting: false,
+      },
+      {
+        accessorKey: 'name',
+        header: 'Name',
+        size: '475',
+      },
+      {
+        accessorKey: 'type',
+        header: 'Type',
+        size: '475',
+      },
+    ],
+    [],
+  );
+
+  const table = useMantineReactTable({
+    columns,
+    data: crops,
+    enableFullScreenToggle: false,
+    enableColumnActions: false,
+    enableDensityToggle: false,
+    positionExpandColumn: "last",
+    renderDetailPanel: ({ row }) => (
+      <Box
+        sx={{
+          margin: 'auto',
+          gridTemplateColumns: '1fr 1fr',
+          width: '100%',
+        }}
+      >
+        {row.original.varietals?.length > 0 ? (
+          <Table highlightOnHover>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>Variety</Table.Th>
+                <Table.Th>Water Frequency</Table.Th>
+                <Table.Th>Fertilize Frequency</Table.Th>
+                <Table.Th>Recorded Events</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {row.original.varietals.map((varietal) => (
+                <Table.Tr
+                  key={varietal.varietalId}
+                  onClick={() => navigate(`/varietal/${varietal?.varietalId}`)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <Table.Td>{varietal?.name}</Table.Td>
+                  <Table.Td>{varietal?.waterEvery || '-'} {varietal?.waterTime > 0 ? `(${varietal?.waterTime} min)` : ''}</Table.Td>
+                  <Table.Td>{varietal?.fertilizeEvery || '-'}</Table.Td>
+                  <Table.Td>{varietal?.events ? `${varietal?.events.length}` : '0'}</Table.Td>
+                </Table.Tr>
+              ))}
+            </Table.Tbody>
+          </Table>
+        ) : (
+          <>
+            <Text size="sm">No varieties of {row.original ? ` ${row.original.name}` : 'this crop'} have been planted</Text>
+          </>
+        )}
+        <Button onClick={() => showNewVarietalForm(row.original)} variant="filled" size="xs" color="green" style={{ marginTop: '30px', marginLeft: row.original?.varietals?.length > 0 ? '10px' : 0 }}>Add</Button>
+      </Box>
+    ),
+  });
+
   return (
     <>
       <Skeleton visible={isLoading}>
@@ -76,17 +161,9 @@ const Crops = () => {
           </Group>
         </div>
         <Text size="md" style={{ color: 'gray' }}>{crops?.length > 0 ? 'Click through each crop to see what has been planted' : 'No crops have been added yet'}</Text>
-        <Accordion chevronPosition="right" variant="contained">
-          {crops
-            && (crops.map((crop) => (
-              <CropList
-                key={crop?.cropId}
-                crop={crop}
-                showCropForm={() => showCropForm(crop)}
-                showNewVarietalForm={() => showNewVarietalForm(crop)}
-              />
-            )))}
-        </Accordion>
+        {crops?.length > 0 && (
+          <MantineReactTable table={table} />
+        )}
       </Skeleton>
 
       <CropForm

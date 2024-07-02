@@ -4,3 +4,4 @@ bin
 appsettings.json
 .vs_code
 .DS_Store
+node_modules

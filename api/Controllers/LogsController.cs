@@ -29,7 +29,7 @@ namespace Api.Controllers
       }
 
       // return await query.ToListAsync();
-      var logs = await query.ToListAsync();
+      var logs = await query.OrderByDescending(l => l.CreatedAt).ToListAsync();
       var logsDTO = logs.Select(l => new LogDTO
       {
         LogId = l.LogId,
