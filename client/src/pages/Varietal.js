@@ -1,6 +1,5 @@
 //Varietal.jsx
 import React, { useEffect, useState } from "react";
-import { calculateNextDate } from "../utils/DateTime";
 import {
   Table,
   Text,
@@ -30,7 +29,7 @@ import { IconArrowLeft,
   IconTractor 
 } from '@tabler/icons-react';
 import { useParams, useNavigate } from "react-router-dom";
-import { formatDate } from "../utils/DateTime";
+import { formatDate, calculateNextDate } from "../utils/DateTime";
 
 import VarietalForm from "../components/varietals/VarietalForm";
 import useVarietals from "../hooks/varietals/useVarietals";

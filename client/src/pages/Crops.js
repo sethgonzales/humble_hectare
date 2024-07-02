@@ -12,13 +12,15 @@ import {
 } from '@mantine/core';
 import { IconPencil, IconPlus } from '@tabler/icons-react';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
+import { useNavigate } from "react-router-dom";
 
 import VarietalForm from "../components/varietals/VarietalForm";
 import CropForm from '../components/crops/CropForm';
 import useCrops from '../hooks/crops/useCrops';
+import { formatDate, calculateNextDate } from "../utils/DateTime";
+
 import '../styles.css';
 
-import { useNavigate } from "react-router-dom";
 
 const Crops = () => {
   const {
@@ -28,6 +30,7 @@ const Crops = () => {
 
   // State for viewing, adding, and updating crops
   const [crops, setCrops] = useState([]);
+  console.log(crops);
   const [cropToShow, setCropToShow] = useState();
   const [showCropModal, setShowCropModal] = useState(false);
 
@@ -40,7 +43,11 @@ const Crops = () => {
   const handleLoadCrops = async () => {
     const cropList = await loadCrops();
     if (cropList) {
-      setCrops(cropList);
+      const cropToShow = cropList.map((crop) => ({
+        ...crop,
+        varietalCount: crop.varietals ? crop.varietals.length : '0',
+      }))
+      setCrops(cropToShow);
     }
   };
 
@@ -83,17 +90,26 @@ const Crops = () => {
             <IconPencil onClick={() => showCropForm(row.original)} size="1rem" stroke={2} color="black" cursor='pointer' />
           </Tooltip>
         ),
+        grow: false,
         enableSorting: false,
       },
       {
         accessorKey: 'name',
         header: 'Name',
-        size: '475',
+        // size: '350',
+        // grow: true,
       },
       {
         accessorKey: 'type',
         header: 'Type',
-        size: '475',
+        // size: '300',
+        // grow: true,
+      },
+      {
+        accessorKey: 'varietalCount',
+        header: 'Varietals Planted',
+        // size: '300',
+        // grow: true,
       },
     ],
     [],
@@ -106,6 +122,7 @@ const Crops = () => {
     enableColumnActions: false,
     enableDensityToggle: false,
     positionExpandColumn: "last",
+
     renderDetailPanel: ({ row }) => (
       <Box
         sx={{
@@ -115,12 +132,12 @@ const Crops = () => {
         }}
       >
         {row.original.varietals?.length > 0 ? (
-          <Table highlightOnHover>
+          <Table highlightOnHover withTableBorder withColumnBorders>
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Variety</Table.Th>
-                <Table.Th>Water Frequency</Table.Th>
-                <Table.Th>Fertilize Frequency</Table.Th>
+                <Table.Th>Next Watering</Table.Th>
+                <Table.Th>Next Fertilizing</Table.Th>
                 <Table.Th>Recorded Events</Table.Th>
               </Table.Tr>
             </Table.Thead>
@@ -144,7 +161,7 @@ const Crops = () => {
             <Text size="sm">No varieties of {row.original ? ` ${row.original.name}` : 'this crop'} have been planted</Text>
           </>
         )}
-        <Button onClick={() => showNewVarietalForm(row.original)} variant="filled" size="xs" color="green" style={{ marginTop: '30px', marginLeft: row.original?.varietals?.length > 0 ? '10px' : 0 }}>Add</Button>
+        <Button onClick={() => showNewVarietalForm(row.original)} variant="filled" size="xs" color="green" style={{ marginTop: '20px', marginLeft: '10px' }}>Add</Button>
       </Box>
     ),
   });

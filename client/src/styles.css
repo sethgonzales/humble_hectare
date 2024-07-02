@@ -1,3 +1,15 @@
 .mantine-TableBodyCell-DetailPanel:hover {
   background-color: transparent !important;
 }
+
+.mantine-TableBodyCell-DetailPanel {
+  border-top: none !important;
+}
+
+/* .mantine-Table-root td{
+  background-color: rgb(255, 45, 45) !important;
+}
+
+.mantine-Table-root tr{
+  background-color: white !important;
+} */
