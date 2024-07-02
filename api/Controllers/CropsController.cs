@@ -41,8 +41,9 @@ namespace Api.Controllers
         {
           VarietalId = v.VarietalId,
           Name = v.Name,
+          WaterStart = v.WaterStart,
           WaterEvery = v.WaterEvery,
-          WaterTime = v.WaterTime,
+          FertilizeStart = v.FertilizeStart,
           FertilizeEvery = v.FertilizeEvery,
           // Events containing only the EventId
           Events = v.Events.Select(e => new EventDTO { EventId = e.EventId }).ToList()

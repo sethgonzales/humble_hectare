@@ -17,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 import VarietalForm from "../components/varietals/VarietalForm";
 import CropForm from '../components/crops/CropForm';
 import useCrops from '../hooks/crops/useCrops';
-import { formatDate, calculateNextDate } from "../utils/DateTime";
 
 import '../styles.css';
 
@@ -30,7 +29,6 @@ const Crops = () => {
 
   // State for viewing, adding, and updating crops
   const [crops, setCrops] = useState([]);
-  console.log(crops);
   const [cropToShow, setCropToShow] = useState();
   const [showCropModal, setShowCropModal] = useState(false);
 
@@ -96,20 +94,14 @@ const Crops = () => {
       {
         accessorKey: 'name',
         header: 'Name',
-        // size: '350',
-        // grow: true,
       },
       {
         accessorKey: 'type',
         header: 'Type',
-        // size: '300',
-        // grow: true,
       },
       {
         accessorKey: 'varietalCount',
         header: 'Varietals Planted',
-        // size: '300',
-        // grow: true,
       },
     ],
     [],
