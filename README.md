@@ -165,4 +165,4 @@ As a developer, my aim is to log my journey in building this application. This a
 - TODO: Pull out the event list into its own component. Lots of repetitive code here. Now that it works... Refactor!
 
 ### 7/1/24
-- Undertook a fun refactor today! I was able to use Mantine's React tables which are far more dynamic and interactive. A lot of features I wanted like sortable columns, search, etc. came right from the table with a few key adjustments. There were a few UI things to work out but ultimately I was able to implement these for Crops and Logs and remove some now unneeded components in crop list and log list.
+- Undertook a fun refactor today! I was able to use Mantine's React tables which are far more dynamic and interactive. A lot of features I wanted like sortable columns, search, etc. came right from the table with a few key adjustments. There were a few UI things to work out but ultimately I was able to implement these for Crops and Logs and remove some now unneeded components in crop list and log list...
