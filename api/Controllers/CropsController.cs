@@ -43,6 +43,7 @@ namespace Api.Controllers
           Name = v.Name,
           WaterStart = v.WaterStart,
           WaterEvery = v.WaterEvery,
+          WaterTime = v.WaterTime,
           FertilizeStart = v.FertilizeStart,
           FertilizeEvery = v.FertilizeEvery,
           // Events containing only the EventId

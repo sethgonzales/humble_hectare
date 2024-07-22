@@ -14,6 +14,7 @@ import { IconPencil, IconPlus } from '@tabler/icons-react';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import { useNavigate } from "react-router-dom";
 
+import { formatDate, calculateNextDate } from "../utils/DateTime";
 import VarietalForm from "../components/varietals/VarietalForm";
 import CropForm from '../components/crops/CropForm';
 import useCrops from '../hooks/crops/useCrops';
@@ -128,8 +129,10 @@ const Crops = () => {
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Variety</Table.Th>
-                <Table.Th>Next Watering</Table.Th>
-                <Table.Th>Next Fertilizing</Table.Th>
+                <Table.Th style={{ color: '#4B6EF5' }}>Water Frequency</Table.Th>
+                <Table.Th style={{ color: '#4B6EF5' }}>Water Next</Table.Th>
+                <Table.Th style={{ color: '#14B885' }}>Fertilize Frequency</Table.Th>
+                <Table.Th style={{ color: '#14B885' }}>Fertilize Next</Table.Th>
                 <Table.Th>Recorded Events</Table.Th>
               </Table.Tr>
             </Table.Thead>
@@ -141,8 +144,15 @@ const Crops = () => {
                   style={{ cursor: "pointer" }}
                 >
                   <Table.Td>{varietal?.name}</Table.Td>
-                  <Table.Td>{varietal?.waterEvery || '-'} {varietal?.waterTime > 0 ? `(${varietal?.waterTime} min)` : ''}</Table.Td>
-                  <Table.Td>{varietal?.fertilizeEvery || '-'}</Table.Td>
+                  <Table.Td style={{ color: '#4B6EF5' }}>{varietal?.waterEvery || '-'}</Table.Td>
+                  <Table.Td style={{ color: '#4B6EF5' }}>
+                    {varietal?.waterStart && varietal.waterEvery ? `${calculateNextDate(varietal.waterStart, varietal.waterEvery)} ` : ''}
+                    {varietal?.waterTime > 0 ? `(${varietal?.waterTime} min)` : '-'}
+                  </Table.Td>
+                  <Table.Td style={{ color: '#14B885' }}>{varietal?.fertilizeEvery || '-'}</Table.Td>
+                  <Table.Td style={{ color: '#14B885' }}>
+                    {varietal?.fertilizeStart && varietal.fertilizeEvery ? `${calculateNextDate(varietal.fertilizeStart, varietal.fertilizeEvery)} ` : '-'}
+                  </Table.Td>
                   <Table.Td>{varietal?.events ? `${varietal?.events.length}` : '0'}</Table.Td>
                 </Table.Tr>
               ))}
