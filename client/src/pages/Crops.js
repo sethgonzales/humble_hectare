@@ -9,6 +9,7 @@ import {
   Box,
   Table,
   Tooltip,
+  Title,
 } from '@mantine/core';
 import { IconPencil, IconPlus } from '@tabler/icons-react';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
@@ -20,6 +21,7 @@ import CropForm from '../components/crops/CropForm';
 import useCrops from '../hooks/crops/useCrops';
 
 import '../styles.css';
+import { render } from "@testing-library/react";
 
 
 const Crops = () => {
@@ -81,20 +83,15 @@ const Crops = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'edit',
-        header: '',
-        size: '50',
-        Cell: ({ row }) => (
-          <Tooltip label="Click to edit" openDelay={500}>
-            <IconPencil onClick={() => showCropForm(row.original)} size="1rem" stroke={2} color="black" cursor='pointer' />
-          </Tooltip>
-        ),
-        grow: false,
-        enableSorting: false,
-      },
-      {
         accessorKey: 'name',
         header: 'Name',
+        Cell: ({ renderedCellValue }) => (
+          <Box
+            className="font-semibold"
+          >
+            {renderedCellValue}
+          </Box>
+        ),
       },
       {
         accessorKey: 'type',
@@ -103,6 +100,18 @@ const Crops = () => {
       {
         accessorKey: 'varietalCount',
         header: 'Varietals Planted',
+      },
+      {
+        accessorKey: 'edit',
+        header: '',
+        size: '50',
+        Cell: ({ row }) => (
+          <Tooltip label="Click to edit" openDelay={500}>
+            <IconPencil onClick={() => showCropForm(row.original)} size="1.5rem" stroke={2} cursor='pointer' className="hover:text-gray-500 text-gray-600 rounded" />
+          </Tooltip>
+        ),
+        grow: false,
+        enableSorting: false,
       },
     ],
     [],
@@ -114,7 +123,13 @@ const Crops = () => {
     enableFullScreenToggle: false,
     enableColumnActions: false,
     enableDensityToggle: false,
-    positionExpandColumn: "last",
+    enableHiding: false,
+    positionExpandColumn: "first",
+    initialState: {  showGlobalFilter: true },
+    mantineSearchTextInputProps: {
+      placeholder: "Search Crops",
+    },
+    positionGlobalFilter:"left",
 
     renderDetailPanel: ({ row }) => (
       <Box
@@ -129,10 +144,10 @@ const Crops = () => {
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Variety</Table.Th>
-                <Table.Th style={{ color: '#4B6EF5' }}>Water Frequency</Table.Th>
-                <Table.Th style={{ color: '#4B6EF5' }}>Water Next</Table.Th>
-                <Table.Th style={{ color: '#14B885' }}>Fertilize Frequency</Table.Th>
-                <Table.Th style={{ color: '#14B885' }}>Fertilize Next</Table.Th>
+                <Table.Th className="text-water">Water Frequency</Table.Th>
+                <Table.Th className="text-water">Water Next</Table.Th>
+                <Table.Th className="text-fertilize">Fertilize Frequency</Table.Th>
+                <Table.Th className="text-fertilize">Fertilize Next</Table.Th>
                 <Table.Th>Recorded Events</Table.Th>
               </Table.Tr>
             </Table.Thead>
@@ -144,13 +159,13 @@ const Crops = () => {
                   style={{ cursor: "pointer" }}
                 >
                   <Table.Td>{varietal?.name}</Table.Td>
-                  <Table.Td style={{ color: '#4B6EF5' }}>{varietal?.waterEvery || '-'}</Table.Td>
-                  <Table.Td style={{ color: '#4B6EF5' }}>
+                  <Table.Td className="text-water">{varietal?.waterEvery || '-'}</Table.Td>
+                  <Table.Td className="text-water">
                     {varietal?.waterStart && varietal.waterEvery ? `${calculateNextDate(varietal.waterStart, varietal.waterEvery)} ` : ''}
                     {varietal?.waterTime > 0 ? `(${varietal?.waterTime} min)` : '-'}
                   </Table.Td>
-                  <Table.Td style={{ color: '#14B885' }}>{varietal?.fertilizeEvery || '-'}</Table.Td>
-                  <Table.Td style={{ color: '#14B885' }}>
+                  <Table.Td className="text-fertilize">{varietal?.fertilizeEvery || '-'}</Table.Td>
+                  <Table.Td className="text-fertilize">
                     {varietal?.fertilizeStart && varietal.fertilizeEvery ? `${calculateNextDate(varietal.fertilizeStart, varietal.fertilizeEvery)} ` : '-'}
                   </Table.Td>
                   <Table.Td>{varietal?.events ? `${varietal?.events.length}` : '0'}</Table.Td>
@@ -163,7 +178,7 @@ const Crops = () => {
             <Text size="sm">No varieties of {row.original ? ` ${row.original.name}` : 'this crop'} have been planted</Text>
           </>
         )}
-        <Button onClick={() => showNewVarietalForm(row.original)} variant="filled" size="xs" color="green" style={{ marginTop: '20px', marginLeft: '10px' }}>Add</Button>
+        <Button onClick={() => showNewVarietalForm(row.original)} variant="filled" size="xs" color="green" className="mt-4">Add</Button>
       </Box>
     ),
   });
@@ -171,15 +186,17 @@ const Crops = () => {
   return (
     <>
       <Skeleton visible={isLoading}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <h1>Crops</h1>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-xl font-semibold" >Crops</h1>
+            <Text size="md" className="text-gray-400">{crops?.length > 0 ? 'Click through each crop to see what has been planted' : 'No crops have been added yet'}</Text>
+          </div>
           <Group>
-            <Button onClick={() => setShowCropModal(true)} color="gray" variant="outline" radius="xl">
-              <IconPlus size="1.5rem" stroke={2} color="black" />
+            <Button onClick={() => setShowCropModal(true)} color="gray" variant="outline" radius="xl" className="hover:bg-gray-100">
+              <IconPlus size="1.5rem" stroke={2} />
             </Button>
           </Group>
         </div>
-        <Text size="md" style={{ color: 'gray' }}>{crops?.length > 0 ? 'Click through each crop to see what has been planted' : 'No crops have been added yet'}</Text>
         {crops?.length > 0 && (
           <MantineReactTable table={table} />
         )}

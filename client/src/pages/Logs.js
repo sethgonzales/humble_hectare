@@ -1,7 +1,7 @@
 //Logs.js
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Group, Skeleton, Table, Text } from "@mantine/core";
+import { Box, Button, Group, Skeleton, Table, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 
@@ -27,7 +27,7 @@ export default function Logs() {
 
       //format dates and add event counts
       const listToShow = logList.map((log) => ({
-        ...log, 
+        ...log,
         createdAt: formatDate(log.createdAt),
         eventCount: log.events ? log.events.length : '0'
       }))
@@ -44,6 +44,13 @@ export default function Logs() {
       {
         accessorKey: 'title',
         header: 'Title',
+        Cell: ({ renderedCellValue }) => (
+          <Box
+            className="font-semibold"
+          >
+            {renderedCellValue}
+          </Box>
+        ),
       },
       {
         accessorKey: 'eventCount',
@@ -63,6 +70,12 @@ export default function Logs() {
     enableFullScreenToggle: false,
     enableColumnActions: false,
     enableDensityToggle: false,
+    enableHiding: false,
+    initialState: { showGlobalFilter: true },
+    mantineSearchTextInputProps: {
+      placeholder: 'Search Logs',
+    },
+    positionGlobalFilter: "left",
     mantineTableBodyRowProps: ({ row }) => ({
       onClick: () => navigate(`/logs/${row.original.logId}`),
       sx: { cursor: 'pointer' },
@@ -72,11 +85,13 @@ export default function Logs() {
   return (
     <>
       <Skeleton visible={isLoading}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <h1>Logs</h1>
-          <Group>
-            <Button onClick={() => setShowLogModal(true)} color="gray" variant="outline" radius="xl">
-              <IconPlus size="1.5rem" stroke={2} color="black" />
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-xl font-semibold">Logs</h1>
+            <Text size="md" className="text-gray-400">{logs?.length > 0 ? 'Read through past journal entries' : 'No entries have been recorded yet'}</Text>
+          </div>          <Group>
+            <Button onClick={() => setShowLogModal(true)} color="gray" variant="outline" radius="xl" className="hover:bg-gray-100">
+              <IconPlus size="1.5rem" stroke={2} />
             </Button>
           </Group>
         </div>
