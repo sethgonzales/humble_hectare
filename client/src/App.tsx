@@ -25,14 +25,14 @@ export default function App() {
   const links = [
     { icon: IconHome2, label: 'Home', path: '/' },
     { icon: IconCarrot, label: 'Crops', path: '/crops' },
-    { icon: IconList, label: 'Logs', path: 'logs' },
+    { icon: IconList, label: 'Logs', path: '/logs' },
   ];
 
 
   return (
     <MantineProvider theme={theme}>
       <AppShell
-        header={{ height: 60 }}
+        header={{ height: 90 }}
         navbar={{
           width: 200,
           breakpoint: 'sm',
@@ -41,6 +41,7 @@ export default function App() {
         className='bg-primary'
         padding="md"
       >
+        {/* ----- HEADER ----- */}
         <AppShell.Header className='flex overflow-hidden bg-secondary border-none p-1'>
           <div className='flex text-center items-center pl-3'>
             <h1 className='text-theme-100 text-3xl font-semibold italic'>Humble Hectare</h1>
@@ -49,19 +50,20 @@ export default function App() {
             <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
           </Center>
         </AppShell.Header>
-
-        <AppShell.Navbar className='border-none bg-secondary pt-8' >
+        {/* ----- NAVBAR ----- */}
+        <AppShell.Navbar className='border-none bg-primary pt-4 p-2' >
           {links.map((link) => (
             <NavLink
               href={link.path}
               key={link.label}
               label={link.label}
-              rightSection={isActive(link.path) ? <IconChevronRight size={14} stroke={1.5} /> : ''}
+              rightSection={<IconChevronRight size={14} stroke={1.5} />}
               leftSection={<link.icon size="1.5rem" stroke={2} />}
-              className={`text-theme-700 hover:text-black hover:bg-primary ${isActive(link.path) ? 'bg-primary text-theme-900' : ''}`}
+              className={`pl-4 rounded-sm text-theme-700 hover:text-black hover:bg-secondary ${isActive(link.path) ? 'bg-secondary text-theme-900 font-semibold' : ''}`}
             />
           ))}
         </AppShell.Navbar>
+        {/* ----- BODY ----- */}
         <AppShell.Main>
           <Card shadow="sm" padding="xl" radius="lg" withBorder>
             <Router />

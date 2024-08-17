@@ -158,8 +158,10 @@ const Log = () => {
                 </Group>
               </Flex>
               <br />
+              <label htmlFor="title">
+                Title
+              </label>
               <TextInput
-                label="Title"
                 placeholder="Title of this log entry"
                 {...form.getInputProps('title')}
               />
@@ -168,7 +170,7 @@ const Log = () => {
               <label htmlFor="entry">
                 Entry
               </label>
-              <div style={{ border: 'solid 1px #c9c9c9', borderRadius: '0.5rem', minHeight: '10rem', maxHeight: '35rem', resize: 'vertical', overflow: 'scroll' }}>
+              <div className="border border-gray-400 rounded-sm min-h-40 max-h-80 resize-y overflow-scroll">
                 <MDXEditor
                   markdown={form.values.entry}
                   onChange={(markdown) => form.setFieldValue('entry', markdown)}
@@ -190,39 +192,37 @@ const Log = () => {
                 />
               </div>
             </form>
+            <br />
           </>
         ) : (
           <>
-            <Flex
-              justify={"space-between"}
-              align={"center"}
-            >
+            <div className="flex items-center justify-between mb-6">
               <Group>
                 <IconArrowLeft
                   onClick={() => navigate("/logs")}
                   size="1.5rem"
                   stroke={2}
-                  color="black"
-                  style={{ cursor: "pointer" }}
-                />
-                <h1>{log?.title}</h1>
+                  className="cursor-pointer text-gray-500"
+                  />
+                <h1 className="text-2xl font-semibold">{log?.title}</h1>
               </Group>
               <Button onClick={() => setIsEditing(true)} variant="filled" size="xs" color="green">Edit</Button>
-            </Flex>
+            </div>
             <Text c="dimmed">{log?.createdAt ? formatDate(log.createdAt) : '-'}</Text>
             {log?.entry ? (
-              <div style={{ border: 'solid 1px #c9c9c9', borderRadius: '0.5rem', minHeight: '10rem', maxHeight: '35rem', resize: 'vertical', overflow: 'scroll', padding: '1rem', color: 'grey' }}>
+              <di onClick={() => setIsEditing(true)} className="border border-gray-400 rounded-sm min-h-40 max-h-80 resize-y overflow-scroll p-2 text-gray-400 cursor-pointer">
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>{log.entry}</ReactMarkdown>
-              </div>
+              </di>
             ) : (
-              <div style={{ border: 'solid 1px #c9c9c9', borderRadius: '0.5rem', minHeight: '10rem', padding: '1rem' }}>
-                <Text c="dimmed">Click edit to start adding your new entry</Text>
+              <div onClick={() => setIsEditing(true)} className="border border-gray-400 rounded-sm min-h-40 p-2 text-gray-400 cursor-pointer">
+                <Text>Click edit to start adding your new entry</Text>
               </div>
             )}
+            <br />
           </>
         )
       }
-      <h2>Events</h2>
+      <h2 className="font-semibold">Events</h2>
       <div>
         {log?.events?.length > 0 ? (
           <>
@@ -230,14 +230,14 @@ const Log = () => {
               {log.events.map((event) => (
                 <Accordion.Item value={event.eventType + event.eventId} key={event.eventId}>
                   <Accordion.Control>
-                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: ".5rem", justifyContent: 'space-between' }}>
+                    <div className="flex flex-wrap items-center gap-1 justify-between">
                       <Group>
                         <Tooltip label="Click to edit" openDelay={500}>
                           <IconPencil onClick={() => showEventForm(event)} size="1rem" stroke={2} color="black" />
                         </Tooltip>
                         <Text><b>{event?.eventType}</b></Text>
                       </Group>
-                      <Text c="dimmed" style={{ marginRight: "16px" }}>{event.dateStart ? formatDate(event.dateStart) : ''} {event?.dateEnd ? ` - ${formatDate(event.dateEnd)}` : ''}</Text>
+                      <Text c="dimmed" className="mr-4">{event.dateStart ? formatDate(event.dateStart) : ''} {event?.dateEnd ? ` - ${formatDate(event.dateEnd)}` : ''}</Text>
                     </div>
                   </Accordion.Control>
                   <Accordion.Panel>
@@ -251,9 +251,8 @@ const Log = () => {
                             <Text
                               c="dimmed"
                               size="med"
-                              style={{ cursor: "pointer" }}
+                              className="cursor-pointer"
                               onClick={event.varietal?.varietalId ? () => navigate(`/varietal/${event.varietal.varietalId}`) : null}
-
                             >
                               {event.varietal?.name}
                             </Text>
@@ -296,7 +295,7 @@ const Log = () => {
                             c="dimmed"
                             ta="right"
                             w="100%"
-                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', cursor: 'pointer' }}
+                            className="flex items-center justify-end cursor-pointer"
                             onClick={() => navigate(`/varietal/${event.varietal.varietalId}`)}
                           >
                             Go to Variety
@@ -315,7 +314,7 @@ const Log = () => {
             <Text size="sm">No events have been recorded for this variety.</Text>
           </>
         )}
-        <Button onClick={() => setShowEventModal(true)} variant="filled" size="xs" color="green" style={{ marginTop: '30px' }}>Add Event</Button>
+        <Button onClick={() => setShowEventModal(true)} variant="filled" size="xs" color="green" className="mt-6">Add Event</Button>
 
 
         <EventForm
@@ -333,7 +332,7 @@ const Log = () => {
         <Modal title="Confirm Delete" onClose={() => setDeleteConfirm(false)} opened={deleteConfirm}>
           <Alert variant="light" color="blue" title="Hold up!">
             This action cannot be undone and will remove this log as record for its related varieties.
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
+            <div className="flex items-center justify-center gap-4 mt-4">
               <Button onClick={handleDeleteLog} variant="filled" size="xs" color="red">Permanently Delete</Button>
               <Button onClick={() => setDeleteConfirm(false)} variant="filled" size="xs" color="grey">Cancel</Button>
             </div>

@@ -122,8 +122,7 @@ const CropForm = (props) => {
             ]}
             {...form.getInputProps('type')}
           />
-
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
+          <div className="flex items-center justify-center gap-4 mt-4">
             <Button type="submit" variant="filled" size="xs" color="green">Save</Button>
             {crop && (
               <Button onClick={() => setDeleteConfirm(true)} variant="filled" size="xs" color="red">Delete</Button>
@@ -139,7 +138,7 @@ const CropForm = (props) => {
       {deleteConfirm && (
         <Alert variant="light" color="blue" title="Hold up!">
           This action cannot be undone. All varieties of this crop and its related data will be removed.
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
+          <div className="flex items-center justify-center gap-4 mt-4">
             <Button onClick={handleDelete} variant="filled" size="xs" color="red">Permanently Delete</Button>
             <Button onClick={() => setDeleteConfirm(false)} variant="filled" size="xs" color="grey">Cancel</Button>
           </div>
@@ -148,7 +147,7 @@ const CropForm = (props) => {
       {duplicateWarning && (
         <Alert variant="light" color="blue" title="Hold up!">
           There is another crop of this name already added
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
+          <div className="flex items-center justify-center gap-4 mt-4">
             <Button onClick={() => setDuplicateWarning(false)} variant="filled" size="xs" color="grey">Cancel</Button>
           </div>
         </Alert>

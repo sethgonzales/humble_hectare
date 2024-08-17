@@ -15,7 +15,8 @@ import {
   Center,
   Avatar
 } from '@mantine/core';
-import { IconArrowLeft,
+import {
+  IconArrowLeft,
   IconArrowRight,
   IconCalendar,
   IconClockHour4,
@@ -26,7 +27,7 @@ import { IconArrowLeft,
   IconPencil,
   IconScale,
   IconSeeding,
-  IconTractor 
+  IconTractor
 } from '@tabler/icons-react';
 import { useParams, useNavigate } from "react-router-dom";
 import { formatDate, calculateNextDate } from "../utils/DateTime";
@@ -98,35 +99,32 @@ const Varietal = () => {
   return (
     <>
       <Skeleton visible={isLoading}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div className="flex items-center gap-1 justify-between mb-2">
           <Group>
             <IconArrowLeft
               onClick={() => navigate("/crops")}
               size="1.5rem"
               stroke={2}
-              color="black"
-              style={{ cursor: "pointer" }}
+              className="cursor-pointer text-gray-500"
             />
-            <h1>{varietal ? `${varietal?.name}` : "Variety"}</h1>
+          <h1 className="text-2xl font-semibold my-3">{varietal ? `${varietal?.name}` : "Variety"}</h1>
           </Group>
           <Tooltip label="Click to edit" openDelay={500}>
             <IconPencil
               onClick={() => setShowVarietalModal(true)}
               size="1.5rem"
               stroke={2}
-              color="black"
-              style={{ cursor: "pointer" }}
+              cursor="pointer"
+              className="hover:text-gray-500 text-gray-600 rounded"
             />
           </Tooltip>
         </div>
         {varietal?.description && (
-          <Blockquote color="blue">
+          <Blockquote color="blue" className="mb-4">
             {varietal?.description}
           </Blockquote>
         )}
-
-        <h2>Schedules</h2>
-        <Grid>
+        <Grid className="mb-4">
           <GridCol span="auto">
             <Center>
               <Timeline active={2} bulletSize={30} lineWidth={2} color="indigo">
@@ -168,21 +166,21 @@ const Varietal = () => {
           </GridCol>
         </Grid>
 
-        <h2>Event History</h2>
+        <h2 className="font-semibold">Event History</h2>
         {varietal?.events?.length > 0 ? (
           <>
             <Accordion chevronPosition="right" variant="contained">
               {varietal.events.map((event) => (
                 <Accordion.Item value={event.eventType + event.eventId} key={event.eventId}>
                   <Accordion.Control>
-                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: ".5rem", justifyContent: 'space-between' }}>
+                    <div className="flex flex-wrap items-center gap-1 justify-between">
                       <Group>
                         <Tooltip label="Click to edit" openDelay={500}>
-                          <IconPencil onClick={() => showEventForm(event)} size="1rem" stroke={2} color="black" />
+                          <IconPencil onClick={() => showEventForm(event)} size="1rem" stroke={2} className="hover:text-gray-500 text-gray-600 rounded" />
                         </Tooltip>
                         <Text><b>{event?.eventType}</b></Text>
                       </Group>
-                      <Text c="dimmed" style={{ marginRight: "16px" }}>{event.dateStart ? formatDate(event.dateStart) : ''} {event?.dateEnd ? ` - ${formatDate(event.dateEnd)}` : ''}</Text>
+                      <Text c="dimmed" className="mr-4">{event.dateStart ? formatDate(event.dateStart) : ''} {event?.dateEnd ? ` - ${formatDate(event.dateEnd)}` : ''}</Text>
                     </div>
                   </Accordion.Control>
                   <Accordion.Panel>
@@ -190,14 +188,14 @@ const Varietal = () => {
                       <GridCol span={{ base: 12, md: 4 }}>
                         <Timeline active={2} bulletSize={30} lineWidth={2} color="yellow">
                           <Timeline.Item bullet={<IconNotebook size={20} />} title="Log">
-                              <Text
-                                c="dimmed"
-                                size="med"
-                                style={event.logId ? { cursor: "pointer" } : null}
-                                onClick={event.logId ? () => navigate(`/logs/${event.log.logId}`) : null}
-                              >
-                                {event.log?.title ? `${event.log.title} (${formatDate(event.log?.createdAt)})` : '-'}
-                              </Text>
+                            <Text
+                              c="dimmed"
+                              size="med"
+                              className={event.logId ? "cursor-pointer" : null}
+                              onClick={event.logId ? () => navigate(`/logs/${event.log.logId}`) : null}
+                            >
+                              {event.log?.title ? `${event.log.title} (${formatDate(event.log?.createdAt)})` : '-'}
+                            </Text>
                           </Timeline.Item>
                           <Timeline.Item bullet={<IconTractor size={20} />} title="Event">
                             <Text c="dimmed" size="med">{event.eventType}</Text>
@@ -237,7 +235,7 @@ const Varietal = () => {
                             c="dimmed"
                             ta="right"
                             w="100%"
-                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', cursor: 'pointer' }}
+                            className="flex items-center justify-end cursor-pointer"
                             onClick={() => navigate(`/logs/${event.logId}`)}
                           >
                             Go to Log
@@ -256,7 +254,7 @@ const Varietal = () => {
             <Text size="sm">No events have been recorded for this variety.</Text>
           </>
         )}
-        <Button onClick={() => setShowEventModal(true)} variant="filled" size="xs" color="green" style={{ marginTop: '30px' }}>Add Event</Button>
+        <Button onClick={() => setShowEventModal(true)} variant="filled" size="xs" color="green" className="mt-6">Add Event</Button>
       </Skeleton >
 
 

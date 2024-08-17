@@ -28,14 +28,14 @@ const EventList = (props) => {
     <>
       <Accordion.Item value={_event.eventType + _event.eventId} key={_event.eventId}>
         <Accordion.Control>
-          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: ".5rem", justifyContent: 'space-between' }}>
+          <div className="flex flex-wrap items-center gap-1 justify-between">
             <Group>
               <Tooltip label="Click to edit" openDelay={500}>
                 <IconPencil onClick={() => showEventForm(_event)} size="1rem" stroke={2} color="black" />
               </Tooltip>
               <Text><b>{_event?.eventType}</b></Text>
             </Group>
-            <Text c="dimmed" style={{ marginRight: "16px" }}>{_event.dateStart ? formatDate(_event.dateStart) : ''} {_event?.dateEnd ? ` - ${formatDate(_event.dateEnd)}` : ''}</Text>
+            <Text c="dimmed" className="mr-4">{_event.dateStart ? formatDate(_event.dateStart) : ''} {_event?.dateEnd ? ` - ${formatDate(_event.dateEnd)}` : ''}</Text>
           </div>
         </Accordion.Control>
         <Accordion.Panel>

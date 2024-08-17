@@ -19,10 +19,7 @@ import { formatDate, calculateNextDate } from "../utils/DateTime";
 import VarietalForm from "../components/varietals/VarietalForm";
 import CropForm from '../components/crops/CropForm';
 import useCrops from '../hooks/crops/useCrops';
-
 import '../styles.css';
-import { render } from "@testing-library/react";
-
 
 const Crops = () => {
   const {
@@ -156,7 +153,7 @@ const Crops = () => {
                 <Table.Tr
                   key={varietal.varietalId}
                   onClick={() => navigate(`/varietal/${varietal?.varietalId}`)}
-                  style={{ cursor: "pointer" }}
+                  className="cursor-pointer"
                 >
                   <Table.Td>{varietal?.name}</Table.Td>
                   <Table.Td className="text-water">{varietal?.waterEvery || '-'}</Table.Td>
@@ -188,7 +185,7 @@ const Crops = () => {
       <Skeleton visible={isLoading}>
         <div className="flex items-center justify-between mb-2">
           <div className="flex flex-col gap-1">
-            <h1 className="text-xl font-semibold" >Crops</h1>
+            <h1 className="text-2xl font-semibold">Crops</h1>
             <Text size="md" className="text-gray-400">{crops?.length > 0 ? 'Click through each crop to see what has been planted' : 'No crops have been added yet'}</Text>
           </div>
           <Group>

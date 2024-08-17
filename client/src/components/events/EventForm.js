@@ -198,7 +198,7 @@ const EventForm = (props) => {
             </>
           )}
           <Checkbox
-            style={{ marginTop: '8px' }}
+            className="mt-2"
             label="Multi-date"
             checked={multiDate}
             onChange={() => setMultiDate(!multiDate)}
@@ -219,7 +219,7 @@ const EventForm = (props) => {
             {...form.getInputProps('notes')}
           />
 
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
+          <div className="flex items-center justify-center gap-4 mt-4">
             <Button type="submit" variant="filled" size="xs" color="green">Save</Button>
             {_event && (
               <Button onClick={() => setDeleteConfirm(true)} variant="filled" size="xs" color="red">Delete</Button>
@@ -235,7 +235,7 @@ const EventForm = (props) => {
       {deleteConfirm && (
         <Alert variant="light" color="blue" title="Hold up!">
           This action cannot be undone. This event will be removed.
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
+          <div className="flex items-center justify-center gap-4 mt-4">
             <Button onClick={handleDelete} variant="filled" size="xs" color="red">Permanently Delete</Button>
             <Button onClick={() => setDeleteConfirm(false)} variant="filled" size="xs" color="grey">Cancel</Button>
           </div>

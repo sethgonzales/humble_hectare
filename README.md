@@ -166,3 +166,8 @@ As a developer, my aim is to log my journey in building this application. This a
 
 ### 7/1/24
 - Undertook a fun refactor today! I was able to use Mantine's React tables which are far more dynamic and interactive. A lot of features I wanted like sortable columns, search, etc. came right from the table with a few key adjustments. There were a few UI things to work out but ultimately I was able to implement these for Crops and Logs and remove some now unneeded components in crop list and log list...
+
+
+### 8/16/24
+- First journal in a while! I have mostly been doing UI updates. BIG switch today to using tailwind. Really really really love tailwind and the ease it gives to styling. 
+- Because of this, I was able to make some big strides and refactor the app's styles. Was also finally able to track active status on tabs! Huzzah!

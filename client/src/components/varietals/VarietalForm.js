@@ -165,7 +165,7 @@ const VarietalForm = (props) => {
             {...form.getInputProps('description')}
           />
 
-          <h3 style={{ marginBottom: "0" }}>Watering Schedule</h3>
+          <h3 className="mb-0">Watering Schedule</h3>
           <DatePickerInput
             label="Start Date"
             dropdownType="modal"
@@ -196,7 +196,7 @@ const VarietalForm = (props) => {
             {...form.getInputProps('waterNotes')}
           />
 
-          <h3 style={{ marginBottom: "0" }}>Fertilizing Schedule</h3>
+          <h3 className="mb-0">Fertilizing Schedule</h3>
           <DatePickerInput
             leftSectionPointerEvents="none"
             label="Start Date"
@@ -220,7 +220,7 @@ const VarietalForm = (props) => {
             {...form.getInputProps('fertilizeNotes')}
           />
 
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
+          <div className="flex items-center justify-center gap-4 mt-4">
             <Button type="submit" variant="filled" size="xs" color="green">Save</Button>
             {varietal && (
               <Button onClick={() => setDeleteConfirm(true)} variant="filled" size="xs" color="red">Delete</Button>
@@ -236,7 +236,7 @@ const VarietalForm = (props) => {
       {deleteConfirm && (
         <Alert variant="light" color="blue" title="Hold up!">
           This action cannot be undone. This variety's related data and events will be removed.
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
+          <div className="flex items-center justify-center gap-4 mt-4">
             <Button onClick={handleDelete} variant="filled" size="xs" color="red">Permanently Delete</Button>
             <Button onClick={() => setDeleteConfirm(false)} variant="filled" size="xs" color="grey">Cancel</Button>
           </div>
@@ -245,7 +245,7 @@ const VarietalForm = (props) => {
       {duplicateWarning && (
         <Alert variant="light" color="blue" title="Hold up!">
           There is another variety of this same name already added for this crop
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
+          <div className="flex items-center justify-center gap-4 mt-4">
             <Button onClick={() => setDuplicateWarning(false)} variant="filled" size="xs" color="grey">Cancel</Button>
           </div>
         </Alert>

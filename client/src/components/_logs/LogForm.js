@@ -58,7 +58,7 @@ const LogForm = (props) => {
           placeholder="Title of this entry"
           {...form.getInputProps('title')}
         />
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
+        <div className="flex items-center justify-center gap-4 mt-4">
           <Button type="submit" variant="filled" size="xs" color="green">Save</Button>
         </div>
       </form>

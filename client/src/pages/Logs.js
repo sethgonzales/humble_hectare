@@ -87,7 +87,7 @@ export default function Logs() {
       <Skeleton visible={isLoading}>
         <div className="flex items-center justify-between mb-2">
           <div className="flex flex-col gap-1">
-            <h1 className="text-xl font-semibold">Logs</h1>
+            <h1 className="text-2xl font-semibold">Logs</h1>
             <Text size="md" className="text-gray-400">{logs?.length > 0 ? 'Read through past journal entries' : 'No entries have been recorded yet'}</Text>
           </div>          <Group>
             <Button onClick={() => setShowLogModal(true)} color="gray" variant="outline" radius="xl" className="hover:bg-gray-100">
@@ -98,7 +98,7 @@ export default function Logs() {
         {logs?.length > 0 ? (
           <MantineReactTable table={table} />
         ) : (
-          <Text size="md" style={{ color: 'gray' }}>No logs have been added yet</Text>
+          <Text size="md" className="text-gray-400">No logs have been added yet</Text>
         )}
 
 
