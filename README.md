@@ -170,4 +170,4 @@ As a developer, my aim is to log my journey in building this application. This a
 
 ### 8/16/24
 - First journal in a while! I have mostly been doing UI updates. BIG switch today to using tailwind. Really really really love tailwind and the ease it gives to styling. 
-- Because of this, I was able to make some big strides and refactor the app's styles. Was also finally able to track active status on tabs! Huzzah!   
+- Because of this, I was able to make some big strides and refactor the app's styles. Was also finally able to track active status on tabs! Huzzah!!
