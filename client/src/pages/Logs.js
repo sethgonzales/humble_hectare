@@ -95,13 +95,9 @@ export default function Logs() {
             </Button>
           </Group>
         </div>
-        {logs?.length > 0 ? (
+        {logs?.length > 0 && (
           <MantineReactTable table={table} />
-        ) : (
-          <Text size="md" className="text-gray-400">No logs have been added yet</Text>
         )}
-
-
       </Skeleton>
       <LogForm
         isOpen={showLogModal}
