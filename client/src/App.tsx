@@ -43,12 +43,12 @@ export default function App() {
       >
         {/* ----- HEADER ----- */}
         <AppShell.Header className='flex overflow-hidden bg-secondary border-none p-1'>
-          <div className='flex text-center items-center pl-3'>
-            <h1 className='text-theme-100 text-3xl font-semibold italic'>Humble Hectare</h1>
-          </div>
           <Center>
             <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
           </Center>
+          <div className='flex text-center items-center pl-3'>
+            <h1 className='text-theme-100 text-3xl font-semibold italic'>Humble Hectare</h1>
+          </div>
         </AppShell.Header>
         {/* ----- NAVBAR ----- */}
         <AppShell.Navbar className='border-none bg-primary pt-4 p-2' >
