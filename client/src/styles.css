@@ -10,6 +10,16 @@
   border-top: none !important;
 }
 
+.prose {
+  font-family: "Inter", sans-serif;
+  max-width: 100% !important;
+}
+
+.prose strong {
+  font-weight: 600;
+}
+
+
 /* .mantine-Table-root td{
   background-color: rgb(255, 45, 45) !important;
 }

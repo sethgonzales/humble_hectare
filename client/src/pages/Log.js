@@ -173,6 +173,7 @@ const Log = () => {
               <div className="border border-gray-400 rounded-sm min-h-40 max-h-80 resize-y overflow-scroll">
                 <MDXEditor
                   markdown={form.values.entry}
+                  contentEditableClassName="prose"
                   onChange={(markdown) => form.setFieldValue('entry', markdown)}
                   plugins={[
                     headingsPlugin(),
@@ -210,7 +211,7 @@ const Log = () => {
             </div>
             <Text c="dimmed">{log?.createdAt ? formatDate(log.createdAt) : '-'}</Text>
             {log?.entry ? (
-              <div onClick={() => setIsEditing(true)} className="border border-gray-400 rounded-sm min-h-40 max-h-80 resize-y overflow-scroll p-2 text-gray-400 cursor-pointer">
+              <div onClick={() => setIsEditing(true)} className="prose border border-gray-400 rounded-sm min-h-40 max-h-80 resize-y overflow-scroll p-2 text-gray-400 cursor-pointer">
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>{log.entry}</ReactMarkdown>
               </div>
             ) : (
