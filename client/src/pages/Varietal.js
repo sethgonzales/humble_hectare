@@ -75,6 +75,7 @@ const Varietal = () => {
     } else {
       setNextFertilizeDate('');
     }
+
   }
 
   const handleLoadVarietal = async () => {
@@ -120,11 +121,11 @@ const Varietal = () => {
           </Tooltip>
         </div>
         {varietal?.description && (
-          <Blockquote color="blue" className="mb-4">
+          <Blockquote color="blue" className="mb-6">
             {varietal?.description}
           </Blockquote>
         )}
-        <Grid className="mb-4">
+        <Grid className="mb-6">
           <GridCol span="auto">
             <Center>
               <Timeline active={2} bulletSize={30} lineWidth={2} color="indigo">

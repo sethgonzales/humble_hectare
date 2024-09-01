@@ -210,9 +210,9 @@ const Log = () => {
             </div>
             <Text c="dimmed">{log?.createdAt ? formatDate(log.createdAt) : '-'}</Text>
             {log?.entry ? (
-              <di onClick={() => setIsEditing(true)} className="border border-gray-400 rounded-sm min-h-40 max-h-80 resize-y overflow-scroll p-2 text-gray-400 cursor-pointer">
+              <div onClick={() => setIsEditing(true)} className="border border-gray-400 rounded-sm min-h-40 max-h-80 resize-y overflow-scroll p-2 text-gray-400 cursor-pointer">
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>{log.entry}</ReactMarkdown>
-              </di>
+              </div>
             ) : (
               <div onClick={() => setIsEditing(true)} className="border border-gray-400 rounded-sm min-h-40 p-2 text-gray-400 cursor-pointer">
                 <Text>Click edit to start adding your new entry</Text>
