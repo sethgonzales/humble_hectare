@@ -54,18 +54,23 @@ const EventForm = (props) => {
     },
     validate: {
       eventType: isNotEmpty('Please enter the type of event'),
+      varietalId: varietal && varietal.varietalId
+        ? undefined // No validation if varietalId is already provided
+        : isNotEmpty('Please select a varietal'), // Validate if no varietalId
       dateStart: (value) => {
         if (!value) {
-          return null;
+          return 'Please select a start date';
         }
+        return null;
       },
       dateEnd: (value) => {
-        if (!value) {
-          return null;
+        if (multiDate && !value) {
+          return 'Please select an end date';
         }
+        return null;
       },
     },
-  });
+  });  
 
   const handleLoadVarietals = async () => {
     const _varietals = await loadVarietals();
@@ -99,15 +104,18 @@ const EventForm = (props) => {
   };
 
   const handleAddEvent = async () => {
+    const hasDateEnd = form.values.dateEnd && multiDate
+
     const data = {
       varietalId: varietal?.varietalId || form.values.varietalId,
       logId: _log?.logId ? _log.logId : null,
       eventType: form.values.eventType,
       dateStart: form.values.dateStart ? form.values.dateStart.toISOString() : "",
-      dateEnd: form.values.dateEnd ? form.values.dateEnd.toISOString() : "",
+      dateEnd: hasDateEnd ? form.values.dateEnd.toISOString() : "",
       yield: form.values.yield,
       notes: form.values.notes,
     };
+    
     // add to db
     await addEvent(data)
     // dismiss and reset the form
@@ -153,13 +161,12 @@ const EventForm = (props) => {
     <Modal opened={isOpen} onClose={handleDismiss} title={_event ? "Event Details" : "New Event"}>
       {!deleteConfirm && (
 
-        <form onSubmit={form.onSubmit(handleSubmit)}>
+        <form onSubmit={form.onSubmit(handleSubmit)} className="flex flex-col gap-4">
           <TextInput
             label="Type"
             placeholder="Harvest, process, seed, blossom, etc."
             {...form.getInputProps('eventType')}
           />
-          <br />
 
           {/* If no varietal has been sent in, and we are able to load our list of available varietals */}
           {!varietal && varietalList?.length > 0 && (
@@ -176,41 +183,43 @@ const EventForm = (props) => {
               {...form.getInputProps('varietalId')}
             />
           )}
-
-          <DatePickerInput
-            label={!multiDate ? "Date" : "Start Date"}
-            dropdownType="modal"
-            clearable
-            placeholder={!multiDate ? "Select the event date" : "Pick start date"}
-            // maxDate={new Date()}
-            {...form.getInputProps('dateStart')}
-          />
-
-          {multiDate && (
-            <>
-              <DatePickerInput
-                label="End Date"
-                dropdownType="modal"
-                clearable
-                placeholder="Pick end date"
-                {...form.getInputProps('dateEnd')}
+          
+          <div>
+            <DatePickerInput
+              label={!multiDate ? "Date" : "Start Date"}
+              dropdownType="modal"
+              clearable
+              placeholder={!multiDate ? "Select the event date" : "Pick start date"}
+              // maxDate={new Date()}
+              {...form.getInputProps('dateStart')}
               />
-            </>
-          )}
-          <Checkbox
-            className="mt-2"
-            label="Multi-date"
-            checked={multiDate}
-            onChange={() => setMultiDate(!multiDate)}
-          />
-          <br />
+
+            {multiDate && (
+              <>
+                <DatePickerInput
+                  label="End Date"
+                  dropdownType="modal"
+                  clearable
+                  placeholder="Pick end date"
+                  disabled={!form.values.dateStart}
+                  minDate={form.values.dateStart || undefined}
+                  {...form.getInputProps('dateEnd')}
+                  />
+              </>
+            )}
+            <Checkbox
+              className="mt-2"
+              label="Multi-date"
+              checked={multiDate}
+              onChange={() => setMultiDate(!multiDate)}
+              />
+          </div>
 
           <TextInput
             label="Yield"
             placeholder="Value and units"
             {...form.getInputProps('yield')}
           />
-          <br />
 
           <Textarea
             resize="vertical"

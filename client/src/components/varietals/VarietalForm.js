@@ -151,7 +151,7 @@ const VarietalForm = (props) => {
   return (
     <Modal opened={isOpen} onClose={handleDismiss} title={varietal ? "Varietal Details" : "New Varietal"} >
       {!deleteConfirm && !duplicateWarning && (
-        <form onSubmit={form.onSubmit(handleSubmit)}>
+        <form onSubmit={form.onSubmit(handleSubmit)} className="flex flex-col gap-3">
           <TextInput
             label="Name"
             placeholder="Name of this variety"
@@ -165,13 +165,13 @@ const VarietalForm = (props) => {
             {...form.getInputProps('description')}
           />
 
-          <h3 className="mb-0">Watering Schedule</h3>
+          <h3 className="-mb-2 mt-4 font-semibold">Watering Schedule</h3>
           <DatePickerInput
             label="Start Date"
             dropdownType="modal"
             clearable
             placeholder="Pick start date"
-            maxDate={new Date()}
+            // maxDate={new Date()}
             {...form.getInputProps('waterStart')}
           />
 
@@ -196,14 +196,14 @@ const VarietalForm = (props) => {
             {...form.getInputProps('waterNotes')}
           />
 
-          <h3 className="mb-0">Fertilizing Schedule</h3>
+          <h3 className="-mb-2 mt-4 font-semibold">Fertilizing Schedule</h3>
           <DatePickerInput
             leftSectionPointerEvents="none"
             label="Start Date"
             dropdownType="modal"
             clearable
             placeholder="Pick start date"
-            maxDate={new Date()}
+            // maxDate={new Date()}
             {...form.getInputProps('fertilizeStart')}
           />
 
