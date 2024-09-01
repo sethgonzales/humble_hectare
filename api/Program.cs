@@ -7,10 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myHHCORS";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins, policy => {policy.WithOrigins("http://localhost:5173")
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();});
+    options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
+    {
+        policy.WithOrigins("https://humble-hectare-jb.web.app", "http://localhost:5173")
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
 });
+
 
 builder.Services.AddControllers()
 .AddJsonOptions(x =>
