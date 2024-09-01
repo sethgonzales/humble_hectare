@@ -2,12 +2,13 @@ import { useState } from 'react';
 import axios from "axios";
 
 const useLogs = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [isLoading, setIsLoading] = useState(false);
 
   const loadLogs = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get('https://localhost:5001/api/logs');
+      const response = await axios.get(`${apiUrl}/api/logs`);
       const _logs = response.data;
       setIsLoading(false);
       return _logs;
@@ -21,7 +22,7 @@ const useLogs = () => {
   const loadLog = async (logId) => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`https://localhost:5001/api/logs/${logId}`);
+      const response = await axios.get(`${apiUrl}/api/logs/${logId}`);
       const _log = response.data;
       setIsLoading(false);
       return _log;
@@ -45,7 +46,7 @@ const useLogs = () => {
       };
 
       const response = await axios.post(
-        `https://localhost:5001/api/logs`,
+        `${apiUrl}/api/logs`,
         data
       );
       return response.data;
@@ -67,7 +68,7 @@ const useLogs = () => {
       };
 
       await axios.put(
-        `https://localhost:5001/api/logs/${log.logId}`,
+        `${apiUrl}/api/logs/${log.logId}`,
         data
       );
 
@@ -81,7 +82,7 @@ const useLogs = () => {
     setIsLoading(true);
     try {
       await axios.delete(
-        `https://localhost:5001/api/logs/${logId}`
+        `${apiUrl}/api/logs/${logId}`
       );
     } catch (error) {
       console.error("Error deleting log:", error);

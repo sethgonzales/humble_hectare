@@ -4,14 +4,14 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const useVarietals = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [isLoading, setIsLoading] = useState(false);
-
   const navigate = useNavigate();
 
   const loadVarietal = async (varietalId) => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`https://localhost:5001/api/varietals/${varietalId}`);
+      const response = await axios.get(`${apiUrl}/api/varietals/${varietalId}`);
       const _varietal = response.data;
       setIsLoading(false);
       return _varietal;
@@ -26,7 +26,7 @@ const useVarietals = () => {
   const loadVarietals = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get('https://localhost:5001/api/varietals');
+      const response = await axios.get(`${apiUrl}/api/varietals`);
       const _varietals = response.data;
       setIsLoading(false);
       return _varietals;
@@ -52,8 +52,8 @@ const useVarietals = () => {
         fertilizeNotes: varietal.fertilizeNotes,
       };
 
-      const response = await axios.post(
-        `https://localhost:5001/api/crops/${cropId}/varietals`,
+      await axios.post(
+        `${apiUrl}/api/crops/${cropId}/varietals`,
         data
       );
     } catch (error) {
@@ -80,7 +80,7 @@ const useVarietals = () => {
       };
 
       await axios.put(
-        `https://localhost:5001/api/crops/${formData.cropId}/varietals/${formData.varietalId}`,
+        `${apiUrl}/api/crops/${formData.cropId}/varietals/${formData.varietalId}`,
         data
       );
 
@@ -94,7 +94,7 @@ const useVarietals = () => {
     setIsLoading(true);
     try {
       await axios.delete(
-        `https://localhost:5001/api/varietals/${varietalId}`
+        `${apiUrl}/api/varietals/${varietalId}`
       );
     } catch (error) {
       console.error("Error deleting varietal:", error);

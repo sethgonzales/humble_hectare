@@ -2,13 +2,14 @@ import { useState } from 'react';
 import axios from "axios";
 
 const useEvents = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [isLoading, setIsLoading] = useState(false);
 
   const addEvent = async (data) => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        `https://localhost:5001/api/varietals/${data.varietalId}/events`,
+        `${apiUrl}/api/varietals/${data.varietalId}/events`,
         data
       );
       setIsLoading(false);
@@ -34,7 +35,7 @@ const useEvents = () => {
       };
 
       await axios.put(
-        `https://localhost:5001/api/varietals/${newData.varietalId}/events/${newData.eventId}`,
+        `${apiUrl}/api/varietals/${newData.varietalId}/events/${newData.eventId}`,
         data
       );
 
@@ -48,7 +49,7 @@ const useEvents = () => {
     setIsLoading(true);
     try {
       await axios.delete(
-        `https://localhost:5001/api/events/${eventId}`
+        `${apiUrl}/api/events/${eventId}`
       );
     } catch (error) {
       console.error("Error deleting varietal:", error);
